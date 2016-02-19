@@ -1,0 +1,9 @@
+# web2py
+cache/
+databases/
+errors/
+sessions/
+uploads/
+
+# python
+**/*.pyc
