@@ -9,15 +9,18 @@
 #########################################################################
 
 def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
-
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
-    """
+    ## Index page
     response.flash = T("Hello World")
-    return dict(message=T('Welcome to web2py!'))
+    return dict()
+
+def search():
+    ## Search page
+    return dict()
+
+def collection():
+    ## User collections page
+    return dict()
+
 
 
 def user():
@@ -46,15 +49,4 @@ def download():
     http://..../[app]/default/download/[filename]
     """
     return response.download(request, db)
-
-
-def call():
-    """
-    exposes services. for example:
-    http://..../[app]/default/call/jsonrpc
-    decorate with @services.jsonrpc the functions to expose
-    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
-    """
-    return service()
-
 
