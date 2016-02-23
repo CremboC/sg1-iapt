@@ -17,7 +17,7 @@ def search():
     ## Search page
     return dict()
 
-def collection():
+def collections():
     ## User collections page
     return dict()
 

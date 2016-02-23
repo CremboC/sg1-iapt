@@ -3,9 +3,9 @@ def trade():
     return dict()
 
 
-def tradehome():
+def home():
     return dict()
 
 
-def tradehistory():
+def history():
     return dict()
