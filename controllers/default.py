@@ -13,16 +13,6 @@ def index():
     response.flash = T("Hello World")
     return dict()
 
-def search():
-    ## Search page
-    return dict()
-
-def collections():
-    ## User collections page
-    return dict()
-
-
-
 def user():
     """
     exposes:
