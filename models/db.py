@@ -14,10 +14,13 @@ from gluon.contrib.appconfig import AppConfig
 ## once in production, remove reload=True to gain full speed
 myconf = AppConfig(reload=True)
 
-
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
-    db = DAL(myconf.take('db.uri'), pool_size=myconf.take('db.pool_size', cast=int), check_reserved=['all'])
+    db = DAL(
+        myconf.take('db.uri'),
+        pool_size=myconf.take('db.pool_size',
+                              cast=int),
+        check_reserved=['all'])
 else:
     ## connect to Google BigTable (optional 'google:datastore://namespace')
     db = DAL('google:datastore+ndb')
@@ -28,13 +31,13 @@ else:
     ## from google.appengine.api.memcache import Client
     ## session.connect(request, response, db = MEMDB(Client()))
 
-## by default give a view/generic.extension to all actions from localhost
-## none otherwise. a pattern can be 'controller/function.extension'
+    ## by default give a view/generic.extension to all actions from localhost
+    ## none otherwise. a pattern can be 'controller/function.extension'
 response.generic_patterns = ['*'] if request.is_local else []
 ## choose a style for forms
-response.formstyle = myconf.take('forms.formstyle')  # or 'bootstrap3_stacked' or 'bootstrap2' or other
+response.formstyle = myconf.take(
+    'forms.formstyle')  # or 'bootstrap3_stacked' or 'bootstrap2' or other
 response.form_label_separator = myconf.take('forms.separator')
-
 
 ## (optional) optimize handling of static files
 # response.optimize_css = 'concat,minify,inline'
@@ -57,12 +60,10 @@ auth = Auth(db)
 service = Service()
 plugins = PluginManager()
 
-## create all tables needed by auth if not custom tables
-auth.define_tables(username=False, signature=False)
-
 ## configure email
 mail = auth.settings.mailer
-mail.settings.server = 'logging' if request.is_local else myconf.take('smtp.server')
+mail.settings.server = 'logging' if request.is_local else myconf.take(
+    'smtp.server')
 mail.settings.sender = myconf.take('smtp.sender')
 mail.settings.login = myconf.take('smtp.login')
 
@@ -90,3 +91,85 @@ auth.settings.reset_password_requires_verification = True
 
 ## after defining tables, uncomment below to enable auditing
 # auth.enable_record_versioning(db)
+
+auth.settings.extra_fields["auth_user"] = [
+	Field( "notifications", "boolean",
+		default = False )
+]
+auth.define_tables( username = True, signature = False )
+
+db.define_table( "types",
+	Field( "object_type", "string" )
+)
+
+# Autoform Safe
+db.define_table( "objects",
+	Field( "owned_by", "reference auth_user",
+		readable = False,
+		writable = False,
+		default = auth.user_id ),
+	Field( "object_type", "reference types",
+		required = True,
+		comment = "What best describes your object?" ),
+	Field( "status", "integer",
+		default = 0,
+		requires = IS_INT_IN_RANGE( 0, 2 ) ), # TODO: Nice label
+	Field( "private", "boolean",
+		default = False ),
+
+	Field( "name", "string",
+		required = True ),
+	Field( "currency_value", "float" ),
+	Field( "description", "text" ),
+	Field( "summary", "string" ),
+	Field( "image", "upload" )
+)
+
+db.define_table( "tags",
+	Field( "target_object", "reference objects",
+		required = True ),
+	Field( "tag", "string",
+		required = True )
+)
+db.tags.tag.requires = [
+	# This ensures that objects & tags are unique
+	# Note: Will require that tags are inserted via request.vars
+	IS_NOT_IN_DB(
+		db( db.tags.target_object == request.vars.object ),
+		"tags.tag",
+		error_message = "You already have a Tag attached to that object!" )
+]
+
+db.define_table( "trades",
+	Field( "sender", "reference auth_user",
+		required = True ),
+	Field( "receiver", "reference auth_user",
+		required = True ),
+	# 0: Pending
+	# 1: Cancelled
+	# 2: Rejected
+	# 3: Accepted
+	# 4: Modified
+	Field( "status", "integer",
+		required = True ),
+	Field( "date_created", "datetime",
+		default = request.now ),
+	Field( "superseded_by", "reference trades" ),
+	Field( "seen", "boolean",
+		default = False )
+)
+
+# Note: Trade & Object should be unique, but this isn't
+# inserted by users, so it'd be pointless to add a
+# validator.
+db.define_table( "trades_sending",
+	Field( "trade", "reference trades",
+		required = True ),
+	Field( "target_object", "reference objects" )
+)
+
+db.define_table( "trades_receiving",
+	Field( "trade", "reference trades",
+		required = True ),
+	Field( "target_object", "reference objects" )
+)
