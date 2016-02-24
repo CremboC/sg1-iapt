@@ -114,6 +114,7 @@ db.define_table( "objects",
 	Field( "status", "integer",
 		default = 0,
 		requires = IS_INT_IN_RANGE( 0, 2 ) ), # TODO: Nice label
+		# 0: Want, 1: have(not trading), 2: have(trading)/incollection
 	Field( "private", "boolean",
 		default = False ),
 
