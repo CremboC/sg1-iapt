@@ -1,0 +1,32 @@
+<div style='clear:both'><p>Trade is editable {{=editable}} </p>
+<p><label for="username">Username: </label><input id='username' type='search'></p>
+</div>
+<div style='clear:both'>
+    <div style='float:left'>
+
+            Available Items:
+            {{=BEAUTIFY(available_objects[0])}}
+        </p>
+    </div>
+    <div style='float:right'>
+        <p>User: {{=usernames[1]}}</p>
+        <p>
+            Available Items:
+            {{=BEAUTIFY(available_objects[1])}}
+        </p>
+    </div>
+</div>
+
+<div style='clear:both'>
+    <div style='float:left'>
+            Trade Items:
+            {{=BEAUTIFY(trade_objects[0])}}
+        </p>
+    </div>
+    <div style='float:right'>
+        <p>
+            Trade items
+            {{=BEAUTIFY(trade_objects[1])}}
+        </p>
+    </div>
+</div>
