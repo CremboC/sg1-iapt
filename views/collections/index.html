@@ -1,0 +1,12 @@
+{{extend 'layout.html'}}
+
+<div class="container">
+
+    <h2>My Collections</h2>
+
+    <ul class="list-group">
+        {{for tag in tags:}}
+    	    <li class="list-group-item">{{=tag.tag}}</li>
+        {{pass}}
+    </ul>
+</div>
