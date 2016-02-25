@@ -6,7 +6,7 @@ if db(db.auth_user.id > 0).count() == 0:
 
 if db(db.auth_user.id > 0).count() == 2:
     db.types.truncate()
-    db.types.insert(object_type='General')
+    db.types.insert(name='General')
 
     db.objects.truncate()
     db.objects.insert(owner_id=1, type_id=1, status=2, private=False, name='object1a', summary='Summary',
