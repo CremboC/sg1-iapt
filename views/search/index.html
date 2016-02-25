@@ -1,22 +1,27 @@
 {{extend 'layout.html'}}
+{{include 'partials/object.html'}}
 
 <div class="container">
     <div class="col-sm-3">
         <div class="panel panel-default">
-        	  <div class="panel-heading">
-        			<h2 class="panel-title">Filter your search</h2>
-        	  </div>
-        	  <div class="panel-body">
-        	  </div>
+            <div class="panel-heading">
+                <h2 class="panel-title">Filter your search</h2>
+            </div>
+            <div class="panel-body">
+                {{include 'search/_filters.html'}}
+            </div>
         </div>
     </div>
     <div class="col-sm-9">
         <div class="panel panel-default">
-        	  <div class="panel-heading">
-        			<h2 class="panel-title">Searched for "{{=request.vars.query}}"</h2>
-        	  </div>
-        	  <div class="panel-body">
-        	  </div>
+            <div class="panel-heading">
+                <h2 class="panel-title">Searched for "{{=request.vars.query}}"</h2>
+            </div>
+            <div class="panel-body">
+                {{for result in results:}}
+                {{print_object(result)}}
+                {{pass}}
+            </div>
         </div>
     </div>
 

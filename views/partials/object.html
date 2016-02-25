@@ -1,0 +1,26 @@
+{{def print_object(object):}}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-3">
+                IMG
+            </div>
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+                    <li>{{=object.objects.name}}</li>
+                    <li>{{=object.objects.currency_value}}</li>
+                    <li>{{=object.types.name}}</li>
+                    <li>Posted By:
+                        <a href="{{=URL('default', 'index')}}">
+                            {{=object.auth_user.username}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-2">
+                Wanted/Had/InCol
+            </div>
+        </div>
+    </div>
+</div>
+{{return}}

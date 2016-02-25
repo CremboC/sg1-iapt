@@ -1,0 +1,63 @@
+<form action="{{=URL('search', 'index')}}">
+    <input type="hidden" name="query" value="{{=request.vars.query}}">
+    <div class="filters">
+        <div class="filter controls">
+            <a href="{{=URL('search', 'index', vars=dict(query=request.vars.query))}}" class="btn btn-danger">Reset Filters</a>
+        </div>
+
+        <div class="filter types">
+            <button type="button" class="btn btn-default btn-block" data-toggle="collapse" data-target="#filters-types">
+                Types
+                <span class="caret"></span>
+            </button>
+
+            <div id="filters-types" class="collapse {{if filtered:}}in{{pass}}">
+                <ul class="list-group">
+                    {{for type in types:}}
+                    <li class="list-group-item">
+                        <label for="{{=type.name}}-{{=type.id}}">
+                            <input type="checkbox"
+                                   name="types"
+                                   id="{{=type.name}}-{{=type.id}}"
+                                   value="{{=type.id}}">
+                            {{=type.name}}
+                        </label>
+                    </li>
+                    {{pass}}
+                </ul>
+            </div>
+        </div>
+
+        <div class="filter value">
+            <button type="button" class="btn btn-default btn-block" data-toggle="collapse" data-target="#filters-value">
+                Value
+                <span class="caret"></span>
+            </button>
+
+            <div id="filters-value" class="collapse {{if filtered:}}in{{pass}}">
+                <label for="min_value">Minimum value: <span id="current_min_value"></span></label>
+                <input type="range" id="min_value" name="min_value" min="10" value="{{=(request.vars.min_value or 10)}}"
+                       max="2000" step="100">
+
+                <label for="max_value">Maximum value: <span id="current_max_value"></span></label>
+                <input type="range" id="max_value" name="max_value" min="10"
+                       value="{{=(request.vars.max_value or 2000)}}" max="2000" step="100">
+            </div>
+        </div>
+
+        <div class="controls filter">
+            <button type="submit" name="filtered" value="true" class="btn btn-success">Submit Filters</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    function watcher($toWatch, $toUpdate) {
+        $toWatch.change(function (e) {
+            $toUpdate.html(e.target.value);
+        });
+    }
+
+    watcher($('#min_value'), $('#current_min_value'));
+    watcher($('#max_value'), $('#current_max_value'));
+</script>
