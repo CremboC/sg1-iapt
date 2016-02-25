@@ -11,6 +11,7 @@
 
 ## app configuration made easy. Look inside private/appconfig.ini
 from gluon.contrib.appconfig import AppConfig
+
 ## once in production, remove reload=True to gain full speed
 myconf = AppConfig(reload=True)
 
@@ -99,7 +100,7 @@ auth.settings.extra_fields["auth_user"] = [
 auth.define_tables(username=True, signature=False)
 
 db.define_table("types",
-                Field("object_type", "string")
+                Field("name", "string")
                 )
 
 # Autoform Safe
@@ -129,18 +130,16 @@ db.define_table("objects",
 db.define_table("tags",
                 Field("owner_id", "reference auth_user",
                       required=True),
-                Field("tag", "string",
+                Field("name", "string",
                       required=True)
                 )
 
 db.define_table("object_tags",
-				Field("object_id", "reference objects",
+                Field("object_id", "reference objects",
                       required=True),
                 Field("tag_id", "reference tags",
                       required=True)
                 )
-
-
 
 db.define_table("trades",
                 Field("sender", "reference auth_user",
