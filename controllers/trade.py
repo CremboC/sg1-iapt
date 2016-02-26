@@ -1,18 +1,17 @@
+@auth.requires_login()
 def index():
-    # if auth.user_id is None:
-    ## Todo: error redirection if user not logged in
-    # print ''
-
     tradeid = request.vars.tradeid
-    # if tradeid is None:
-    ## Todo: error redirection if tradeid is invalid
-    # print ''
+
+    # If tradeId not specified
+    if tradeid is None:
+        raise HTTP(400, "Error 400: Trade id not specified.")
 
     trade = db.trades(tradeid)
-    # if (auth.user_id != trade.sender) | (auth.user_id != trade.receiver):
-    ## Todo: error redirection if user not permitted to view trade
-    ##print ''
+    if trade is None:
+        raise HTTP(404, "Error 404: Invalid request, trade does not exist")
 
+    if (auth.user_id != trade.sender) | (auth.user_id != trade.receiver):
+        raise HTTP(404, "Error 404: Invalid request, trade does not exist")
 
     # Get objects currently in trade from sender
     send_trade_objects = db(
@@ -44,7 +43,6 @@ def index():
 
     # Get objects not currently in trade from sender
     # TODO: verify whether we want objects to be available to multiple trades
-    # TODO: remove rows with id not
     send_ava_objects = db((db.objects.owner_id == trade.sender) & (db.objects.status == 2) & ~db.objects.id.belongs(
         send_object_ids)).select(
         db.objects.id,

@@ -2,7 +2,7 @@ def index():
     db.auth_user.truncate()
     db.auth_user.insert(first_name="first", last_name="last", email="A@A.com", username="username1",
 		password="pbkdf2(1000,20,sha512)$9faa1d46cb1f1519$6111cb586aaeae66958fc9b521cf4efda7d72443")
-    db.auth_user.insert(first_name="first", last_name="last", email="A@A.com", username="username2",
+    db.auth_user.insert(first_name="second", last_name="last", email="A@A.com", username="username2",
 		password="pbkdf2(1000,20,sha512)$a5eabdb2efc9cdad$9360417c8ad0de06e013a827664abea802fb78de")
 
     db.types.truncate()
