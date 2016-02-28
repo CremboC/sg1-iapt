@@ -1,6 +1,7 @@
 def index():
-    query_string = request.vars.query
+    query_string = request.vars.query or ''
     filtered = request.vars.filtered == "true" or False
+    selected_types = []
 
     # fill filters
     types = db(db.types.id > 0).select()
@@ -11,8 +12,18 @@ def index():
 
     if filtered:
         if request.vars.types:
-            search_query &= db.objects.type_id.belongs(request.vars.types)
+            selected_types = [int(type) for type in request.vars.types] or [request.vars.types]
+            search_query &= db.objects.type_id.belongs(selected_types)
+
+        if request.vars.user_id != '':
+            search_query &= db.objects.owner_id == request.vars.user_id
+
+        if request.vars.min_value != '':
+            search_query &= db.objects.currency_value >= request.vars.min_value
+
+        if request.vars.max_value != '':
+            search_query &= db.objects.currency_value <= request.vars.max_value
 
     results = db(search_query).select()
 
-    return dict(results=results, types=types, filtered=filtered)
+    return dict(results=results, types=types, filtered=filtered, selected_types=selected_types)
