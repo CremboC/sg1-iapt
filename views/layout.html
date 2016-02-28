@@ -39,8 +39,6 @@
 </head>
 <body>
 
-<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
-
 <!-- Navbar ======================================= -->
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
@@ -74,7 +72,7 @@
                     <a href="{{=URL('trade', 'home')}}">Trades</a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{{=URL('items', 'create')}}">
                         <span class="glyphicon glyphicon-plus-sign"></span>
                         Add Item
                     </a>
@@ -102,6 +100,25 @@
 </nav>
 
 <div class="wrapper">
+    {{if response.flash:}}
+    {{
+    status = 'info'
+    message = response.flash
+    }}
+    {{if type(response.flash) is dict:}}
+    {{
+    status = response.flash['status']
+    message = response.flash['message']
+    }}
+    {{pass}}
+    <div class="container">
+        <div class="alert alert-{{=status}}">
+        	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        	{{=message}}
+        </div>
+    </div>
+    {{pass}}
+
     {{block center}}
     {{include}}
     {{end}}

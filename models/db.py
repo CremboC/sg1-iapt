@@ -111,17 +111,19 @@ db.define_table("objects",
                       default=auth.user_id),
                 Field("type_id", "reference types",
                       required=True,
+                      label="Type",
                       comment="What best describes your object?"),
                 Field("status", "integer",
                       default=0,
-                      requires=IS_INT_IN_RANGE(0, 2)),  # TODO: Nice label
+                      requires=IS_INT_IN_RANGE(0, 3)),  # TODO: Nice label
                 # 0: Want, 1: have(not trading), 2: have(trading)/incollection
                 Field("private", "boolean",
                       default=False),
-
                 Field("name", "string",
-                      required=True),
-                Field("currency_value", "float"),
+                      required=True,
+                      requires=[IS_NOT_EMPTY(error_message="An item must have a name assigned to it.")]),
+                Field("currency_value", "float",
+                      comment="Your own assigned value in Great British Sterling"),
                 Field("description", "text"),
                 Field("summary", "string"),
                 Field("image", "upload")
