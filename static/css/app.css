@@ -61,3 +61,15 @@
 .form-comment {
     font-style: italic;
 }
+
+/*Trade section*/
+
+.tradeborder{
+    border-right: 1px solid #393a35;
+}
+
+.receiverUsernamePanel{
+    text-align: center;
+    clear:both;
+    padding-bottom: 1%
+}
