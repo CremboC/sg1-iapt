@@ -1,17 +1,18 @@
 {{extend 'layout.html'}}
 
+<script src="{{=URL('static','js/trade.js')}}"></script>
 <div class="container">
 
-    <div style='text-align: center; clear:both; padding-bottom: 20px; padding-left: 20%; padding-right: 20%'><p>Trade is editable {{=editable}} </p>
+    <div style='text-align: center; clear:both; padding-bottom: 20px; padding-left: 20%; padding-right: 20%'>
         <form class="form-inline" action="">
             <label for='trader_username'>Select User: &nbsp;</label><input class="form-control" name='trader_username' type='search' value="{{=(trader_username if trader_username is not None else '')}}">
             <input type='submit' value='Submit'>
         </form>
     </div>
     <!-- TODO: create search features for multi-selects -->
-    <!-- TODO: disable items for completed trade -->
     <div style="clear:both">
         <div class="col-md-6" style="border-right: 1px solid #393a35;">
+            {{if editable:}}
             <div class="panel panel-default">
 
                 <div class="panel-heading">
@@ -36,11 +37,11 @@
                     </div>
                 </div>
             </div>
-
+            {{pass}}
             <div class="panel panel-default">
 
                 <div class="panel-heading">
-                    <h2 class="panel-title">You give</h2>
+                    <h2 class="panel-title">{{=("You give" if editable else "you gave")}}</h2>
                 </div>
 
                 <div class="panel-body">
@@ -48,20 +49,26 @@
                         <input type="text" class="form-control" id="searchOwnItems" placeholder="Search your items">
                         <button type="submit" class="btn btn-default">Submit</button>
                     </div>
-
+                    {{if editable:}}
                     <select id="ownTradeObjects" multiple size="5" class="form-control">
+                    {{else:}}
+                    <select id="ownTradeObjects" disabled multiple size="5" class="form-control">
+                    {{pass}}
                     {{for row in trade_objects[0]:}}
                         <option value="{{=row.id}}">{{=row.name}}</option>
                     {{pass}}
                     </select>
+                    {{if editable:}}
                     <div style="float:right">
-                        <button type="submit" class="btn btn-default" onclick="transferOptions($('#ownTradeObjects'), $('#ownAvailableObjects'))">Add item</button>
+                        <button type="submit" class="btn btn-default" onclick="transferOptions($('#ownTradeObjects'), $('#ownAvailableObjects'))">Remove item</button>
                     </div>
+                    {{pass}}
                 </div>
             </div>
         </div>
 
         <div class="col-md-6">
+            {{if editable:}}
             <div class="panel panel-default">
 
                 <div class="panel-heading">
@@ -85,10 +92,11 @@
                     </div>
                 </div>
             </div>
+            {{pass}}
             <div class="panel panel-default">
 
                 <div class="panel-heading">
-                    <h2 class="panel-title">He gives</h2>
+                    <h2 class="panel-title">{{=("He gives" if editable else "He gave")}}</h2>
                 </div>
 
                 <div class="panel-body">
@@ -97,15 +105,20 @@
                         <input type="text" class="form-control" id="searchOwnItems" placeholder="Search their items">
                         <button type="submit" class="btn btn-default">Submit</button>
                     </div>
-
+                    {{if editable:}}
                     <select id="theirTradeObjects" multiple size="5" class="form-control">
+                    {{else:}}
+                    <select id="theirTradeObjects" disabled multiple size="5" class="form-control">
+                    {{pass}}
                     {{for row in trade_objects[1]:}}
                         <option value="{{=row.id}}">{{=row.name}}</option>
                     {{pass}}
                     </select>
+                    {{if editable:}}
                     <div style="float:right">
-                        <button type="submit" class="btn btn-default" onclick="transferOptions($('#theirTradeObjects'), $('#theirAvailableObjects'))">Add item</button>
+                        <button type="submit" class="btn btn-default" onclick="transferOptions($('#theirTradeObjects'), $('#theirAvailableObjects'))">Remove item</button>
                     </div>
+                    {{pass}}
                 </div>
             </div>
         </div>
@@ -113,43 +126,30 @@
 
 
     <div style='clear:both'>
+        {{if editable:}}
         <div style="float:left">
             <a type="submit" name="filtered" class="btn btn-danger" href="{{=URL('trade', 'home')}}">Cancel</a>
         </div>
         <div style="float:right">
             <button type="submit" name="filtered" class="btn btn-success" onclick="submitproposal('{{=user_id}}', '{{=trader_id}}', $('#ownTradeObjects'), $('#theirTradeObjects'))">Send trade proposal</button>
         </div>
+        {{else:}}
+            {{if status==0:}}
+            <p> Trade is currently pending.</p>
+            {{elif status==1:}}
+            <p> Trade was cancelled.</p>
+            {{elif status==2:}}
+            <p> Trade was rejected by receiver.</p>
+            {{elif status==3:}}
+            <p> Trade was accepted by receiver.</p>
+            {{elif status==4:}}
+            <p> Trade was modified.</p>
+            {{pass}}
+        {{pass}}
     </div>
-    <div style='clear:both'>
+    <!--<div style='clear:both'>
     {{=available_objects[0]}}
     {{ = (available_objects[1] if trader_username is not ''  else '')}}
     </div>
+    -->
 </div>
-<!--
-<div style='clear:both'>
-    <div style='float:left'>
-
-            Available Items:
-        </p>
-
-    </div>
-    <div style='float:right'>
-        <p>User: {{=trader_username}}</p>
-        <p>
-            Available Items:
-        </p>
-    </div>
-</div>
-
-<div style='clear:both'>
-    <div style='float:left'>
-            Trade Items:
-        </p>
-    </div>
-    <div style='float:right'>
-        <p>
-            Trade items
-        </p>
-    </div>
-</div>
--->

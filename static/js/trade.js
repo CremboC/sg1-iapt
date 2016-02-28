@@ -32,7 +32,8 @@ function submitproposal(senderId, receivedId, sentItemsSelect, receivedItemsSele
             window.location.href = "trade/home";
         },
         error: function(x, y, z) {
-            console.log("fail");
+            console.log("Fail");
+            $.web2py.flash(x.responseText);
         }
     });
 }
