@@ -134,9 +134,11 @@ def get_available_user_items(userid):
         db.objects.image,
         db.objects.summary)
 
-
+@auth.requires_login()
 def home():
-    return dict()
+    #count = db.trades.
+    #trades = db(db.trades.)
+    return {}
 
 
 def history():
