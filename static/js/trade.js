@@ -31,8 +31,7 @@ function submitproposal(senderId, receivedId, sentItemsSelect, receivedItemsSele
         success: function(data, textStatus, xhr){
             window.location.href = "trade/home";
         },
-        error: function(x, y, z) {
-            console.log("Fail");
+        error: function(data, textStatus, xhr) {
             $.web2py.flash(x.responseText);
         }
     });
