@@ -3,7 +3,9 @@
     <div class="panel-body">
         <div class="object-header clearfix col-xs-12">
             <div class="pull-left">
-                <strong>{{=object.objects.name}}</strong>
+                <a href="{{=URL('items', 'show', args=[object.objects.id])}}">
+                    <strong>{{=object.objects.name}}</strong>
+                </a>
             </div>
 
             <div class="pull-right">
