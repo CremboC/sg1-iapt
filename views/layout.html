@@ -107,15 +107,17 @@
     {{end}}
 </div>
 
-
 {{block footer}} <!-- this is default footer -->
-<footer class="footer">
+<footer>
     <div class="container">
     </div>
 </footer>
 {{end}}
 
-{{=response.toolbar()}}
+<div class="container">
+    {{=response.toolbar()}}
+</div>
+
 
 <!-- The javascript =============================== -->
 <script src="{{=URL('static','js/bootstrap.min.js')}}"></script>

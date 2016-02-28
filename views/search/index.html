@@ -18,9 +18,13 @@
                 <h2 class="panel-title">Searched for "{{=request.vars.query}}"</h2>
             </div>
             <div class="panel-body">
-                {{for result in results:}}
-                {{print_object(result)}}
-                {{pass}}
+                <div class="row">
+                    {{for result in results:}}
+                    <div class="col-md-6">
+                        {{print_object(result)}}
+                    </div>
+                    {{pass}}
+                </div>
             </div>
         </div>
     </div>
