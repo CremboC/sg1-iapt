@@ -31,3 +31,29 @@
     padding-right:0;
     padding-left:0;
 }
+
+.object {
+
+}
+
+.object .panel-body {
+    padding: 0;
+}
+
+.object .object-image {
+}
+
+.object .object-image img {
+    border-bottom-right-radius: 4px;
+}
+
+.object .object-header {
+    padding: 10px 15px;
+}
+
+.object .object-text {
+}
+
+.object .object-status {
+    width: 100%;
+}
