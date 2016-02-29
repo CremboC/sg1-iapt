@@ -5,6 +5,9 @@ def index():
 
 
 def show():
+    user_id = request.vars.user
+    tags = db(db.tags.owner_id == user_id).select()
+    user = db(db.auth_user.id == user_id).select()[0]
 
-    return dict()
+    return dict(tags=tags, user=user)
 

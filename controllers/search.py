@@ -1,7 +1,18 @@
+from collections import namedtuple
+
 def index():
     query_string = request.vars.query or ''
     filtered = request.vars.filtered == "true" or False
     selected_types = []
+    selected_statuses = []
+
+    StatusRecord = namedtuple('Status', 'id name')
+
+    statuses = [
+        StatusRecord(id=0, name='Wanted'),
+        StatusRecord(id=1, name='Had'),
+        StatusRecord(id=2, name='InCol'),
+    ]
 
     # fill filters
     types = db(db.types.id > 0).select()
@@ -24,6 +35,13 @@ def index():
         if request.vars.max_value != '':
             search_query &= db.objects.currency_value <= request.vars.max_value
 
+        if request.vars.statuses:
+            selected_statuses = [int(status) for status in request.vars.statuses] or [request.vars.statuses]
+            search_query &= db.objects.status.belongs(selected_statuses)
+
     results = db(search_query).select()
 
-    return dict(results=results, types=types, filtered=filtered, selected_types=selected_types)
+    return dict(results=results,
+                types=types, statuses=statuses,
+                filtered=filtered,
+                selected_types=selected_types, selected_statuses=selected_statuses)

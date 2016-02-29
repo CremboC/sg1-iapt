@@ -18,7 +18,7 @@
                     {{for type in types:}}
                     <li class="list-group-item">
                         {{if type.id in selected_types:}}
-                        <label for="{{=type.name}}-{{=type.id}}">
+                        <label for="{{=type.name}}-{{=type.id}}" class="full-width">
                             <input type="checkbox"
                                    name="types"
                                    id="{{=type.name}}-{{=type.id}}"
@@ -27,7 +27,7 @@
                             {{=type.name}}
                         </label>
                         {{else:}}
-                        <label for="{{=type.name}}-{{=type.id}}">
+                        <label for="{{=type.name}}-{{=type.id}}" class="full-width">
                             <input type="checkbox"
                                    name="types"
                                    id="{{=type.name}}-{{=type.id}}"
@@ -71,6 +71,39 @@
                 <input type="search" name="user" id="filter_user" class="form-control"
                        value="{{=request.vars.user or ''}}" autocomplete="off">
                 <input type="hidden" name="user_id" id="filter_user_id" value="{{=request.vars.user_id or ''}}">
+            </div>
+        </div>
+
+        <div class="filter status">
+            <button type="button" class="btn btn-default btn-block" data-toggle="collapse" data-target="#filters-status">
+                Item Status
+                <span class="caret"></span>
+            </button>
+            <div id="filters-status" class="collapse {{if filtered:}}in{{pass}}">
+                <ul class="list-group">
+                    {{for status in statuses:}}
+                    <li class="list-group-item">
+                        {{if status.id in selected_statuses:}}
+                        <label for="{{=status.id}}-{{=status.name}}" class="full-width">
+                            <input type="checkbox"
+                                   name="statuses"
+                                   id="{{=status.id}}-{{=status.name}}"
+                                   value="{{=status.id}}"
+                                   checked="checked">
+                            {{=status.name}}
+                        </label>
+                        {{else:}}
+                        <label for="{{=status.id}}-{{=status.name}}" class="full-width">
+                            <input type="checkbox"
+                                   name="statuses"
+                                   id="{{=status.id}}-{{=status.name}}"
+                                   value="{{=status.id}}">
+                            {{=status.name}}
+                        </label>
+                        {{pass}}
+                    </li>
+                    {{pass}}
+                </ul>
             </div>
         </div>
 

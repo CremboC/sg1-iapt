@@ -17,7 +17,7 @@
             <ul class="list-unstyled">
                 <li>{{=object.types.name}}</li>
                 <li>Posted By:
-                    <a href="{{=URL('default', 'index')}}">
+                    <a href="{{=URL('collections', 'show', vars={'user': object.auth_user.id})}}">
                         {{=object.auth_user.username}}
                     </a>
                 </li>

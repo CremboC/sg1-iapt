@@ -2,6 +2,10 @@
     margin-top: 75px;
 }
 
+.full-width {
+    width: 100%;
+}
+
 .navbar-searchbar {
 
 }
@@ -28,8 +32,8 @@
 }
 
 .no-gutter > [class*='col-'] {
-    padding-right:0;
-    padding-left:0;
+    padding-right: 0;
+    padding-left: 0;
 }
 
 .object {
@@ -64,19 +68,19 @@
 
 /*Trade index*/
 
-.tradeborder{
+.tradeborder {
     border-right: 1px solid #393a35;
 }
 
-.receiverUsernamePanel{
+.receiverUsernamePanel {
     text-align: center;
-    clear:both;
+    clear: both;
     padding-bottom: 1%
 }
 
 /* Trade history */
 
-.trade-history-table{
+.trade-history-table {
 
 }
 
