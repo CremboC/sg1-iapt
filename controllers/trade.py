@@ -1,3 +1,5 @@
+# note: don't trade wanted items
+
 @auth.requires_login()
 def index():
     tradeid = request.vars.tradeid
