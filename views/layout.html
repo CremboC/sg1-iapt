@@ -56,6 +56,21 @@
 
         <div id="navbar-ex1-collapse" class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
+                {{ if auth.user_id: }}
+                    {{ if notifications(): }}
+                    <li>
+                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="You have notifications!">
+                            <span class="glyphicon glyphicon-bell notification-icon" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                    {{ else: }}
+                    <li>
+                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="No Notifications">
+                            <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                    {{ pass}}
+                {{ pass }}
                 {{='auth' in globals() and auth.navbar('Welcome',mode='dropdown') or ''}}
             </ul>
 

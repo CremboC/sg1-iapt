@@ -2,6 +2,11 @@
     margin-top: 75px;
 }
 
+.notification-icon {
+    color: #fff;
+    text-shadow: 0 0 3px #09f;
+}
+
 .navbar-searchbar {
 
 }
