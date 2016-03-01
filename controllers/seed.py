@@ -10,17 +10,17 @@ def index():
     db.types.insert(name='Comics')
 
     db.objects.truncate()
-    db.objects.insert(owner_id=1, type_id=1, status=2, private=False, name='object1a', summary='Summary',
+    db.objects.insert(owner_id=1, type_id=1, status=2, name='object1a', summary='Summary',
 		description='Description', currency_value=5.0)
-    db.objects.insert(owner_id=2, type_id=1, status=2, private=False, name='object2a', summary='Summary',
+    db.objects.insert(owner_id=2, type_id=1, status=2, name='object2a', summary='Summary',
 		description='Description', currency_value=4.0)
 
-    db.objects.insert(owner_id=1, type_id=1, status=2, private=False, name='object1b', summary='Summary',
+    db.objects.insert(owner_id=1, type_id=1, status=2, name='object1b', summary='Summary',
 		description='Description', currency_value=5.0)
-    db.objects.insert(owner_id=2, type_id=1, status=2, private=False, name='object2b', summary='Summary',
+    db.objects.insert(owner_id=2, type_id=1, status=2, name='object2b', summary='Summary',
 		description='Description', currency_value=4.0)
 
-    db.objects.insert(owner_id=2, type_id=2, status=2, private=False, name='comic2a', summary='Summary',
+    db.objects.insert(owner_id=2, type_id=2, status=2, name='comic2a', summary='Summary',
 		description='Description', currency_value=10.0)
 
     db.trades.truncate()
