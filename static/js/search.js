@@ -2,6 +2,9 @@ function watcher($toWatch, $toUpdate) {
     $toWatch.change(function (e) {
         $toUpdate.html(e.target.value);
     });
+    $toWatch.keypress(function (e) {
+        $toUpdate.html(e.target.value);
+    });
 }
 
 $.getJSON(__users_url__, function (data) {

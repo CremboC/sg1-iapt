@@ -16,7 +16,32 @@
         <div class="col-sm-9">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h2 class="panel-title">Searched for "{{=request.vars.query}}"</h2>
+                    <h2 class="panel-title">
+                        {{if not request.vars.query or request.vars.query == "": }}
+                            Searching for <strong>everything</strong><!--
+                        -->{{else:}}
+                            Searching for <strong>{{=request.vars.query}}</strong>
+                        {{pass}}<!--
+                        -->{{if request.vars.types:}}
+                            <!-- TODO: Fix this godawful hack -->
+                            of type <strong>{{=", ".join(map( lambda x: types[int(x)-1].name, request.vars.types))}}</strong><!--
+                        -->{{pass}}<!--
+                        -->{{if request.vars.user:}}
+                            from user <strong>{{=request.vars.user}}</strong><!--
+                        -->{{pass}}<!--
+                        -->{{if request.vars.min_value and request.vars.max_value:}}
+                            worth between
+                            <strong>&pound;{{=request.vars.min_value}}</strong>
+                            -
+                            <strong>&pound;{{=request.vars.max_value}}</strong><!--
+                        -->{{elif request.vars.max_value:}}
+                            worth less than
+                            <strong>&pound;{{=request.vars.max_value}}</strong><!--
+                        -->{{elif request.vars.min_value:}}
+                            worth more than
+                            <strong>&pound;{{=request.vars.min_value}}</strong><!--
+                        -->{{pass}}.
+                    </h2>
                 </div>
                 <div class="panel-body">
                     <div class="row">
