@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="pull-right">
-                Value: £{{=object.objects.currency_value}}
+                    Value: &pound;{{="{:0,.2f}".format(object.objects.currency_value)}}
                 </div>
             </div>
         </div>
