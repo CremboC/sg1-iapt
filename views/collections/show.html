@@ -5,8 +5,8 @@
     <h2>{{=user.username}}'s Collections</h2>
 
     <ul class="list-group">
-        {{for tag in tags:}}
-    	    <li class="list-group-item">{{=tag.name}}</li>
+        {{for collection in collections:}}
+    	    <li class="list-group-item">{{=collection.name}}</li>
         {{pass}}
     </ul>
 </div>

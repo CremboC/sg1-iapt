@@ -1,0 +1,35 @@
+<form action="{{=URL('search', 'index')}}">
+
+    <input type="hidden" name="query" value="{{=request.vars.query or ""}}">
+    <div class="filters">
+        <div class="filter controls">
+            <a href="{{=URL('search', 'index', vars=dict(query=request.vars.query))}}" class="btn btn-danger">
+                Reset Filters
+            </a>
+        </div>
+
+        <div class="filter user">
+            <button type="button" class="btn btn-default btn-block" data-toggle="collapse" data-target="#filters-user">
+                User
+                <span class="caret"></span>
+            </button>
+            <div id="filters-user" class="collapse {{if request.vars.user_id:}}in{{pass}}">
+                <label for="filter_user">Username</label>
+                <input type="search" name="user" id="filter_user" class="form-control"
+                       value="{{=request.vars.user or ''}}" autocomplete="off">
+                <input type="hidden" name="user_id" id="filter_user_id" value="{{=request.vars.user_id or ''}}">
+            </div>
+        </div>
+
+        <div class="controls filter">
+            <button type="submit" name="filtered" value="true" class="btn btn-success">Submit Filters</button>
+        </div>
+    </div>
+
+
+</form>
+
+<script>
+    var __users_url__ = "{{=URL('users', 'index.json')}}";
+</script>
+<script src="{{=URL('static','js/search.js')}}"></script>

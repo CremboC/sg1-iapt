@@ -4,33 +4,6 @@
 
     <h2>My Collections</h2>
 
-	<table class="table table-hover">
-		<thead>
-			<tr>
-				<th>
-					<span class="glyphicon glyphicon-lock"></span>
-				</th>
-				<th>Name</th>
-				<th># of Items</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-	        {{for tag in tags:}}
-	        <tr>
-	        	<td>
-	        		{{if tag.private:}}
-	        		<strong>
-	        			<span class="glyphicon glyphicon-lock"></span>
-	        		</strong>
-	        		{{pass}}
-	        	</td>
-	        	<td>
-	        		{{=tag.name}}
-	        	</td>
-	        </tr>
-	        {{pass}}
-		</tbody>
-	</table>
+    {{=print_collections(collections)}}
 
 </div>

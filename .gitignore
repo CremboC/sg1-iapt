@@ -7,3 +7,7 @@ uploads/
 
 # python
 **/*.pyc
+
+# pycharm
+.idea
+*.iml

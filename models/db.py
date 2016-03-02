@@ -95,87 +95,108 @@ auth.settings.reset_password_requires_verification = True
 
 auth.settings.extra_fields["auth_user"] = [
     Field("notifications", "boolean",
-        default=False)
+          default=False)
 ]
 auth.define_tables(username=True, signature=False)
 
 db.define_table("types",
-    Field("name", "string")
-)
+                Field("name", "string")
+                )
 
 # Autoform Safe
 db.define_table("objects",
-    Field("owner_id", "reference auth_user",
-        readable=False,
-        writable=False,
-        default=auth.user_id),
-    Field("type_id", "reference types",
-        required=True,
-        label="Type",
-        comment="What best describes your object?"),
-    # 0: Want
-    # 1: Own
-    # 2: Own, Willing to Trade
-    Field("status", "integer",
-        default=0,
-        requires=IS_INT_IN_RANGE(0, 3)),  # TODO: Nice label
-    Field("name", "string",
-        required=True,
-        requires=[IS_NOT_EMPTY(
-            error_message="An item must have a name assigned to it.")]),
-    Field("currency_value", "float",
-        comment="Your own assigned value in Great British Sterling"),
-    Field("description", "text"),
-    Field("summary", "string"),
-    Field("image", "upload")
+                Field("owner_id", "reference auth_user",
+                      readable=False,
+                      writable=False,
+                      default=auth.user_id),
+                Field("type_id", "reference types",
+                      required=True,
+                      label="Type",
+                      comment="What best describes your object?"),
+                # 0: Want
+                # 1: Own
+                # 2: Own, Willing to Trade
+                Field("status", "integer",
+                      default=0,
+                      requires=IS_INT_IN_RANGE(0, 3)),  # TODO: Nice label
+                Field("name", "string",
+                      required=True,
+                      requires=[IS_NOT_EMPTY(
+                          error_message="An item must have a name assigned to it.")]),
+                Field("currency_value", "float",
+                      comment="Your own assigned value in Great British Sterling"),
+                Field("description", "text"),
+                Field("summary", "string"),
+                Field("image", "upload"),
+                Field('created_on', 'datetime', default=request.now, writable=False,
+                      readable=False),
+                Field('updated_on', 'datetime', default=request.now, update=request.now, writable=False,
+                      readable=False),
+                )
+
+db.define_table("collections",
+                Field("owner_id", "reference auth_user",
+                      required=True),
+                Field("name", "string",
+                      required=True),
+                Field("private", "boolean",
+                      default=False),
+                Field('created_on', 'datetime', default=request.now, writable=False,
+                      readable=False),
+                Field('updated_on', 'datetime', default=request.now, update=request.now, writable=False,
+                      readable=False),
+                )
+
+db.collections.objects = Field.Lazy(
+    'objects',
+    lambda row: collections_and_objects(db.collections.id == row.collections.id).select(db.objects.ALL,
+                                                                                        orderby=~db.objects.updated_on)
 )
 
-db.define_table("tags",
-    Field("owner_id", "reference auth_user",
-        required=True),
-    Field("name", "string",
-        required=True),
-    Field("private", "boolean",
-        default=False)
-)
-
-db.define_table("object_tags",
-    Field("object_id", "reference objects",
-        required=True),
-    Field("tag_id", "reference tags",
-        required=True)
-)
+db.define_table("object_collection",
+                Field("object_id", "reference objects",
+                      required=True),
+                Field("collection_id", "reference collections",
+                      required=True)
+                )
 
 db.define_table("trades",
-    Field("sender", "reference auth_user",
-        required=True),
-    Field("receiver", "reference auth_user",
-        required=True),
-    # 0: Pending
-    # 1: Cancelled
-    # 2: Rejected
-    # 3: Accepted
-    # 4: Modified
-    Field("status", "integer",
-        required=True),
-    Field("date_created", "datetime",
-        default=request.now),
-    Field("superseded_by", "reference trades"),
-    Field("seen", "boolean",
-        default=False)
-)
+                Field("sender", "reference auth_user",
+                      required=True),
+                Field("receiver", "reference auth_user",
+                      required=True),
+                # 0: Pending
+                # 1: Cancelled
+                # 2: Rejected
+                # 3: Accepted
+                # 4: Modified
+                Field("status", "integer",
+                      required=True),
+                Field("date_created", "datetime",
+                      default=request.now),
+                Field("superseded_by", "reference trades"),
+                Field("seen", "boolean",
+                      default=False),
+                Field('created_on', 'datetime', default=request.now, writable=False,
+                      readable=False),
+                Field('updated_on', 'datetime', default=request.now, update=request.now, writable=False,
+                      readable=False),
+                )
 
 # Note: Trade & Object should be unique, but this isn't
 # inserted by users, so it'd be pointless to add a
 # validator.
 db.define_table("trades_sending",
-    Field("trade_id", "reference trades",
-        required=True),
-    Field("sent_object_id", "reference objects")
-)
+                Field("trade_id", "reference trades",
+                      required=True),
+                Field("sent_object_id", "reference objects")
+                )
 
 db.define_table("trades_receiving",
-    Field("trade_id", "reference trades",
-        required=True),
-    Field("recv_object_id", "reference objects")
-)
+                Field("trade_id", "reference trades",
+                      required=True),
+                Field("recv_object_id", "reference objects")
+                )
+
+collections_and_objects = db(
+    (db.collections.id == db.object_collection.collection_id) & (db.objects.id == db.object_collection.object_id))

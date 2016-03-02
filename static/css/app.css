@@ -46,7 +46,8 @@
 }
 
 .object .panel-body {
-    padding: 0;
+    /*padding: 0;*/
+    padding: 0px 0 0 10px;
 }
 
 .object .object-image {

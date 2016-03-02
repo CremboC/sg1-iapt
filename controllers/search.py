@@ -1,11 +1,48 @@
 from collections import namedtuple
 
+Page = namedtuple('Page', 'name')
+pages = [
+    Page(name='items'),
+    Page(name='collections'),
+    Page(name='users'),
+]
+
+
 def index():
     query_string = request.vars.query or ''
+    page = request.vars.page or 'items'
     filtered = request.vars.filtered == "true" or False
+
+    returns = dict()
+
+    if page == 'items':
+        (search_query, selected_statuses, selected_types, types, statuses) = _items(query_string, filtered)
+        results = db(search_query).select()
+
+        returns = dict(
+            results=results,
+            types=types, statuses=statuses,
+            filtered=filtered,
+            selected_types=selected_types, selected_statuses=selected_statuses)
+    elif page == 'collections':
+        (search_query) = _collections(query_string, filtered)
+        results = db(search_query).select()
+
+        returns = dict(
+            results=results,
+            filtered=filtered)
+    elif page == 'users':
+        pass
+    else:
+        pass
+
+    returns.update(dict(page=page))
+    return returns
+
+
+def _items(query_string, filtered):
     selected_types = []
     selected_statuses = []
-
     StatusRecord = namedtuple('Status', 'id name')
 
     statuses = [
@@ -39,9 +76,10 @@ def index():
             selected_statuses = [int(status) for status in request.vars.statuses] or [request.vars.statuses]
             search_query &= db.objects.status.belongs(selected_statuses)
 
-    results = db(search_query).select()
+    return search_query, selected_statuses, selected_types, types, statuses
 
-    return dict(results=results,
-                types=types, statuses=statuses,
-                filtered=filtered,
-                selected_types=selected_types, selected_statuses=selected_statuses)
+
+def _collections(query_string, filtered):
+    search_query = db.collections.name.contains(query_string)
+
+    return search_query

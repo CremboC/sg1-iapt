@@ -3,12 +3,30 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-3">
+            <div class="list-group">
+                <a href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'items'})}}"
+                   class="list-group-item {{if page == 'items':}}active{{pass}}">
+                    Items
+                </a>
+                <a href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'collections'})}}"
+                   class="list-group-item {{if page == 'collections':}}active{{pass}}">
+                    Collections
+                </a>
+                <a href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'users'})}}"
+                   class="list-group-item {{if page == 'users':}}active{{pass}}">
+                    Users
+                </a>
+            </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2 class="panel-title">Filter your search</h2>
                 </div>
                 <div class="panel-body">
-                    {{include 'search/_filters.html'}}
+                {{if page == 'items':}}
+                        {{include 'search/_items_filters.html'}}
+                    {{elif page == 'collections':}}
+                        {{include 'search/_collections_filters.html'}}
+                    {{pass}}
                 </div>
             </div>
         </div>
@@ -16,41 +34,31 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2 class="panel-title">
-                        {{if not request.vars.query or request.vars.query == "": }}
-                            Searching for <strong>everything</strong><!--
-                        -->{{else:}}
-                            Searching for <strong>{{=request.vars.query}}</strong>
-                        {{pass}}<!--
-                        -->{{if request.vars.types:}}
-                            <!-- TODO: Fix this godawful hack -->
-                            of type <strong>{{=", ".join(map( lambda x: types[int(x)-1].name, request.vars.types))}}</strong><!--
-                        -->{{pass}}<!--
-                        -->{{if request.vars.user:}}
-                            from user <strong>{{=request.vars.user}}</strong><!--
-                        -->{{pass}}<!--
-                        -->{{if request.vars.min_value and request.vars.max_value:}}
-                            worth between
-                            <strong>&pound;{{=request.vars.min_value}}</strong>
-                            -
-                            <strong>&pound;{{=request.vars.max_value}}</strong><!--
-                        -->{{elif request.vars.max_value:}}
-                            worth less than
-                            <strong>&pound;{{=request.vars.max_value}}</strong><!--
-                        -->{{elif request.vars.min_value:}}
-                            worth more than
-                            <strong>&pound;{{=request.vars.min_value}}</strong><!--
-                        -->{{pass}}.
+                    {{if page == 'items':}}
+                        {{include 'search/_items_header.html'}}
+                    {{elif page == 'collections':}}
+                        {{include 'search/_collections_header.html'}}
+                    {{elif page == 'users':}}
+                        {{include 'search/_users_header.html'}}
+                    {{pass}}
                     </h2>
                 </div>
+
+            {{if page == 'items':}}
                 <div class="panel-body">
                     <div class="row">
-                        {{for result in results:}}
+                    {{for result in results:}}
                         <div class="col-md-6">
-                            {{print_object(result)}}
+                        {{print_object(result)}}
                         </div>
-                        {{pass}}
+                    {{pass}}
                     </div>
                 </div>
+            {{elif page == 'collections':}}
+                {{print_collections(results)}}
+            {{elif page == 'users':}}
+                ...
+            {{pass}}
             </div>
         </div>
     </div>

@@ -1,0 +1,44 @@
+{{def print_collections(collections, show_privacy = False):}}
+<table class="table table-hover">
+    <thead>
+    <tr>
+    {{if show_privacy:}}
+        <th>
+            <span class="glyphicon glyphicon-lock"></span>
+        </th>
+    {{pass}}
+        <th>Name</th>
+        <th># of Items</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{for collection in collections:}}
+    <tr>
+    {{if show_privacy:}}
+        <td>
+        {{if collection.private:}}
+            <strong>
+                <span class="glyphicon glyphicon-lock"></span>
+            </strong>
+        {{pass}}
+        </td>
+    {{pass}}
+        <td>
+            <a href="{{=URL('collections', 'show', args=[collection.id])}}">
+            {{=collection.name}}
+            </a>
+        </td>
+        <td>
+        {{=len(collection.objects())}}
+        </td>
+        <td>
+            <a href="{{=URL('collections', 'show', args=[collection.id])}}" class="btn btn-default btn-sm">
+                View
+            </a>
+        </td>
+    </tr>
+    {{pass}}
+    </tbody>
+</table>
+{{return}}

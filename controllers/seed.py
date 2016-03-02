@@ -9,6 +9,13 @@ def index():
     db.types.insert(name='General')
     db.types.insert(name='Comics')
 
+    db.collections.truncate()
+    db.collections.insert(owner_id=1, name='Collection One', private=False)
+    db.collections.insert(owner_id=1, name='Collection Two', private=True)
+    db.collections.insert(owner_id=2, name='Collection Three', private=False)
+    db.collections.insert(owner_id=2, name='Collection', private=True)
+    db.collections.insert(owner_id=2, name='Comics', private=True)
+
     db.objects.truncate()
     db.objects.insert(owner_id=1, type_id=1, status=2, name='object1a', summary='Summary',
         description='Description', currency_value=5.0)

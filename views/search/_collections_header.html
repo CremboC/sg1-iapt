@@ -1,0 +1,5 @@
+{{if not request.vars.query or request.vars.query == "": }}
+    Searching for <strong>everything</strong><!--
+-->{{else:}}
+    Searching for <strong>{{=request.vars.query}}</strong>
+{{pass}}
