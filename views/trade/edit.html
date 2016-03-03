@@ -1,0 +1,123 @@
+{{extend 'layout.html'}}
+
+<script src="{{=URL('static','js/trade.js')}}"></script>
+<link rel="stylesheet" type="text/css" href="{{=URL('static','css/app.css')}}">
+<div class="container">
+
+    <div class="row text-center clearfix">
+        <form class="form-inline" action="">
+            <label for='trader_username'>Select User: &nbsp;</label><input class="form-control" name='trader_username' type='search' value="{{=(trader_username if trader_username is not None else '')}}">
+            <input type='submit' value='Submit'>
+        </form>
+    </div>
+    <!-- TODO: create search features for multi-selects -->
+    <form  id="tradeform" action="{{=URL('trade', 'createNew')}}">
+        <div class="clearfix">
+            <div class="col-md-6 tradeborder">
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        <h2 class="panel-title">You have</h2>
+                    </div>
+
+                    <div class="panel-body">
+
+                        <div id="searchItems" class="form-inline">
+                            <input type="text" class="form-control" id="searchOwnItems" placeholder="Search your items">
+                            <button type="button" class="btn btn-default">Submit</button>
+                        </div>
+
+                        <select id="ownAvailableObjects" multiple size="5" class="form-control">
+                        {{for row in available_objects[0]:}}
+                            <option value="{{=row.id}}">{{=row.name}}</option>
+                        {{pass}}
+                        </select>
+
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-default" onclick="transferOptions($('#ownAvailableObjects'), $('#ownTradeObjects'))">Add item</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{{="You give"}}</h2>
+                    </div>
+
+                    <div class="panel-body">
+                        <div id="searchItems" class="form-inline">
+                            <input type="text" class="form-control" id="searchOwnItems" placeholder="Search your items">
+                            <button type="button" class="btn btn-default">Submit</button>
+                        </div>
+                        <select name="senderObjects" id="ownTradeObjects" multiple size="5" class="form-control">
+                        {{for row in trade_objects[0]:}}
+                            <option value="{{=row.id}}">{{=row.name}}</option>
+                        {{pass}}
+                        </select>
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-default" onclick="transferOptions($('#ownTradeObjects'), $('#ownAvailableObjects'))">Remove item</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        <h2 class="panel-title">He has</h2>
+                    </div>
+
+                    <div class="panel-body">
+
+                        <div id="searchItems" class="form-inline">
+                            <input type="text" class="form-control" id="searchOwnItems" placeholder="Search their items">
+                            <button type="button" class="btn btn-default">Submit</button>
+                        </div>
+
+                        <select id="theirAvailableObjects" multiple size="5" class="form-control">
+                        {{for row in available_objects[1]:}}
+                            <option value="{{=row.id}}">{{=row.name}}</option>
+                        {{pass}}
+                        </select>
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-default" onclick="transferOptions($('#theirAvailableObjects'), $('#theirTradeObjects'))">Add item</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{{="He gives"}}</h2>
+                    </div>
+
+                    <div class="panel-body">
+
+                        <div id="searchItems" class="form-inline">
+                            <input type="text" class="form-control" id="searchOwnItems" placeholder="Search their items">
+                            <button type="button" class="btn btn-default">Submit</button>
+                        </div>
+                        <select name="receiverObjects"  id="theirTradeObjects" multiple size="5" class="form-control">
+                        {{for row in trade_objects[1]:}}
+                            <option value="{{=row.id}}">{{=row.name}}</option>
+                        {{pass}}
+                        </select>
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-default" onclick="transferOptions($('#theirTradeObjects'), $('#theirAvailableObjects'))">Remove item</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="clearfix">
+            <div class="pull-left">
+                <a class="btn btn-danger" href="{{=URL('trade', 'index')}}">Cancel</a>
+            </div>
+            <div class="pull-right">
+                <button onclick="selectAll();" class="btn btn-success">Send trade proposal</button>
+             </div>
+        </div>
+    </form>
+</div>
