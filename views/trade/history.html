@@ -1,40 +1,9 @@
 {{extend 'layout.html'}}
 <div class="container">
-    <table class="table table-striped header-fixed" style="width:100%;
-border:1px solid #FF0000;">
-        <thead>
-            <tr>
-                <th>To/From</th>
-                <th>Username</th>
-                <th>Date</th>
-                <th>Items given</th>
-                <th>Items received</th>
-                <th>Total value</th>
-                <th>Status</th>
-                <th>Link</th>
-                <th>Superseded by</th> <!-- Link -->
-            </tr>
-        </thead>
-        <tbody>
-        {{for trade in trades:}}
-            <tr>
-                <td>{{=trade.trades.sender==auth.user_id}}</td>
-                <td>{{=trade.auth_user.username}}</td>
-                <td>{{=trade.trades.date_created.date()}}</td>
-                <td>{{=trade.sentItems}}</td>
-                <td>{{=trade.receivedItems}}</td>
-                <td>£ {{=trade.value}}</td>
-                <td>{{=trade.trades.status}}</td>
-                <td><a href="{{=URL('trade', 'index', vars=dict(tradeid=trade.trades.id))}}">Link</a></td>
-                {{if trade.trades.superseded_by is not None:}}
-                <td><a href="{{=URL('trade', 'index', vars=dict(tradeid=trade.trades.superseded_by))}}">Link</a></td>
-                {{else:}}
-                <td>N/A</td>
-                {{pass}}
-            </tr>
-        </tbody>
-        {{pass}}
-    </table>
-
+{{trades = incoming}}
+    {{include 'partials/trade_history.html'}}
+{{trades = sent}}
+    {{include 'partials/trade_history.html'}}
+{{trades = completed}}
+    {{include 'partials/trade_history.html'}}
 </div>
-        {{=trades}}
