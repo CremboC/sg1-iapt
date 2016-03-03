@@ -153,6 +153,11 @@ db.collections.objects = Field.Lazy(
                                                                                         orderby=~db.objects.updated_on)
 )
 
+db.collections.owner = Field.Lazy(
+    'owner',
+    lambda row: db(db.auth_user.id == row.collections.owner_id).select()[0]
+)
+
 db.define_table("object_collection",
                 Field("object_id", "reference objects",
                       required=True),

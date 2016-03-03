@@ -1,4 +1,4 @@
-{{def print_collections(collections, show_privacy = False):}}
+{{def print_collections(collections, show_privacy = False, show_owner = True, show_edit = False):}}
 <table class="table table-hover">
     <thead>
     <tr>
@@ -8,6 +8,9 @@
         </th>
     {{pass}}
         <th>Name</th>
+    {{if show_owner:}}
+        <th>Owner</th>
+    {{pass}}
         <th># of Items</th>
         <th>Actions</th>
     </tr>
@@ -29,6 +32,14 @@
             {{=collection.name}}
             </a>
         </td>
+    {{if show_owner:}}
+    {{owner = collection.owner()}}
+        <td>
+            <a href="{{=URL('users', 'show', args=owner.id)}}">
+                {{=owner.username}}
+            </a>
+        </td>
+    {{pass}}
         <td>
         {{=len(collection.objects())}}
         </td>

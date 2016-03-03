@@ -1,6 +1,8 @@
 <form action="{{=URL('search', 'index')}}">
 
     <input type="hidden" name="query" value="{{=request.vars.query or ""}}">
+    <input type="hidden" name="page" value="{{=request.vars.page or page or ""}}">
+
     <div class="filters">
         <div class="filter controls">
             <a href="{{=URL('search', 'index', vars=dict(query=request.vars.query))}}" class="btn btn-danger">Reset

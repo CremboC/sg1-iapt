@@ -63,13 +63,13 @@ def _items(query_string, filtered):
             selected_types = [int(type) for type in request.vars.types] or [request.vars.types]
             search_query &= db.objects.type_id.belongs(selected_types)
 
-        if request.vars.user_id != '':
+        if request.vars.user_id:
             search_query &= db.objects.owner_id == request.vars.user_id
 
-        if request.vars.min_value != '':
+        if request.vars.min_value:
             search_query &= db.objects.currency_value >= request.vars.min_value
 
-        if request.vars.max_value != '':
+        if request.vars.max_value:
             search_query &= db.objects.currency_value <= request.vars.max_value
 
         if request.vars.statuses:
@@ -81,5 +81,9 @@ def _items(query_string, filtered):
 
 def _collections(query_string, filtered):
     search_query = db.collections.name.contains(query_string)
+
+    if filtered:
+        if request.vars.user_id != '':
+            search_query &= db.collections.owner_id == request.vars.user_id
 
     return search_query
