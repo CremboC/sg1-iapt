@@ -12,6 +12,7 @@
     </div>
     <!-- TODO: create search features for multi-selects -->
     <form  id="tradeform" action="{{=URL('trade', 'createNew')}}">
+        <input hidden name="prevtrade" value="{{=prevtrade}}"/>
         <div class="clearfix">
             <div class="col-md-6 tradeborder">
                 <div class="panel panel-default">

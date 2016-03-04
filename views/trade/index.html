@@ -1,0 +1,30 @@
+{{extend 'layout.html'}}
+<div class="container">
+{{trades = incoming}}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">Incoming trades</h2>
+        </div>
+        <div class="panel-body">
+            {{include 'partials/trade_history.html'}}
+        </div>
+    </div>
+{{trades = sent}}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">Sent trades</h2>
+        </div>
+        <div class="panel-body">
+            {{include 'partials/trade_history.html'}}
+        </div>
+    </div>
+{{trades = completed}}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">Completed trades</h2>
+        </div>
+        <div class="panel-body">
+            {{include 'partials/trade_history.html'}}
+        </div>
+    </div>
+</div>

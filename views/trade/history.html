@@ -1,9 +1,1 @@
 {{extend 'layout.html'}}
-<div class="container">
-{{trades = incoming}}
-    {{include 'partials/trade_history.html'}}
-{{trades = sent}}
-    {{include 'partials/trade_history.html'}}
-{{trades = completed}}
-    {{include 'partials/trade_history.html'}}
-</div>

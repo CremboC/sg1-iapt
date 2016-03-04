@@ -1,34 +1,47 @@
-<table class="table table-striped header-fixed" style="width:100%;
-border:1px solid #FF0000;">
+<table class="table table-striped header-fixed" style="width:100%;">
     <thead>
     <tr>
-        <th>To/From</th>
+        <th>Status</th>
         <th>Username</th>
         <th>Date</th>
         <th>Items given</th>
         <th>Items received</th>
         <th>Total value</th>
-        <th>Status</th>
-        <th>Link</th>
+
         <th>Superseded by</th> <!-- Link -->
+        <th>Link</th>
     </tr>
     </thead>
     <tbody>
     {{for trade in trades:}}
+
         <tr>
-            <td>{{=trade.trades.sender==auth.user_id}}</td>
-            <td>{{=trade.auth_user.username}}</td>
+            {{if (trade.trades.status==0) & (trade.trades.sender==user_id):}}
+                <td><span class="glyphicon glyphicon-send"></span></td>
+            {{elif (trade.trades.status==0) & (trade.trades.receiver==user_id):}}
+                <td><span class="glyphicon glyphicon-arrow-right"></span></td>
+            {{elif trade.trades.status==1:}}
+                <td><span class="glyphicon glyphicon glyphicon-remove" style="color:red"></span></td>
+            {{elif trade.trades.status==2:}}
+                <td><span class="glyphicon glyphicon-thumbs-down" style="color:red"></span></td>
+            {{elif trade.trades.status==3:}}
+                <td><span class="glyphicon glyphicon-thumbs-up" style="color:green"></span></td>
+            {{elif trade.trades.status==4:}}
+                <td><span class="glyphicon glyphicon-refresh" style="color:darkorange"></span></td>
+            {{pass}}
+
+            <td>{{=trade.trades.otheruser}}</td>
             <td>{{=trade.trades.date_created.date()}}</td>
             <td>{{=trade.sentItems}}</td>
             <td>{{=trade.receivedItems}}</td>
             <td>£ {{=trade.value}}</td>
-            <td>{{=trade.trades.status}}</td>
-            <td><a href="{{=URL('trade', 'index', vars=dict(tradeid=trade.trades.id))}}">Link</a></td>
-        {{if trade.trades.superseded_by is not None:}}
-            <td><a href="{{=URL('trade', 'index', vars=dict(tradeid=trade.trades.superseded_by))}}">Link</a></td>
+       {{if trade.trades.superseded_by is not None:}}
+            <td><a href="{{=URL('trade', 'view', vars=dict(tradeid=trade.trades.superseded_by))}}">Link</a></td>
         {{else:}}
             <td>N/A</td>
         {{pass}}
+            <td><a href="{{=URL('trade', 'view', vars=dict(tradeid=trade.trades.id))}}">Link</a></td>
+
         </tr>
     {{pass}}
     </tbody>

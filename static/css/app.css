@@ -121,3 +121,6 @@
     width: 11%;
     float: left;
 }
+span.glyphicon {
+    font-size: 1.4em;
+}
