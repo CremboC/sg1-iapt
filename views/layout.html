@@ -1,5 +1,6 @@
 {{include 'partials/object.html'}}
 {{include 'partials/collections.html'}}
+{{include 'partials/sortby.html'}}
 
 <!DOCTYPE html>
 <!--[if (gt IE 9)|!(IE)]><!-->
@@ -38,10 +39,11 @@
     <script src="{{=URL('static','js/respond-1.4.2.min.js')}}"></script>z
     <![endif]-->
     <!-- Favicons -->
-    {{include 'web2py_ajax.html'}} <!-- this includes jquery.js, calendar.js/.css and web2py.js -->
+{{include 'web2py_ajax.html'}} <!-- this includes jquery.js, calendar.js/.css and web2py.js -->
     <script src="{{=URL('static','js/app.js')}}"></script>
 </head>
 <body>
+
 
 <!-- Navbar ======================================= -->
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -59,22 +61,33 @@
 
         <div id="navbar-ex1-collapse" class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
-                {{ if auth.user_id: }}
-                    {{ if notifications(): }}
-                    <li>
-                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="You have notifications!">
-                            <span class="glyphicon glyphicon-bell notification-icon" aria-hidden="true"></span>
-                        </a>
-                    </li>
-                    {{ else: }}
-                    <li>
-                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="No Notifications">
-                            <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
-                        </a>
-                    </li>
-                    {{ pass}}
-                {{ pass }}
-                {{='auth' in globals() and auth.navbar('Welcome',mode='dropdown') or ''}}
+            {{ if auth.user_id: }}
+            {{ if notifications(): }}
+                <li>
+                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="You have notifications!">
+                        <span class="glyphicon glyphicon-bell notification-icon" aria-hidden="true"></span>
+                    </a>
+                </li>
+            {{ else: }}
+                <li>
+                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="No Notifications">
+                        <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
+                    </a>
+                </li>
+            {{ pass}}
+            {{ pass }}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Create
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{=URL('items', 'create')}}">
+                            Add Item
+                        </a></li>
+                        <li><a href="{{=URL('collections', 'create')}}">Create Collection</a></li>
+                    </ul>
+                </li>
+            {{='auth' in globals() and auth.navbar('Welcome',mode='dropdown') or ''}}
             </ul>
 
             <ul class="nav navbar-nav">
@@ -90,18 +103,13 @@
                 <li>
                     <a href="{{=URL('trade', 'index')}}">Trades</a>
                 </li>
-                <li>
-                    <a href="{{=URL('items', 'create')}}">
-                        <span class="glyphicon glyphicon-plus-sign"></span>
-                        Add Item
-                    </a>
-                </li>
             </ul>
         </div>
     </div>
     <div class="container navbar-searchbar">
         <form class="navbar-form" action="{{=URL('search', 'index')}}">
             <label for="search_query" class="sr-only">Search Query</label>
+
             <div class="row">
                 <div class="col-sm-6 col-sm-offset-2">
                     <input type="text" name="query" id="search_query" class="form-control"
@@ -119,28 +127,28 @@
 </nav>
 
 <div class="wrapper">
-    {{if response.flash:}}
-    {{
-    status = 'info'
-    message = response.flash
-    }}
-    {{if type(response.flash) is dict:}}
-    {{
-    status = response.flash['status']
-    message = response.flash['message']
-    }}
-    {{pass}}
+{{if response.flash:}}
+{{
+status = 'info'
+message = response.flash
+}}
+{{if type(response.flash) is dict:}}
+{{
+status = response.flash['status']
+message = response.flash['message']
+}}
+{{pass}}
     <div class="container">
         <div class="alert alert-{{=status}}">
-        	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        	{{=message}}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{=message}}
         </div>
     </div>
-    {{pass}}
+{{pass}}
 
-    {{block center}}
-    {{include}}
-    {{end}}
+{{block center}}
+{{include}}
+{{end}}
 </div>
 
 {{block footer}} <!-- this is default footer -->
@@ -151,7 +159,7 @@
 {{end}}
 
 <div class="container">
-    {{=response.toolbar()}}
+{{#=response.toolbar()}}
 </div>
 
 
