@@ -20,6 +20,7 @@
     <!-- include stylesheets -->
     <link rel="stylesheet" href="{{=URL('static','css/bootstrap.min.css')}}"/>
     <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static','css/bootstrap-multiselect.css')}}"/>
 
     <link rel="stylesheet" href="{{=URL('static','css/app.css')}}"/>
 
@@ -58,26 +59,33 @@
             {{ if notifications(): }}
                 <li>
                     <a href="#" data-toggle="tooltip" data-placement="bottom" title="You have notifications!">
-                        <span class="glyphicon glyphicon-bell notification-icon" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-bell notification-icon middle" aria-hidden="true"></span>
                     </a>
                 </li>
             {{ else: }}
                 <li>
                     <a href="#" data-toggle="tooltip" data-placement="bottom" title="No Notifications">
-                        <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-bell middle" aria-hidden="true"></span>
                     </a>
                 </li>
             {{ pass}}
             {{ pass }}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-plus middle"></span>
                         Create
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{=URL('items', 'create')}}">
-                            Add Item
-                        </a></li>
-                        <li><a href="{{=URL('collections', 'create')}}">Create Collection</a></li>
+                        <li>
+                            <a href="{{=URL('items', 'create')}}">
+                                Add Item
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{=URL('collections', 'create')}}">
+                                Create Collection
+                            </a>
+                        </li>
                     </ul>
                 </li>
             {{='auth' in globals() and auth.navbar('Welcome',mode='dropdown') or ''}}
@@ -120,19 +128,19 @@
 </nav>
 
 <div class="wrapper">
-    {{ if "breadcrumbs" in vars(): }}
-        <div class="container">
-            <ol class="breadcrumb">
-                {{ for index, tup in enumerate( breadcrumbs ): }}
-                    {{ if index + 1 == len( breadcrumbs ): }}
-                        <li class="active">{{=tup[1] or tup[0]}}</li>
-                    {{ else: }}
-                        <li><a href="{{=tup[0]}}">{{=tup[1]}}</a></li>
-                    {{ pass }}
-                {{ pass }}
-            </ol>
-        </div>
-    {{ pass }}
+{{ if "breadcrumbs" in vars(): }}
+    <div class="container">
+        <ol class="breadcrumb">
+        {{ for index, tup in enumerate( breadcrumbs ): }}
+        {{ if index + 1 == len( breadcrumbs ): }}
+            <li class="active">{{=tup[1] or tup[0]}}</li>
+        {{ else: }}
+            <li><a href="{{=tup[0]}}">{{=tup[1]}}</a></li>
+        {{ pass }}
+        {{ pass }}
+        </ol>
+    </div>
+{{ pass }}
 {{if response.flash:}}
 {{
 status = 'info'
@@ -173,6 +181,7 @@ message = response.flash['message']
 <script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
 <script src="{{=URL('static','js/web2py-bootstrap3.js')}}"></script>
 <script src="{{=URL('static','js/bootstrap-typeahead.min.js')}}"></script>
+<script src="{{=URL('static','js/bootstrap-multiselect.js')}}"></script>
 {{block page_js}}{{end page_js}}
 </body>
 </html>
