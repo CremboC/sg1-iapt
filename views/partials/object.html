@@ -1,4 +1,4 @@
-{{def print_object(obj):}}
+{{def print_object(obj, show_owner = True):}}
 {{owner = obj.owner()}}
 {{type = obj.type()}}
 <div class="panel panel-default object">
@@ -21,11 +21,13 @@
             <div class="col-md-7 object-text">
                 <ul class="list-unstyled">
                     <li>{{=type.name}}</li>
+                    {{if show_owner:}}
                     <li>Posted By:
                         <a href="{{=URL('collections', 'show', vars={'user': owner.id})}}">
                         {{=owner.username}}
                         </a>
                     </li>
+                    {{pass}}
                 </ul>
                 <div class="object-status">
                 {{if obj.status == 0:}}

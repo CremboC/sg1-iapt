@@ -3,10 +3,31 @@
 
 <div class="container">
 {{=form.custom.begin}}
+    <h3>Editing Collection <strong>{{=collection.name}}</strong></h3>
+
     <div class="row row-bottom-margin">
         <div class="col-xs-6">
-        {{=form.custom.widget.name}}
-            <button class="btn btn-danger">Delete</button>
+            <div class="form-group">
+                <label for="collections_name" class="sr-only">{{=form.custom.label.name}}</label>
+                <input class="form-control string" id="collections_name" name="name" type="text"
+                       value="Collection One">
+
+            </div>
+            <div class="form-group">
+                <label for="collections_private">
+                {{if collection.private:}}
+                    <input class="boolean" id="collections_private" name="private" type="checkbox" value="on"
+                           checked="checked">
+                {{else:}}
+                    <input class="boolean" id="collections_private" name="private" type="checkbox" value="on">
+                {{pass}}
+                {{=form.custom.label.private}}
+                </label>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" name="submit" value="delete" class="btn btn-danger">Delete</button>
+            </div>
         </div>
         <div class="col-xs-6 clearfix">
             <div class="pull-right">
@@ -15,11 +36,25 @@
         </div>
     </div>
 
+    <h3>Items in Collection</h3>
 
     <div class="panel panel-default">
         <div class="panel-body">
-            {{print_sortby()}}
+        {{print_sortby()}}
+        {{objects = collection.objects()}}
+            <div class="row">
+            {{for object in objects:}}
+                <div class="col-xs-4">
+                    {{print_object(object, False)}}
+                </div>
+            {{pass}}
+            </div>
         </div>
+    </div>
+
+    <div class="form-group clearfix">
+        <a href="{{=URL('collections', 'show', args=collection.id)}}" class="btn btn-default pull-left">Cancel</a>
+        <button type="submit" name="submit" value="save" class="btn btn-success pull-right">Save Collection</button>
     </div>
 
 {{=form.custom.end}}

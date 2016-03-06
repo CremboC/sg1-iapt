@@ -36,7 +36,7 @@
     {{owner = collection.owner()}}
         <td>
             <a href="{{=URL('users', 'show', args=owner.id)}}">
-                {{=owner.username}}
+            {{=owner.username}}
             </a>
         </td>
     {{pass}}
@@ -47,6 +47,11 @@
             <a href="{{=URL('collections', 'show', args=collection.id)}}" class="btn btn-default btn-sm">
                 View
             </a>
+        {{if show_edit:}}
+            <a href="{{=URL('collections', 'edit', args=collection.id)}}" class="btn btn-default btn-sm">
+                Edit
+            </a>
+        {{pass}}
         </td>
     </tr>
     {{pass}}
