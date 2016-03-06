@@ -118,7 +118,7 @@
 
 .header-fixed > tbody > tr > td,
 .header-fixed > thead > tr > th {
-    width: 11%;
+    width: 12.5%;
     float: left;
 }
 span.glyphicon {

@@ -1,1 +1,21 @@
 {{extend 'layout.html'}}
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">Sent trades</h2>
+        </div>
+        <div class="panel-body">
+        {{include 'partials/trade_list.html'}}
+        </div>
+    </div>
+    <nav>
+      <ul class="pager">
+        {{if hasPrevPage:}}
+            <li class="previous"><a href={{=URL('trade', 'history', vars={"index": minIndex-numPerPage})}}><span aria-hidden="true">&larr;</span> Older</a></li>
+        {{pass}}
+        {{if hasNextPage:}}
+            <li class="next"><a href={{=URL('trade', 'history', vars={"index": minIndex+numPerPage})}}>Newer <span aria-hidden="true">&rarr;</span></a></li>
+        {{pass}}
+      </ul>
+    </nav>
+</div>

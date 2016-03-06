@@ -12,7 +12,8 @@
         <th>Link</th>
     </tr>
     </thead>
-    <tbody>
+
+    <tbody style="height:inherit">
     {{for trade in trades:}}
 
         <tr>
@@ -40,9 +41,13 @@
         {{else:}}
             <td>N/A</td>
         {{pass}}
-            <td><a href="{{=URL('trade', 'view', vars=dict(tradeid=trade.trades.id))}}">Link</a></td>
-
+            <td><a href="{{=URL('trade', 'view', vars=dict(tradeid=trade.trades.id))}}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
         </tr>
+    {{pass}}
+    {{if len(trades)==0:}}
+    <tr>
+        <td colspan=4 style="width:100%">No trades to display :(</td>
+    </tr>
     {{pass}}
     </tbody>
 

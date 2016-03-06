@@ -1,9 +1,4 @@
-import datetime
-
-
-# todo: don't trade wanted items
-
-
+import json
 
 @auth.requires_login()
 def view():
@@ -126,11 +121,20 @@ def edit():
     if trader_username is None:
         trader_username = db(db.auth_user.id == trader_id).select(db.auth_user.username).column()[0]
 
+    available_objects = [get_available_user_items(auth.user_id), get_available_user_items(trader_id)]
+
     return {"prevtrade": tradeid, "user_id": auth.user_id, "trader_id": trader_id, "status": trade.status,
             "trader_username": trader_username,
             "editable": editable,
-            "trade_objects": trade_objects,
-            "available_objects": [get_available_user_items(auth.user_id), get_available_user_items(trader_id)]}
+            "trade_objects": trade_objects, "available_objects": available_objects
+            }
+
+def getobjectdata():
+    print(request.get_vars)
+    objectId = request.vars.id
+    object = db(db.objects.id == objectId).select()
+    object[0].image = URL('download', args=object[0].image)
+    return object.json()
 
 
 @auth.requires_login()
@@ -147,23 +151,27 @@ def createNew():
 
     # Verify all objects belong to correct user
     senderobjectIds = map(int, request.vars['senderObjects'])
-    senderobjects = db(db.objects.id.belongs(senderobjectIds)).select(db.objects.owner_id).column()
+    senderobjects = db(db.objects.id.belongs(senderobjectIds)).select(db.objects.owner_id, db.objects.status)
 
-    for string in senderobjects:
-        if string != senderId:
+    for row in senderobjects:
+        if row.owner_id != senderId:
             response.status = 400
             return 'Error 400: invalid item ID, please refresh page'
+        if row.status != 2:
+            response.status = 400
+            return 'Error 400: Item not available for trade'
 
     receiverobjectIds = map(int, request.vars['receiverObjects'])
-    receiverobjects = db(db.objects.id.belongs(receiverobjectIds)).select(db.objects.owner_id).column()
-
+    receiverobjects = db(db.objects.id.belongs(receiverobjectIds)).select(db.objects.owner_id, db.objects.status)
 
     receiverId = receiverobjects[0].id
-
-    for string in receiverobjects:
-        if string != receiverId:
+    for row in receiverobjects:
+        if row.owner_id != receiverId:
             response.status = 400
             return 'Error 400: invalid item ID, please refresh page'
+        if row.status != 2:
+            response.status = 400
+            return 'Error 400: Item not available for trade'
 
     if request.vars.prevtrade is not None:
         newTradeId = db.trades.insert(sender=senderId, receiver=receiverId, status=4, seen=False)
@@ -243,19 +251,14 @@ def index():
     incoming = []
     sent = []
     completed = []
-    # 0: Pending
-    # 1: Cancelled
-    # 2: Rejected
-    # 3: Accepted
-    # 4: Modified
+
     for trade in trades:
         sentItems = db(db.trades_sending.trade_id == trade.trades.id).count()
-        sentItemValue = db((db.trades_sending.trade_id == trade.trades.id) & (
-            db.trades.id == db.trades_sending.sent_object_id)).select(db.objects.currency_value).column()
+        sentItemValue = map(int, db((db.trades_sending.trade_id == trade.trades.id) & (
+            db.objects.id == db.trades_sending.sent_object_id)).select(db.objects.currency_value).column())
         receivedItems = db(db.trades_receiving.trade_id == trade.trades.id).count()
-        recvItemValue = db((db.trades_receiving.trade_id == trade.trades.id) & (
-            db.trades.id == db.trades_receiving.recv_object_id)).select(db.objects.currency_value).column()
-
+        recvItemValue = map(int, db((db.trades_receiving.trade_id == trade.trades.id) & (
+            db.objects.id == db.trades_receiving.recv_object_id)).select(db.objects.currency_value).column())
 
         trade.value = sum(sentItemValue) + sum(recvItemValue)
 
@@ -305,3 +308,54 @@ def get_available_user_items(userid):
         db.objects.currency_value,
         db.objects.image,
         db.objects.summary)
+
+@auth.requires_login()
+def history():
+
+    numPerPage = 20
+    minIndex = int(request.vars.index)
+    if minIndex is None:
+        minIndex = 0
+
+    trades = db((((db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)) | (
+        (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender))) &
+        db.trades.status.belongs([1, 2, 3])).select(db.trades.id, db.trades.date_created, db.trades.sender, db.trades.receiver, db.trades.status,
+                         db.trades.superseded_by, db.auth_user.username, limitby=(minIndex, minIndex+numPerPage))
+
+    numTrades = db((((db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)) | (
+        (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender))) &
+        db.trades.status.belongs([1, 2, 3])).count()
+
+    for trade in trades:
+        sentItems = db(db.trades_sending.trade_id == trade.trades.id).count()
+        sentItemValue = map(int, db((db.trades_sending.trade_id == trade.trades.id) & (
+            db.objects.id == db.trades_sending.sent_object_id)).select(db.objects.currency_value).column())
+        receivedItems = db(db.trades_receiving.trade_id == trade.trades.id).count()
+        recvItemValue = map(int, db((db.trades_receiving.trade_id == trade.trades.id) & (
+            db.objects.id == db.trades_receiving.recv_object_id)).select(db.objects.currency_value).column())
+
+        trade.value = sum(sentItemValue) + sum(recvItemValue)
+
+        if trade.trades.sender != auth.user_id:
+            a = receivedItems
+            receivedItems = sentItems
+            sentItems = a
+        trade.sentItems = sentItems
+        trade.receivedItems = receivedItems
+        trade.trades.status = int(trade.trades.status)
+
+        if trade.trades.sender == auth.user_id:
+            trade.trades.otheruser = trade.trades.receiver
+        else:
+            trade.trades.otheruser = trade.trades.sender
+        trade.trades.otheruser = db(db.auth_user.id == trade.trades.otheruser).select(db.auth_user.username).column()[0]
+
+    return {"trades": trades, "user_id": auth.user_id, "hasPrevPage": minIndex>0, "hasNextPage": numTrades > minIndex+numPerPage, "minIndex": minIndex, "numPerPage":numPerPage}
+
+@cache.action()
+def download():
+    """
+    allows downloading of uploaded files
+    http://..../[app]/default/download/[filename]
+    """
+    return response.download(request, db)

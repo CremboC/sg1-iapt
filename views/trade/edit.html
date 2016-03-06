@@ -1,9 +1,10 @@
 {{extend 'layout.html'}}
 
 <script src="{{=URL('static','js/trade.js')}}"></script>
+
+
 <link rel="stylesheet" type="text/css" href="{{=URL('static','css/app.css')}}">
 <div class="container">
-
     <div class="row text-center clearfix">
         <form class="form-inline" action="">
             <label for='trader_username'>Select User: &nbsp;</label><input class="form-control" name='trader_username' type='search' value="{{=(trader_username if trader_username is not None else '')}}">
@@ -35,7 +36,7 @@
                         </select>
 
                         <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptions($('#ownAvailableObjects'), $('#ownTradeObjects'))">Add item</button>
+                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#ownAvailableObjects'), $('#ownTradeObjects'))">Add item</button>
                         </div>
                     </div>
                 </div>
@@ -44,20 +45,15 @@
                     <div class="panel-heading">
                         <h2 class="panel-title">{{="You give"}}</h2>
                     </div>
+                    <div id="yourItemDisplay">
 
+                    </div>
                     <div class="panel-body">
-                        <div id="searchItems" class="form-inline">
-                            <input type="text" class="form-control" id="searchOwnItems" placeholder="Search your items">
-                            <button type="button" class="btn btn-default">Submit</button>
-                        </div>
-                        <select name="senderObjects" id="ownTradeObjects" multiple size="5" class="form-control">
+                        <select style="display:none" hidden name="senderObjects" id="ownTradeObjects" multiple size="5" class="form-control">
                         {{for row in trade_objects[0]:}}
                             <option value="{{=row.id}}">{{=row.name}}</option>
                         {{pass}}
                         </select>
-                        <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptions($('#ownTradeObjects'), $('#ownAvailableObjects'))">Remove item</button>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -82,7 +78,7 @@
                         {{pass}}
                         </select>
                         <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptions($('#theirAvailableObjects'), $('#theirTradeObjects'))">Add item</button>
+                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#theirAvailableObjects'), $('#theirTradeObjects'))">Add item</button>
                         </div>
                     </div>
                 </div>
@@ -91,21 +87,15 @@
                     <div class="panel-heading">
                         <h2 class="panel-title">{{="He gives"}}</h2>
                     </div>
+                    <div id="hisItemDisplay">
 
+                    </div>
                     <div class="panel-body">
-
-                        <div id="searchItems" class="form-inline">
-                            <input type="text" class="form-control" id="searchOwnItems" placeholder="Search their items">
-                            <button type="button" class="btn btn-default">Submit</button>
-                        </div>
-                        <select name="receiverObjects"  id="theirTradeObjects" multiple size="5" class="form-control">
+                        <select style="display:none" name="receiverObjects"  id="theirTradeObjects" multiple size="5" class="form-control">
                         {{for row in trade_objects[1]:}}
                             <option value="{{=row.id}}">{{=row.name}}</option>
                         {{pass}}
                         </select>
-                        <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptions($('#theirTradeObjects'), $('#theirAvailableObjects'))">Remove item</button>
-                        </div>
                     </div>
                 </div>
             </div>

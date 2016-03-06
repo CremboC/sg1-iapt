@@ -34,7 +34,7 @@
                         </select>
 
                         <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptions($('#ownAvailableObjects'), $('#ownTradeObjects'))">Add item</button>
+                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#ownAvailableObjects'), $('#ownTradeObjects'))">Add item</button>
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                         <select name="senderObjects" id="ownTradeObjects" multiple size="5" class="form-control">
                         </select>
                         <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptions($('#ownTradeObjects'), $('#ownAvailableObjects'))">Remove item</button>
+                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#ownTradeObjects'), $('#ownAvailableObjects'))">Remove item</button>
                         </div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                             {{pass}}
                         </select>
                         <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptions($('#theirAvailableObjects'), $('#theirTradeObjects'))">Add item</button>
+                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#theirAvailableObjects'), $('#theirTradeObjects'))">Add item</button>
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                         <select name="receiverObjects"  id="theirTradeObjects" multiple size="5" class="form-control">
                         </select>
                         <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptions($('#theirTradeObjects'), $('#theirAvailableObjects'))">Remove item</button>
+                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#theirTradeObjects'), $('#theirAvailableObjects'))">Remove item</button>
                         </div>
                     </div>
                 </div>
