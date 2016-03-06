@@ -1,8 +1,16 @@
 @auth.requires_login()
 def index():
     user_id = request.vars.user or auth.user_id
-    collections = db(db.collections.owner_id == user_id).select()
-    return dict(collections=collections)
+    is_me = user_id == auth.user_id
+    user = db(db.auth_user.id == user_id).select().first()
+
+    collection_query = db.collections.owner_id == user_id
+    if not is_me:
+        collection_query &= db.collections.private == False
+
+    collections = db(collection_query).select()
+
+    return dict(collections=collections, is_me=is_me, user=user)
 
 
 @auth.requires_login()

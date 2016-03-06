@@ -45,8 +45,8 @@
     padding-left: 0;
 }
 
-.object {
-
+.object-wrapper {
+    margin-bottom: 15px;
 }
 
 .object .panel-body {

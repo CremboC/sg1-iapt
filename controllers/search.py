@@ -15,23 +15,23 @@ def index():
         returns = dict(
             results=results,
             types=types, statuses=statuses,
-            filtered=filtered,
-            selected_types=selected_types, selected_statuses=selected_statuses)
+            selected_types=selected_types, selected_statuses=selected_statuses
+        )
 
     elif page == 'collections':
         (search_query) = _collections(query_string, filtered)
         results = db(search_query).select()
 
-        returns = dict(
-            results=results,
-            filtered=filtered)
+        returns = dict(results=results)
 
     elif page == 'users':
-        pass
-    else:
-        pass
+        (search_query) = _users(query_string, filtered)
 
-    returns.update(dict(page=page))
+        results = db(search_query).select()
+
+        returns = dict(results=results)
+
+    returns.update(dict(page=page, filtered=filtered))
     return returns
 
 
@@ -78,5 +78,11 @@ def _collections(query_string, filtered):
     if filtered:
         if request.vars.user_id != '':
             search_query &= db.collections.owner_id == request.vars.user_id
+
+    return search_query
+
+
+def _users(query_string, filtered):
+    search_query = db.auth_user.username.contains(query_string)
 
     return search_query
