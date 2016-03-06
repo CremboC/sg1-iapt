@@ -43,7 +43,6 @@ def view():
         trader_id = trade.sender
         trade_objects = [trade_objects1, trade_objects2]
 
-
     # Verify whether trade is editable
     editable = (trade.status == 0) | (trade.status == 4)
     if trader_username is None:
