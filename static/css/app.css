@@ -177,3 +177,9 @@ span.glyphicon {
     right: 0;
     z-index:2;
 }
+
+.vcenter{
+    height:3em;
+    vertical-align: middle;
+    display: table-cell;
+}

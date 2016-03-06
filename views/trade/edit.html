@@ -5,11 +5,8 @@
 
 <link rel="stylesheet" type="text/css" href="{{=URL('static','css/app.css')}}">
 <div class="container">
-    <div class="row text-center clearfix">
-        <form class="form-inline" action="">
-            <label for='trader_username'>Select User: &nbsp;</label><input class="form-control" name='trader_username' type='search' value="{{=(trader_username if trader_username is not None else '')}}">
-            <input type='submit' value='Submit'>
-        </form>
+    <div class="panel panel-default text-center clearfix">
+        <div class="panel-body">Trading with username: {{=(trader_username if trader_username is not None else '')}} </div>
     </div>
     <!-- TODO: create search features for multi-selects -->
     <form  id="tradeform" action="{{=URL('trade', 'createNew')}}">
@@ -64,7 +61,7 @@
                     <div class="panel-body">
 
                         <div id="searchItems" class="form-inline">
-                            <input type="text" class="form-control" id="searchOwnItems" placeholder="Search their items">
+                            <input type="text" class="form-control" id="searchTheirItems" placeholder="Search their items">
                             <button type="button" class="btn btn-default">Submit</button>
                         </div>
 

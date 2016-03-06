@@ -322,9 +322,10 @@ def get_available_user_items(userid):
 def history():
 
     numPerPage = 20
-    minIndex = int(request.vars.index)
-    if minIndex is None:
+    if request.vars.index is None:
         minIndex = 0
+    else:
+        minIndex = int(request.vars.index)
 
     trades = db((((db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)) | (
         (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender))) &

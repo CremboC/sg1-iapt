@@ -57,4 +57,45 @@ function generateFormFields(){
     $("#tradeform").append(yourItems).append(hisItems);
 }
 
+$(function() {
+    var opts = $('#ownAvailableObjects option').map(function(){
+        return [[this.value, $(this).text()]];
+    });
+
+
+    $('#searchOwnItems').keyup(function(){
+        var rxp = new RegExp($('#searchOwnItems').val(), 'i');
+        var optlist = $('#ownAvailableObjects').empty();
+        opts.each(function(){
+            if (rxp.test(this[1])) {
+                optlist.append($('<option/>').attr('value', this[0]).text(this[1]));
+            }
+        });
+
+    });
+
+});
+
+$(function() {
+    var opts = $('#theirAvailableObjects option').map(function(){
+        return [[this.value, $(this).text()]];
+    });
+
+    $('#searchTheirItems').keyup(function(){
+        var rxp = new RegExp($('#searchTheirItems').val(), 'i');
+        var optlist = $('#theirAvailableObjects').empty();
+        opts.each(function(){
+            if (rxp.test(this[1])) {
+                optlist.append($('<option/>').attr('value', this[0]).text(this[1]));
+            }
+        });
+    });
+});
+
+
+
+
+
+
+
 
