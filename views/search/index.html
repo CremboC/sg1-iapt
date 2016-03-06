@@ -23,10 +23,10 @@
                 </div>
                 <div class="panel-body">
                 {{if page == 'items':}}
-                        {{include 'search/_items_filters.html'}}
-                    {{elif page == 'collections':}}
-                        {{include 'search/_collections_filters.html'}}
-                    {{pass}}
+                    {{include 'search/_items_filters.html'}}
+                {{elif page == 'collections':}}
+                    {{include 'search/_collections_filters.html'}}
+                {{pass}}
                 </div>
             </div>
         </div>
@@ -46,6 +46,9 @@
 
             {{if page == 'items':}}
                 <div class="panel-body">
+                {{if len(results) == 0:}}
+                    <strong>No results found.</strong>
+                {{else:}}
                     <div class="row">
                     {{for result in results:}}
                         <div class="col-md-6">
@@ -53,11 +56,24 @@
                         </div>
                     {{pass}}
                     </div>
+                {{pass}}
                 </div>
             {{elif page == 'collections':}}
-                {{print_collections(results)}}
+            {{if len(results) == 0:}}
+                <div class="panel-body">
+                    <strong>No results found.</strong>
+                </div>
+            {{else:}}
+            {{print_collections(results)}}
+            {{pass}}
             {{elif page == 'users':}}
-                ...
+            {{if len(results) == 0:}}
+                <div class="panel-body">
+                    <strong>No results found.</strong>
+                </div>
+            {{else:}}
+            {{print_users(results)}}
+            {{pass}}
             {{pass}}
             </div>
         </div>

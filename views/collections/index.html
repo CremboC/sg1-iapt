@@ -2,8 +2,12 @@
 
 <div class="container">
 
+{{if is_me:}}
     <h2>My Collections</h2>
+{{else:}}
+    <h2>{{=user.username}}'s Collections</h2>
+{{pass}}
 
-    {{print_collections(collections, True, False, True)}}
+{{print_collections(collections, is_me, False, is_me)}}
 
 </div>
