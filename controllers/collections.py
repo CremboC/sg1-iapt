@@ -12,13 +12,13 @@ def index():
 
     return dict(collections=collections, is_me=is_me, user=user)
 
-
-@auth.requires_login()
 def show():
     collection_id = request.args[0] or redirect(URL('collections', 'index'))
     collection = db(db.collections.id == collection_id).select().first()
     user = db(db.auth_user.id == collection.owner_id).select().first()
     is_owner = user.id == auth.user_id
+
+    # TODO: Ask to log in / Redirect if collection not found / collection private
 
     return dict(collection=collection, user=user, is_owner=is_owner)
 
