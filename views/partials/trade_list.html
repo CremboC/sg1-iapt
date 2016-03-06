@@ -18,17 +18,30 @@
 
         <tr>
             {{if (trade.trades.status==0) & (trade.trades.sender==user_id):}}
-                <td><span class="glyphicon glyphicon-send"></span></td>
+                <td><span class="glyphicon glyphicon-send"
+                    data-toggle="tooltip"
+                    title="This trade has been sent and is awaiting a response."></span></td>
             {{elif (trade.trades.status==0) & (trade.trades.receiver==user_id):}}
-                <td><span class="glyphicon glyphicon-arrow-right"></span></td>
+                <td><span class="glyphicon glyphicon-arrow-right"
+                    data-toggle="tooltip"
+                    title="Someone has sent you a trade request! View the
+                    trade to accept or reject it."></span></td>
             {{elif trade.trades.status==1:}}
-                <td><span class="glyphicon glyphicon glyphicon-remove" style="color:red"></span></td>
+                <td><span class="glyphicon glyphicon glyphicon-remove" style="color:red"
+                    data-toggle="tooltip"
+                    title="You cancelled this trade."></span></td>
             {{elif trade.trades.status==2:}}
-                <td><span class="glyphicon glyphicon-thumbs-down" style="color:red"></span></td>
+                <td><span class="glyphicon glyphicon-thumbs-down" style="color:red"
+                    data-toggle="tooltip"
+                    title="The user rejected your trade."></span></td>
             {{elif trade.trades.status==3:}}
-                <td><span class="glyphicon glyphicon-thumbs-up" style="color:green"></span></td>
+                <td><span class="glyphicon glyphicon-thumbs-up" style="color:green"
+                    data-toggle="tooltip"
+                    title="The user accepted your trade."></span></td>
             {{elif trade.trades.status==4:}}
-                <td><span class="glyphicon glyphicon-refresh" style="color:darkorange"></span></td>
+                <td><span class="glyphicon glyphicon-refresh" style="color:darkorange"
+                    data-toggle="tooltip"
+                    title="The user proposed a modified trade."></span></td>
             {{pass}}
 
             <td>{{=trade.trades.otheruser}}</td>
