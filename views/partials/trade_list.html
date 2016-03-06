@@ -1,54 +1,56 @@
-<table class="table table-striped header-fixed" style="width:100%;">
-    <thead>
-    <tr>
-        <th>Status</th>
-        <th>Username</th>
-        <th>Date</th>
-        <th>Items given</th>
-        <th>Items received</th>
-        <th>Total value</th>
-
-        <th>Superseded by</th> <!-- Link -->
-        <th>Link</th>
-    </tr>
-    </thead>
-
-    <tbody style="height:inherit">
-    {{for trade in trades:}}
-
+{{def list_trades(trades):}}
+    <table class="table table-striped header-fixed" style="width:100%;">
+        <thead>
         <tr>
-            {{if (trade.trades.status==0) & (trade.trades.sender==user_id):}}
-                <td><span class="glyphicon glyphicon-send"></span></td>
-            {{elif (trade.trades.status==0) & (trade.trades.receiver==user_id):}}
-                <td><span class="glyphicon glyphicon-arrow-right"></span></td>
-            {{elif trade.trades.status==1:}}
-                <td><span class="glyphicon glyphicon glyphicon-remove" style="color:red"></span></td>
-            {{elif trade.trades.status==2:}}
-                <td><span class="glyphicon glyphicon-thumbs-down" style="color:red"></span></td>
-            {{elif trade.trades.status==3:}}
-                <td><span class="glyphicon glyphicon-thumbs-up" style="color:green"></span></td>
-            {{elif trade.trades.status==4:}}
-                <td><span class="glyphicon glyphicon-refresh" style="color:darkorange"></span></td>
-            {{pass}}
+            <th>Status</th>
+            <th>Username</th>
+            <th>Date</th>
+            <th>Items given</th>
+            <th>Items received</th>
+            <th>Total value</th>
 
-            <td>{{=trade.trades.otheruser}}</td>
-            <td>{{=trade.trades.date_created.date()}}</td>
-            <td>{{=trade.sentItems}}</td>
-            <td>{{=trade.receivedItems}}</td>
-            <td>£ {{=trade.value}}</td>
-       {{if trade.trades.superseded_by is not None:}}
-            <td><a href="{{=URL('trade', 'view', vars=dict(tradeid=trade.trades.superseded_by))}}">Link</a></td>
-        {{else:}}
-            <td>N/A</td>
-        {{pass}}
-            <td><a href="{{=URL('trade', 'view', vars=dict(tradeid=trade.trades.id))}}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+            <th>Superseded by</th> <!-- Link -->
+            <th>Link</th>
         </tr>
-    {{pass}}
-    {{if len(trades)==0:}}
-    <tr>
-        <td colspan=4 style="width:100%">No trades to display :(</td>
-    </tr>
-    {{pass}}
-    </tbody>
+        </thead>
 
-</table>
+        <tbody style="height:inherit">
+        {{for trade in trades:}}
+
+            <tr>
+                {{if (trade.trades.status==0) & (trade.trades.sender==user_id):}}
+                    <td><span class="glyphicon glyphicon-send"></span></td>
+                {{elif (trade.trades.status==0) & (trade.trades.receiver==user_id):}}
+                    <td><span class="glyphicon glyphicon-arrow-right"></span></td>
+                {{elif trade.trades.status==1:}}
+                    <td><span class="glyphicon glyphicon glyphicon-remove" style="color:red"></span></td>
+                {{elif trade.trades.status==2:}}
+                    <td><span class="glyphicon glyphicon-thumbs-down" style="color:red"></span></td>
+                {{elif trade.trades.status==3:}}
+                    <td><span class="glyphicon glyphicon-thumbs-up" style="color:green"></span></td>
+                {{elif trade.trades.status==4:}}
+                    <td><span class="glyphicon glyphicon-refresh" style="color:darkorange"></span></td>
+                {{pass}}
+
+                <td>{{=trade.trades.otheruser}}</td>
+                <td>{{=trade.trades.date_created.date()}}</td>
+                <td>{{=trade.sentItems}}</td>
+                <td>{{=trade.receivedItems}}</td>
+                <td>£ {{=trade.value}}</td>
+           {{if trade.trades.superseded_by is not None:}}
+                <td><a href="{{=URL('trade', 'view', vars=dict(tradeid=trade.trades.superseded_by))}}">Link</a></td>
+            {{else:}}
+                <td>N/A</td>
+            {{pass}}
+                <td><a href="{{=URL('trade', 'view', vars=dict(tradeid=trade.trades.id))}}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+            </tr>
+        {{pass}}
+        {{if len(trades)==0:}}
+        <tr>
+            <td colspan=4 style="width:100%">No trades to display :(</td>
+        </tr>
+        {{pass}}
+        </tbody>
+
+    </table>
+{{return}}

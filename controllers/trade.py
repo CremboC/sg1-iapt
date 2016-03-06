@@ -358,7 +358,7 @@ def history():
         else:
             trade.trades.otheruser = trade.trades.sender
         trade.trades.otheruser = db(db.auth_user.id == trade.trades.otheruser).select(db.auth_user.username).column()[0]
-
+    print trades
     return {"trades": trades, "user_id": auth.user_id, "hasPrevPage": minIndex>0, "hasNextPage": numTrades > minIndex+numPerPage, "minIndex": minIndex, "numPerPage":numPerPage}
 
 @cache.action()

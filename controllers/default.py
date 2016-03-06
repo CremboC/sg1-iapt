@@ -9,9 +9,41 @@
 #########################################################################
 
 def index():
-    ## Index page
-    response.flash = T("Hello World")
-    return dict()
+
+    trades = db((((db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)) | (
+        (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender))) &
+        db.trades.status.belongs([1, 2, 3])).select(db.trades.id, db.trades.date_created, db.trades.sender, db.trades.receiver, db.trades.status,
+                         db.trades.superseded_by, db.auth_user.username, orderby=~db.trades.date_created, limitby=(0, 3))
+
+    for trade in trades:
+        sent_items = db(db.trades_sending.trade_id == trade.trades.id).count()
+        sent_item_value = map(int, db((db.trades_sending.trade_id == trade.trades.id) & (
+            db.objects.id == db.trades_sending.sent_object_id)).select(db.objects.currency_value).column())
+        received_items = db(db.trades_receiving.trade_id == trade.trades.id).count()
+        recv_item_value = map(int, db((db.trades_receiving.trade_id == trade.trades.id) & (
+            db.objects.id == db.trades_receiving.recv_object_id)).select(db.objects.currency_value).column())
+
+        trade.value = sum(sent_item_value) + sum(recv_item_value)
+
+        if trade.trades.sender != auth.user_id:
+            a = received_items
+            received_items = sent_items
+            sent_items = a
+        trade.sentItems = sent_items
+        trade.receivedItems = received_items
+        trade.trades.status = int(trade.trades.status)
+
+        if trade.trades.sender == auth.user_id:
+            trade.trades.otheruser = trade.trades.receiver
+        else:
+            trade.trades.otheruser = trade.trades.sender
+        trade.otheruser = db(db.auth_user.id == trade.trades.otheruser).select(db.auth_user.username).column()[0]
+
+    newest_items = db(db.objects.id > 0).select(orderby=~db.objects.created_on, limitby=(0,9))
+
+
+    return {"auth_id": auth.user_id, "auth_logged_in": auth.is_logged_in(), "trades": trades, "newest_items": newest_items}
+
 
 def user():
     """

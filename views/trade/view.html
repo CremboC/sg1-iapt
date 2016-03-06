@@ -13,45 +13,32 @@
 
     <!-- TODO: create search features for multi-selects -->
     <div class="clearfix">
-        <div class="col-md-6 tradeborder">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">{{=("You offer" if editable else "You exchanged")}}</h2>
-                </div>
+            <div class="col-md-6 tradeborder">
+                <div class="panel panel-default">
 
-                <div class="panel-body">
-                    <div id="searchItems" class="form-inline">
-                        <input type="text" class="form-control" id="searchOwnItems" placeholder="Search your items">
-                        <button type="submit" class="btn btn-default">Search</button>
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{{="You give"}}</h2>
                     </div>
-                    <select id="ownTradeObjects" multiple size="5" class="form-control">
-                    {{for row in trade_objects[0]:}}
-                        <option value="{{=row.id}}">{{=row.name}}</option>
-                    {{pass}}
-                    </select>
+
+                    <div class="panel-body" id="yourItemDisplay">
+                        {{for row in trade_objects[0]:}}
+                            <script> addItemToTrade("{{=row.id}}", $('#yourItemDisplay'), $('#yourAvailableObjects'), createOption("{{=row.id}}", "{{=row.name}}"))</script>
+                        {{pass}}
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-6">
-
-            <div class="panel panel-default">
-
-                <div class="panel-heading">
-                    <h2 class="panel-title">{{=("He offers" if editable else "He exchanged")}}</h2>
-                </div>
-
-                <div class="panel-body">
-
-                    <div id="searchItems" class="form-inline">
-                        <input type="text" class="form-control" id="searchOwnItems" placeholder="Search their items">
-                        <button type="submit" class="btn btn-default">Search</button>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{{="He gives"}}</h2>
                     </div>
-                    <select id="theirTradeObjects" multiple size="5" class="form-control">
-                    {{for row in trade_objects[1]:}}
-                        <option value="{{=row.id}}">{{=row.name}}</option>
-                    {{pass}}
-                    </select>
+
+                    <div class="panel-body" id="hisItemDisplay">
+                        {{for row in trade_objects[1]:}}
+                            <script> addItemToTrade("{{=row.id}}", $('#hisItemDisplay'), $('#theirAvailableObjects'), createOption("{{=row.id}}", "{{=row.name}}"))</script>
+                        {{pass}}
+                    </div>
                 </div>
             </div>
         </div>

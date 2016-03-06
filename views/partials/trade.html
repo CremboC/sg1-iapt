@@ -1,0 +1,34 @@
+{{def print_trade(trade):}}
+    <div class="panel panel-default object">
+        <div class="panel-body">
+            <div class="row">
+                <div class="object-header clearfix col-xs-12">
+                    <div class="pull-left">
+                        Traded with: <a href="{{=URL('users', 'view')}}">{{=trade.otheruser}}</a>
+                    </div>
+                    <div class="pull-right">
+                        <a href="{{=URL('trade', 'view', vars={'tradeid':trade.trades.id})}}">View</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-7 object-text">
+                    <ul class="list-unstyled">
+                        {{if trade.trades.sender == auth_id:}}
+                            <li>You gave {{=trade.sentItems}} objects.</li>
+                            <li>In exchange of {{=trade.receivedItems}} objects.</li>
+                        {{else:}}
+                            <li>You gave {{=trade.receivedItems}} objects.</li>
+                            <li>In exchange of {{=trade.sentItems}} objects.</li>
+                        {{pass}}
+                            <li>The trade was worth: {{=trade.value}}£</li>
+                    </ul>
+                </div>
+                <div class="col-md-5 object-image clearfix">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{{return}}
