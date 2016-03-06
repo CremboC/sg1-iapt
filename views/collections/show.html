@@ -3,7 +3,7 @@
 <div class="container">
 
     <div class="clearfix">
-        <h2 class="pull-left">{{=user.username}}'s Collections</h2>
+        <h2 class="pull-left">{{=user.username}}'s Collection: <strong>{{=collection.name}}</strong></h2>
 
         <div class="pull-right">
         {{if is_owner:}}
@@ -20,7 +20,7 @@
             {{items = collection.objects()}}
             {{for item in items:}}
                 <div class="col-xs-4">
-                {{print_object(item)}}
+                {{print_object(item, False)}}
                 </div>
             {{pass}}
             </div>
