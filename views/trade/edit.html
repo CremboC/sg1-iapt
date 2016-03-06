@@ -29,14 +29,14 @@
                             <button type="button" class="btn btn-default">Submit</button>
                         </div>
 
-                        <select id="ownAvailableObjects" multiple size="5" class="form-control">
+                        <select id="yourAvailableObjects" multiple size="5" class="form-control">
                         {{for row in available_objects[0]:}}
                             <option value="{{=row.id}}">{{=row.name}}</option>
                         {{pass}}
                         </select>
 
                         <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#ownAvailableObjects'), $('#ownTradeObjects'))">Add item</button>
+                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#yourAvailableObjects'), $('#yourItemDisplay'))">Add item</button>
                         </div>
                     </div>
                 </div>
@@ -45,15 +45,11 @@
                     <div class="panel-heading">
                         <h2 class="panel-title">{{="You give"}}</h2>
                     </div>
-                    <div id="yourItemDisplay">
 
-                    </div>
-                    <div class="panel-body">
-                        <select style="display:none" hidden name="senderObjects" id="ownTradeObjects" multiple size="5" class="form-control">
+                    <div class="panel-body" id="yourItemDisplay">
                         {{for row in trade_objects[0]:}}
-                            <option value="{{=row.id}}">{{=row.name}}</option>
+                            <script> addItemToTrade("{{=row.id}}", $('#yourItemDisplay'), $('#yourAvailableObjects'), createOption("{{=row.id}}", "{{=row.name}}"))</script>
                         {{pass}}
-                        </select>
                     </div>
                 </div>
             </div>
@@ -78,7 +74,7 @@
                         {{pass}}
                         </select>
                         <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#theirAvailableObjects'), $('#theirTradeObjects'))">Add item</button>
+                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#theirAvailableObjects'), $('#hisItemDisplay'))">Add item</button>
                         </div>
                     </div>
                 </div>
@@ -87,15 +83,11 @@
                     <div class="panel-heading">
                         <h2 class="panel-title">{{="He gives"}}</h2>
                     </div>
-                    <div id="hisItemDisplay">
 
-                    </div>
-                    <div class="panel-body">
-                        <select style="display:none" name="receiverObjects"  id="theirTradeObjects" multiple size="5" class="form-control">
+                    <div class="panel-body" id="hisItemDisplay">
                         {{for row in trade_objects[1]:}}
-                            <option value="{{=row.id}}">{{=row.name}}</option>
+                            <script> addItemToTrade("{{=row.id}}", $('#hisItemDisplay'), $('#theirAvailableObjects'), createOption("{{=row.id}}", "{{=row.name}}"))</script>
                         {{pass}}
-                        </select>
                     </div>
                 </div>
             </div>
@@ -107,7 +99,7 @@
                 <a class="btn btn-danger" href="{{=URL('trade', 'index')}}">Cancel</a>
             </div>
             <div class="pull-right">
-                <button onclick="selectAll();" class="btn btn-success">Send trade proposal</button>
+                <button onclick="generateFormFields();" class="btn btn-success">Send trade proposal</button>
              </div>
         </div>
     </form>

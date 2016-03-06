@@ -1,49 +1,60 @@
-function transferOptionsToTrade(select1, select2){
+function transferOptionsToTrade(select1, itemPreviewDiv){
     var itemIds = select1.val();
-    console.log(select1.val());
-    console.log(itemIds);
     for (var x=0; x<itemIds.length; x++){
         var id = itemIds[x];
-        console.log('/getobjectdata?id='+id);
-        $.getJSON('getobjectdata?id='+id, function(data){
-            console.log("GOt image");
-            console.log(data);
-            makeObjectDisplay(data[0]);
-        });
-
+        addItemToTrade(id, itemPreviewDiv, select1, select1.find("option[value='"+id+"']"))
     }
-
-    var selectedItems = select1.children("option:selected");
     select1.children("option:selected").remove();
-    select2.append(selectedItems);
 }
 
-function makeObjectDisplay(object){
-    var div = $("<div style='background-image: url("+object.image+")';>");
-    console.log('createdImage');
+function createOption(id, name){
+    return $("<option value='"+id+"'>"+name+"</option>")
+}
+
+function addItemToTrade(id, displayDiv, availableSelect, option){
+   $.getJSON('getobjectdata?id='+id, function(data){
+       displayDiv.append(makeObjectDisplay(data[0], availableSelect, option));
+   });
+}
+
+function makeObjectDisplay(object, availableSelect, option){
+
+    var div = $("<div itemid="+object.id+" class='item-preview' style='background-image: url("+object.image+")';> </div>");
+    var hovertext = $("<div class='hovertext'><p>"+object.name+"</p><p>Value: " +object['currency_value']+ " </div>");
+    var removeBtn = $("<div class='rmvItemPreview'><span class='glyphicon glyphicon glyphicon-remove' style='color:red'></span></div>");
+    removeBtn.click(function(){
+        $(this).parent().remove();
+        availableSelect.append(option);
+
+    });
+    div.append(removeBtn).append(hovertext);
     $("#hisItemDisplay").append(div);
-}
-
-
-function transferOptionsToAvailable(select1, select2){
-    var selectedItems = select1.children("option:selected");
-    select1.children("option:selected").remove();
-    select2.append(selectedItems);
+    return div
 }
 
 $.urlParam = function(name){
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
     if (results==null){
        return null;
-    }
-    else{
+    }else{
        return results[1] || 0;
     }
 };
 
-function selectAll(){
-    $("option").attr('selected', 'selected');
-    console.log("Hello");
+function generateFormFields(){
+    var yourItemIds = [];
+    $("#yourItemDisplay").children('div').each(function(){
+        console.log(this);
+        yourItemIds.push($(this).attr('itemid'));
+    });
+
+    var hisItemIds = [];
+    $("#hisItemDisplay").children('div').each(function(){
+        hisItemIds.push($(this).attr('itemid'));
+    });
+    var yourItems = $("<input style='display:none' name='youritems' value="+yourItemIds+">");
+    var hisItems = $("<input style='display:none' name='theiritems' value="+hisItemIds+">");
+    $("#tradeform").append(yourItems).append(hisItems);
 }
 
 

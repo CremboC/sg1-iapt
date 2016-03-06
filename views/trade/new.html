@@ -10,7 +10,7 @@
             <input type='submit' value='Submit'>
         </form>
     </div>
-    <!-- TODO: create search features for multi-selects -->
+     <!-- TODO: create search features for multi-selects -->
     <form  id="tradeform" action="{{=URL('trade', 'createNew')}}">
         <div class="clearfix">
             <div class="col-md-6 tradeborder">
@@ -34,7 +34,7 @@
                         </select>
 
                         <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#ownAvailableObjects'), $('#ownTradeObjects'))">Add item</button>
+                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#ownAvailableObjects'), $('#yourItemDisplay'))">Add item</button>
                         </div>
                     </div>
                 </div>
@@ -44,16 +44,7 @@
                         <h2 class="panel-title">{{="You give"}}</h2>
                     </div>
 
-                    <div class="panel-body">
-                        <div id="searchItems" class="form-inline">
-                            <input type="text" class="form-control" id="searchOwnItems" placeholder="Search your items">
-                            <button type="button" class="btn btn-default">Submit</button>
-                        </div>
-                        <select name="senderObjects" id="ownTradeObjects" multiple size="5" class="form-control">
-                        </select>
-                        <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#ownTradeObjects'), $('#ownAvailableObjects'))">Remove item</button>
-                        </div>
+                    <div class="panel-body" id="yourItemDisplay">
                     </div>
                 </div>
             </div>
@@ -73,14 +64,14 @@
                         </div>
 
                         <select id="theirAvailableObjects" multiple size="5" class="form-control">
-                            {{if trader_username is not None:}}
-                                {{for row in available_objects[1]:}}
-                                    <option value="{{=row.id}}">{{=row.name}}</option>
-                                {{pass}}
+                        {{if len(available_objects)>1:}}
+                            {{for row in available_objects[1]:}}
+                                <option value="{{=row.id}}">{{=row.name}}</option>
                             {{pass}}
+                        {{pass}}
                         </select>
                         <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#theirAvailableObjects'), $('#theirTradeObjects'))">Add item</button>
+                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#theirAvailableObjects'), $('#hisItemDisplay'))">Add item</button>
                         </div>
                     </div>
                 </div>
@@ -90,17 +81,7 @@
                         <h2 class="panel-title">{{="He gives"}}</h2>
                     </div>
 
-                    <div class="panel-body">
-
-                        <div id="searchItems" class="form-inline">
-                            <input type="text" class="form-control" id="searchOwnItems" placeholder="Search their items">
-                            <button type="button" class="btn btn-default">Submit</button>
-                        </div>
-                        <select name="receiverObjects"  id="theirTradeObjects" multiple size="5" class="form-control">
-                        </select>
-                        <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#theirTradeObjects'), $('#theirAvailableObjects'))">Remove item</button>
-                        </div>
+                    <div class="panel-body" id="hisItemDisplay">
                     </div>
                 </div>
             </div>
@@ -112,8 +93,8 @@
                 <a class="btn btn-danger" href="{{=URL('trade', 'index')}}">Cancel</a>
             </div>
             <div class="pull-right">
-                <button  class="btn btn-success">Send trade proposal</button>
-            </div>
+                <button onclick="generateFormFields();" class="btn btn-success">Send trade proposal</button>
+             </div>
         </div>
     </form>
 </div>

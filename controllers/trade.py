@@ -56,19 +56,20 @@ def view():
 
 @auth.requires_login()
 def new():
-    receiver_id = request.vars.trader_id
-    if receiver_id is None:
+    receiver_username = request.vars.receiver_username
+    receiver_id = request.vars.receiver_id
+    if (receiver_username is None) & (receiver_id is not None):
+        receiver_username = db(db.auth_user.id == receiver_id).select(db.auth_user.username).column()[0]
+
+    if receiver_username is None:
         return {"user_id": auth.user_id, "trader_id": "", "trader_username": None,
                 "available_objects": [get_available_user_items(auth.user_id)]}
-    elif receiver_id == auth.user_id:
+    elif receiver_username == db(db.auth_user.id == auth.user_id).select(db.auth_user.username).column()[0]:
         raise HTTP(404, "Cannot trade with yourself")
     else:
-        receiver_username = db(db.auth_user.id == receiver_id).select(db.auth_user.username).column()[0]
-        if receiver_username is None:
-            raise HTTP(404, "Error 404: Invalid request, user id does not exist")
-        else:
-            available_items = [get_available_user_items(auth.user_id), get_available_user_items(receiver_id)]
-            return {"user_id": auth.user_id, "trader_id": receiver_id, "trader_username": receiver_username,
+        receiver_id = db(db.auth_user.username==receiver_username).select(db.auth_user.id).column()[0]
+        available_items = [get_available_user_items(auth.user_id), get_available_user_items(receiver_id)]
+        return {"user_id": auth.user_id, "trader_id": receiver_id, "trader_username": receiver_username,
                     "available_objects": available_items}
 
 
@@ -122,7 +123,6 @@ def edit():
         trader_username = db(db.auth_user.id == trader_id).select(db.auth_user.username).column()[0]
 
     available_objects = [get_available_user_items(auth.user_id), get_available_user_items(trader_id)]
-
     return {"prevtrade": tradeid, "user_id": auth.user_id, "trader_id": trader_id, "status": trade.status,
             "trader_username": trader_username,
             "editable": editable,
@@ -130,17 +130,25 @@ def edit():
             }
 
 def getobjectdata():
-    print(request.get_vars)
     objectId = request.vars.id
     object = db(db.objects.id == objectId).select()
-    object[0].image = URL('download', args=object[0].image)
+    if object[0].image is not None:
+        object[0].image = URL('download', args=object[0].image)
+    else:
+        object[0].image = URL('static', 'images/missing-image.png')
     return object.json()
 
 
 @auth.requires_login()
 def createNew():
+    if (request.vars['youritems'] is None) | (request.vars['theiritems'] is None):
+        response.status = 400
+        return 'Error 400: incomplete trade, please enter trade items or select other user'
 
-    if (request.vars['receiverObjects'] is None) | (request.vars['senderObjects'] is None):
+
+    youritems = request.vars['youritems'].split(",")
+    theiritems = request.vars['theiritems'].split(",")
+    if (youritems == ['']) | (theiritems == ['']):
         response.status = 400
         return 'Error 400: incomplete trade, please enter trade items or select other user'
 
@@ -148,11 +156,9 @@ def createNew():
     # Check user owns all objects he proposes
 
     # Check target user owns all objects proposed
-
     # Verify all objects belong to correct user
-    senderobjectIds = map(int, request.vars['senderObjects'])
+    senderobjectIds = map(int, youritems)
     senderobjects = db(db.objects.id.belongs(senderobjectIds)).select(db.objects.owner_id, db.objects.status)
-
     for row in senderobjects:
         if row.owner_id != senderId:
             response.status = 400
@@ -160,11 +166,10 @@ def createNew():
         if row.status != 2:
             response.status = 400
             return 'Error 400: Item not available for trade'
-
-    receiverobjectIds = map(int, request.vars['receiverObjects'])
+    receiverobjectIds = map(int, theiritems)
     receiverobjects = db(db.objects.id.belongs(receiverobjectIds)).select(db.objects.owner_id, db.objects.status)
 
-    receiverId = receiverobjects[0].id
+    receiverId = receiverobjects[0].owner_id
     for row in receiverobjects:
         if row.owner_id != receiverId:
             response.status = 400
@@ -293,11 +298,15 @@ def index():
 def get_available_user_items(userid):
     excludedobjects1 = map(int, db(
         (db.objects.owner_id == userid) &
-        (db.trades_receiving.recv_object_id == db.objects.id)).select(
+        (db.trades_receiving.recv_object_id == db.objects.id) &
+        (db.trades_receiving.trade_id == db.trades.id) &
+        (db.trades.status == 0)).select(
         db.objects.id).column())
     excludedobjects2 = map(int, db(
         (db.objects.owner_id == userid) &
-        (db.trades_sending.sent_object_id == db.objects.id)).select(
+        (db.trades_sending.sent_object_id == db.objects.id) &
+        (db.trades_sending.trade_id == db.trades.id) &
+        (db.trades.status == 0)).select(
         db.objects.id).column())
 
     return db((db.objects.owner_id == userid) & (db.objects.status == 2) & ~db.objects.id.belongs(
