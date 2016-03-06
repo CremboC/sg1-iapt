@@ -1,16 +1,18 @@
 {{def print_object(obj):}}
+{{owner = obj.owner()}}
+{{type = obj.type()}}
 <div class="panel panel-default object">
     <div class="panel-body">
         <div class="row">
             <div class="object-header clearfix col-xs-12">
                 <div class="pull-left">
-                    <a href="{{=URL('items', 'show', args=[obj.objects.id])}}">
-                        <strong>{{=obj.objects.name}}</strong>
+                    <a href="{{=URL('items', 'show', args=obj.id)}}">
+                        <strong>{{=obj.name}}</strong>
                     </a>
                 </div>
 
                 <div class="pull-right">
-                    Value: &pound;{{="{:0,.2f}".format(obj.objects.currency_value)}}
+                    Value: &pound;{{="{:0,.2f}".format(obj.currency_value)}}
                 </div>
             </div>
         </div>
@@ -18,25 +20,25 @@
         <div class="row">
             <div class="col-md-7 object-text">
                 <ul class="list-unstyled">
-                    <li>{{=obj.types.name}}</li>
+                    <li>{{=type.name}}</li>
                     <li>Posted By:
-                        <a href="{{=URL('collections', 'show', vars={'user': obj.auth_user.id})}}">
-                            {{=obj.auth_user.username}}
+                        <a href="{{=URL('collections', 'show', vars={'user': owner.id})}}">
+                        {{=owner.username}}
                         </a>
                     </li>
                 </ul>
                 <div class="object-status">
-                    {{if obj.objects.status == 0:}}
+                {{if obj.status == 0:}}
                     Want
-                    {{elif obj.objects.status == 1:}}
+                {{elif obj.status == 1:}}
                     Have
-                    {{elif obj.objects.status == 2:}}
+                {{elif obj.status == 2:}}
                     InCol
-                    {{pass}}
+                {{pass}}
                 </div>
             </div>
             <div class="col-md-5 object-image clearfix">
-                <img src="http://lorempixel.com/100/100/cats/{{=obj.objects.id}}/" alt=""
+                <img src="http://lorempixel.com/100/100/cats/{{=obj.id}}/" alt=""
                      class="img-responsive pull-right">
             </div>
         </div>

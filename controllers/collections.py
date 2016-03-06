@@ -1,13 +1,29 @@
 @auth.requires_login()
 def index():
-    collections = db(db.collections.owner_id == auth.user.id).select()
+    user_id = request.vars.user or auth.user_id
+    collections = db(db.collections.owner_id == user_id).select()
     return dict(collections=collections)
 
 
+@auth.requires_login()
 def show():
-    user_id = request.vars.user
-    collections = db(db.collections.owner_id == user_id).select()
-    user = db(db.auth_user.id == user_id).select()[0]
+    collection_id = request.args[0] or redirect(URL('collections', 'index'))
+    collection = db(db.collections.id == collection_id).select().first()
+    user = db(db.auth_user.id == collection.owner_id).select().first()
+    is_owner = user.id == auth.user_id
 
-    return dict(collections=collections, user=user)
+    return dict(collection=collection, user=user, is_owner=is_owner)
 
+
+@auth.requires_login()
+def edit():
+    collection_id = request.args[0] or redirect(URL('collections', 'index'))
+
+    collection = db(db.collections.id == collection_id).select().first()
+
+    if collection.owner_id != auth.user_id:
+        return redirect(URL('collections', 'index'))
+
+    form = SQLFORM(db.collections, record=collection, showid=False, deletable=True, submit_button='Update')
+
+    return dict(collection=collection, form=form)

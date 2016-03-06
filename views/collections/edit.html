@@ -1,9 +1,11 @@
 {{extend 'layout.html'}}
 
+
 <div class="container">
-    <div class="row">
+{{=form.custom.begin}}
+    <div class="row row-bottom-margin">
         <div class="col-xs-6">
-            <input type="text" class="form-control">
+        {{=form.custom.widget.name}}
             <button class="btn btn-danger">Delete</button>
         </div>
         <div class="col-xs-6 clearfix">
@@ -15,18 +17,10 @@
 
 
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="panel-title clearfix">
-                <div class="pull-left">
-                    Collection
-                </div>
-                <div class="pull-right">
-                    <button>Sort By</button>
-                </div>
-            </div>
-        </div>
-
         <div class="panel-body">
+            {{print_sortby()}}
         </div>
     </div>
+
+{{=form.custom.end}}
 </div>

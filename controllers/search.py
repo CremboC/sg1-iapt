@@ -1,12 +1,5 @@
 from collections import namedtuple
 
-Page = namedtuple('Page', 'name')
-pages = [
-    Page(name='items'),
-    Page(name='collections'),
-    Page(name='users'),
-]
-
 
 def index():
     query_string = request.vars.query or ''
@@ -24,6 +17,7 @@ def index():
             types=types, statuses=statuses,
             filtered=filtered,
             selected_types=selected_types, selected_statuses=selected_statuses)
+
     elif page == 'collections':
         (search_query) = _collections(query_string, filtered)
         results = db(search_query).select()
@@ -31,6 +25,7 @@ def index():
         returns = dict(
             results=results,
             filtered=filtered)
+
     elif page == 'users':
         pass
     else:
@@ -55,8 +50,6 @@ def _items(query_string, filtered):
     types = db(db.types.id > 0).select()
 
     search_query = db.objects.name.contains(query_string)  # search by the query
-    search_query &= db.objects.type_id == db.types.id  # join type info
-    search_query &= db.objects.owner_id == db.auth_user.id  # join user info
 
     if filtered:
         if request.vars.types:

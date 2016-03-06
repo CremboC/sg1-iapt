@@ -28,7 +28,7 @@
         </td>
     {{pass}}
         <td>
-            <a href="{{=URL('collections', 'show', args=[collection.id])}}">
+            <a href="{{=URL('collections', 'show', args=collection.id)}}">
             {{=collection.name}}
             </a>
         </td>
@@ -44,7 +44,7 @@
         {{=len(collection.objects())}}
         </td>
         <td>
-            <a href="{{=URL('collections', 'show', args=[collection.id])}}" class="btn btn-default btn-sm">
+            <a href="{{=URL('collections', 'show', args=collection.id)}}" class="btn btn-default btn-sm">
                 View
             </a>
         </td>

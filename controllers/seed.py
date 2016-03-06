@@ -30,6 +30,10 @@ def index():
     db.objects.insert(owner_id=2, type_id=2, status=2, name='comic2a', summary='Summary',
         description='Description', currency_value=10.0)
 
+    db.object_collection.truncate()
+    db.object_collection.insert(object_id=1, collection_id=1)
+    db.object_collection.insert(object_id=3, collection_id=1)
+
     db.trades.truncate()
     db.trades.insert(sender=1, receiver=2, status=0)
 

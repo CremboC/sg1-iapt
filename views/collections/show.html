@@ -2,11 +2,30 @@
 
 <div class="container">
 
-    <h2>{{=user.username}}'s Collections</h2>
+    <div class="clearfix">
+        <h2 class="pull-left">{{=user.username}}'s Collections</h2>
 
-    <ul class="list-group">
-        {{for collection in collections:}}
-    	    <li class="list-group-item">{{=collection.name}}</li>
+        <div class="pull-right">
+        {{if is_owner:}}
+            <a href="{{=URL('collections', 'add', args=collection.id)}}" class="btn btn-success">Add Item</a>
+            <a href="{{=URL('collections', 'edit', args=collection.id)}}" class="btn btn-warning">Edit Collection</a>
         {{pass}}
-    </ul>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {{print_sortby()}}
+            <div class="row">
+            {{items = collection.objects()}}
+            {{for item in items:}}
+                <div class="col-xs-4">
+                {{print_object(item)}}
+                </div>
+            {{pass}}
+            </div>
+        </div>
+    </div>
+
+
 </div>
