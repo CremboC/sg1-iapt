@@ -3,16 +3,16 @@
     <thead>
     <tr>
     {{if show_privacy:}}
-        <th>
-            <span class="glyphicon glyphicon-lock"></span>
+        <th class="col-md-1">
+            Privacy
         </th>
     {{pass}}
         <th>Name</th>
     {{if show_owner:}}
         <th>Owner</th>
     {{pass}}
-        <th># of Items</th>
-        <th>Actions</th>
+    <th class="col-md-2">Items in Collection</th>
+    <th class="col-md-2">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -21,9 +21,10 @@
     {{if show_privacy:}}
         <td>
         {{if collection.private:}}
-            <strong>
-                <span class="glyphicon glyphicon-lock"></span>
-            </strong>
+            <span
+                class="glyphicon glyphicon-lock"
+                data-toggle="tooltip"
+                title="This Collection is Private."></span>
         {{pass}}
         </td>
     {{pass}}
@@ -44,14 +45,16 @@
         {{=len(collection.objects())}}
         </td>
         <td>
-            <a href="{{=URL('collections', 'show', args=collection.id)}}" class="btn btn-default btn-sm">
+            <div class="btn-group" role="group" aria-label="Collection Actions">
+            <a href="{{=URL('collections', 'show', args=collection.id)}}" class="btn btn-default btn-sm" role="button">
                 View
             </a>
-        {{if show_edit:}}
-            <a href="{{=URL('collections', 'edit', args=collection.id)}}" class="btn btn-default btn-sm">
-                Edit
-            </a>
-        {{pass}}
+            {{if show_edit:}}
+                <a href="{{=URL('collections', 'edit', args=collection.id)}}" class="btn btn-default btn-sm">
+                    Edit
+                </a>
+            {{pass}}
+            </div>
         </td>
     </tr>
     {{pass}}
