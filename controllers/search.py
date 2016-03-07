@@ -74,6 +74,7 @@ def _items(query_string, filtered):
 
 def _collections(query_string, filtered):
     search_query = db.collections.name.contains(query_string)
+    search_query &= db.collections.private == False
 
     if filtered:
         if request.vars.user_id != '':

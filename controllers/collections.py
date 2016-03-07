@@ -1,6 +1,6 @@
 @auth.requires_login()
 def index():
-    user_id = request.vars.user or auth.user_id
+    user_id = next(iter(request.args), auth.user_id)
     is_me = user_id == auth.user_id
     user = db(db.auth_user.id == user_id).select().first()
 
@@ -12,11 +12,17 @@ def index():
 
     return dict(collections=collections, is_me=is_me, user=user)
 
+
+@auth.requires_login()
 def show():
     collection_id = request.args[0] or redirect(URL('collections', 'index'))
+
     collection = db(db.collections.id == collection_id).select().first()
     user = db(db.auth_user.id == collection.owner_id).select().first()
     is_owner = user.id == auth.user_id
+
+    if collection.private and not is_owner:
+        raise HTTP(404, "Error 404: Invalid request, collection does not exist")
 
     # TODO: Ask to log in / Redirect if collection not found / collection private
 
@@ -33,5 +39,15 @@ def edit():
         return redirect(URL('collections', 'index'))
 
     form = SQLFORM(db.collections, record=collection, showid=False, deletable=True, submit_button='Update')
+
+    if form.process().accepted:
+        if request.vars.objects:
+            objects_to_remove = [int(obj) for obj in request.vars.objects] or [request.vars.objects]
+
+            query = db.object_collection.object_id.belongs(objects_to_remove)
+            db(query).delete()
+
+        session.flash = dict(status='success', message='Successfully updated collection.')
+        return redirect(URL('collections', 'show', args=form.vars.id))
 
     return dict(collection=collection, form=form)

@@ -10,7 +10,7 @@
     {{for user in users:}}
     <tr>
         <td>
-            <a href="{{=URL('collections', 'index', vars=dict(user=user.id))}}">
+            <a href="{{=URL('collections', 'index', args=user.id)}}">
             {{=user.username}}
             </a>
         </td>

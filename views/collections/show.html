@@ -3,7 +3,17 @@
 <div class="container">
 
     <div class="clearfix">
-        <h2 class="pull-left">{{=user.username}}'s Collection: <strong>{{=collection.name}}</strong></h2>
+        <div class="pull-left">
+            <h2>
+            {{=collection.name}}
+                <small>
+                    by
+                    <a href="{{=URL('collections', 'index', args=user.id)}}">
+                    {{=user.username}}
+                    </a>
+                </small>
+            </h2>
+        </div>
 
         <div class="pull-right">
         {{if is_owner:}}
@@ -13,9 +23,17 @@
         </div>
     </div>
 
+    {{if is_owner:}}
+    <p>
+        <i>
+            This collection is {{if collection.private:}} private{{else:}} public{{pass}}.
+        </i>
+    </p>
+    {{pass}}
+
     <div class="panel panel-default">
         <div class="panel-body">
-            {{print_sortby()}}
+        {{print_sortby()}}
             <div class="row">
             {{items = collection.objects()}}
             {{for item in items:}}

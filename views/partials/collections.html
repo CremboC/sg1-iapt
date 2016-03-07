@@ -36,7 +36,7 @@
     {{if show_owner:}}
     {{owner = collection.owner()}}
         <td>
-            <a href="{{=URL('users', 'show', args=owner.id)}}">
+            <a href="{{=URL('collections', 'index', args=owner.id)}}">
             {{=owner.username}}
             </a>
         </td>
@@ -47,10 +47,12 @@
         <td>
             <div class="btn-group" role="group" aria-label="Collection Actions">
             <a href="{{=URL('collections', 'show', args=collection.id)}}" class="btn btn-default btn-sm" role="button">
+                <span class="glyphicon glyphicon-eye-open middle"></span>
                 View
             </a>
             {{if show_edit:}}
                 <a href="{{=URL('collections', 'edit', args=collection.id)}}" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-edit middle"></span>
                     Edit
                 </a>
             {{pass}}

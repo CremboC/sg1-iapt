@@ -23,7 +23,7 @@
                     <li>{{=type.name}}</li>
                     {{if show_owner:}}
                     <li>Posted By:
-                        <a href="{{=URL('collections', 'show', vars={'user': owner.id})}}">
+                        <a href="{{=URL('collections', 'show', args=owner.id)}}">
                         {{=owner.username}}
                         </a>
                     </li>

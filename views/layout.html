@@ -111,10 +111,11 @@
     </div>
     <div class="container navbar-searchbar">
         <form class="navbar-form" action="{{=URL('search', 'index')}}">
-            <label for="search_query" class="sr-only">Search Query</label>
+            <input type="hidden" name="page" value="{{=request.vars.page or 'items'}}">
 
             <div class="row">
                 <div class="col-sm-6 col-sm-offset-2">
+                    <label for="search_query" class="sr-only">Search Query</label>
                     <input type="text" name="query" id="search_query" class="form-control"
                            value="{{if request.vars.query:}}{{=request.vars.query}}{{pass}}"
                            placeholder="Search for anything on MEGACOLLECTOR...">
@@ -184,6 +185,7 @@ message = response.flash['message']
 <script src="{{=URL('static','js/web2py-bootstrap3.js')}}"></script>
 <script src="{{=URL('static','js/bootstrap-typeahead.min.js')}}"></script>
 <script src="{{=URL('static','js/bootstrap-multiselect.js')}}"></script>
+<script src="{{=URL('static','js/vue.min.js')}}"></script>
 {{block page_js}}{{end page_js}}
 </body>
 </html>

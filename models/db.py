@@ -146,11 +146,11 @@ db.objects.type = Field.Lazy(
 
 db.define_table("collections",
                 Field("owner_id", "reference auth_user",
-                      required=True),
+                      required=True, writable=False, readable=False, default=auth.user_id),
                 Field("name", "string",
                       required=True),
                 Field("private", "boolean",
-                      default=False),
+                      default=False, label="Check this box to make the collection visible only to you."),
                 Field('created_on', 'datetime', default=request.now, writable=False,
                       readable=False),
                 Field('updated_on', 'datetime', default=request.now, update=request.now, writable=False,
