@@ -1,14 +1,40 @@
 {{extend 'layout.html'}}
 
 <div class="container">
-    <h2 class="text-center">{{=item.name}}</h2>
+    <div class="clearfix">
+        <h2 class="pull-left">{{=item.name}}</h2>
+        <div class="pull-right">
+            <a href="{{=URL('items', 'edit', args=item.id)}}" class="btn btn-success">
+                <span class="glyphicon glyphicon-edit middle" aria-hidden="true"></span>
+                Edit
+            </a>
+        </div>
+    </div>
 
+    <h4>Short summary:</h4>
     <p>
         {{=item.summary}}
     </p>
 
-    ..
+    <img src="{{=URL('default', 'download', args=item.image)}}" height="400" />
 
+    <ul class="list-unstyled">
+        <li><strong>Type:</strong> {{=item.type().name}}</li>
+        <li><strong>Value:</strong> {{=item.currency_value}}</li>
+        {{if not is_owner:}}
+        <li>
+            <strong>Owner:</strong> <a href="{{=URL('collections', 'index', args=user.id)}}">{{=user.username}}</a>
+        </li>
+        {{pass}}
+        <li>
+            <strong>Collections:</strong>
+            {{for col in item.collections():}}
+                <a href="{{=URL('collection', 'show', args=col.id)}}">{{=col.name}}</a>&nbsp;
+            {{pass}}
+        </li>
+    </ul>
+
+    <h3>Description:</h3>
     <p>
         {{=item.description}}
     </p>

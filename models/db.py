@@ -144,6 +144,11 @@ db.objects.type = Field.Lazy(
     lambda row: db(db.types.id == row.objects.type_id).select()[0]
 )
 
+db.objects.collections = Field.Lazy(
+    'collections',
+    lambda row: collections_and_objects(db.objects.id == row.objects.id).select(db.collections.ALL)
+)
+
 db.define_table("collections",
                 Field("owner_id", "reference auth_user",
                       required=True, writable=False, readable=False, default=auth.user_id),

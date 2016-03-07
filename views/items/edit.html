@@ -1,0 +1,139 @@
+{{extend 'layout.html'}}
+
+<div class="container">
+
+{{if form.errors:}}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>Your submitted form contains the following errors</strong>
+        <ul>
+        {{for fieldname in form.errors:}}
+            <li>{{=fieldname}} error: {{=form.errors[fieldname]}}</li>
+        {{pass}}
+        </ul>
+    </div>
+{{form.errors.clear()}}
+{{pass}}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Add Item</h3>
+        </div>
+        <div class="panel-body">
+        {{=form.custom.begin}}
+
+            <!--name-->
+            <div class="form-group">
+                <label for="objects_name">{{=form.custom.label.name}}</label>
+            {{=form.custom.widget.name}}
+
+                <p class="form-comment">
+                {{=form.custom.comment.name}}
+                </p>
+            </div>
+
+            <!--description-->
+            <div class="form-group">
+                <label for="objects_description">{{=form.custom.label.description}}</label>
+            {{=form.custom.widget.description}}
+
+                <p class="form-comment">
+                {{=form.custom.comment.description}}
+                </p>
+            </div>
+
+            <!--summary-->
+            <div class="form-group">
+                <label for="objects_summary">{{=form.custom.label.summary}}</label>
+
+                <textarea name="summary" id="objects_summary" cols="10" rows="5" class="form-control">{{=object.summary}}</textarea>
+
+                <div class="clearfix">
+                    <div class="pull-left">
+                        <p class="form-comment">
+                        {{=form.custom.comment.description}}
+                        </p>
+                    </div>
+
+                    <div class="pull-right">
+                        Characters left: <span id="summary-length">100</span>
+                    </div>
+                </div>
+            </div>
+
+            <!--type-->
+            <div class="form-group">
+                <label for="objects_type">{{=form.custom.label.type_id}}</label>
+                <select name="type_id" id="objects_type" class="form-control">
+                {{for type in types:}}
+                    <option value="{{=type.id}}">{{=type.name}}</option>
+                {{pass}}
+                </select>
+
+                <p class="form-comment">
+                {{=form.custom.comment.type_id}}
+                </p>
+            </div>
+
+            <!--collections-->
+            <div class="form-group">
+                <label for="objects_collection">Collections</label>
+                <br>
+                <select id="objects_collection" multiple="multiple" name="collections">
+                {{for collection in collections:}}
+                    {{if collection.id in object_collections:}}
+                    <option value="{{=collection.id}}">{{=collection.name}}</option>
+                    {{else:}}
+                    <option value="{{=collection.id}}" selected="selected">{{=collection.name}}</option>
+                    {{pass}}
+                {{pass}}
+                </select>
+            </div>
+
+            <!--image-->
+            <div class="form-group">
+                <label for="objects_image">{{=form.custom.label.image}}</label>
+                <input type="file" name="image" id="objects_image" class="form-control">
+
+                <p class="form-comment">
+                {{=form.custom.comment.image}}
+                </p>
+            </div>
+
+            <!--value-->
+            <div class="form-group">
+                <label for="objects_value">{{=form.custom.label.currency_value}}</label>
+                {{=form.custom.widget.currency_value}}
+                <!-- <input type="number" name="currency_value" id="objects_value" class="form-control"> -->
+
+                <p class="form-comment">
+                {{=form.custom.comment.currency_value}}
+                </p>
+            </div>
+
+            <!--status-->
+            <input type="hidden" name="status" value="2">
+
+            <div class="form-group clearfix">
+                <div class="pull-left">
+                    <a href="{{=URL('items', 'show', args=object.id)}}" class="btn btn-default">
+                        Cancel
+                    </a>
+                </div>
+                <button type="submit" class="btn btn-success pull-right">
+                    <span class="glyphicon glyphicon-floppy-save middle"></span>
+                    Save
+                </button>
+            </div>
+
+
+
+        {{=form.custom.end}}
+        </div>
+    </div>
+</div>
+
+<script>
+    var __collections_url__ = "{{=URL('collections', 'get.json')}}";
+</script>
+<script src="{{=URL('static','js/item.js')}}"></script>
