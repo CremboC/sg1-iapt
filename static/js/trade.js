@@ -1,33 +1,45 @@
-function transferOptionsToTrade(select1, itemPreviewDiv){
+function transferOptionsToTrade(select1, itemPreviewDiv, enableRemove){
     var itemIds = select1.val();
-    for (var x=0; x<itemIds.length; x++){
-        var id = itemIds[x];
-        addItemToTrade(id, itemPreviewDiv, select1, select1.find("option[value='"+id+"']"))
-    }
-    select1.children("option:selected").remove();
+    addItemToTrade(itemIds, itemPreviewDiv, select1, enableRemove);
 }
 
 function createOption(id, name){
     return $("<option value='"+id+"'>"+name+"</option>")
 }
 
-function addItemToTrade(id, displayDiv, availableSelect, option){
-   $.getJSON('getobjectdata?id='+id, function(data){
-       displayDiv.append(makeObjectDisplay(data[0], availableSelect, option));
+function addItemToTrade(ids, displayDiv, availableSelect, option, enableRemove){
+    var joined_ids;
+    if (ids instanceof Array){
+        joined_ids = ids.join();
+    } else{
+        joined_ids = [ids].join();
+    }
+   $.getJSON('getobjectdata?ids='+joined_ids, function(data){
+       for (var x=0; x<data.length; x++){
+           var object = data[x];
+           displayDiv.append(makeObjectDisplay(object, availableSelect, option, enableRemove));
+           availableSelect.children("option[value='"+object.id+"']").remove();
+       }
    });
+
 }
 
-function makeObjectDisplay(object, availableSelect, option){
+function makeObjectDisplay(object, availableSelect, option, enableRemove) {
 
-    var div = $("<div itemid="+object.id+" class='item-preview' style='background-image: url("+object.image+")';> </div>");
-    var hovertext = $("<div class='hovertext'><p>"+object.name+"</p><p>Value: " +object['currency_value']+ " </div>");
+    var div = $("<div itemid=" + object.id + " class='item-preview' style='background-image: url(" + object.image + ")';> </div>");
+    var hovertext = $("<div class='hovertext'><p>" + object.name + "</p><p>Value: " + object['currency_value'] + " </div>");
+
+    if (enableRemove) {
     var removeBtn = $("<div class='rmvItemPreview'><span class='glyphicon glyphicon glyphicon-remove' style='color:red'></span></div>");
-    removeBtn.click(function(){
-        $(this).parent().remove();
-        availableSelect.append(option);
+        removeBtn.click(function () {
+            $(this).parent().remove();
+            availableSelect.append(option);
 
-    });
-    div.append(removeBtn).append(hovertext);
+        });
+        div.append(removeBtn).append(hovertext);
+    } else {
+        div.append(hovertext);
+    }
     $("#hisItemDisplay").append(div);
     return div
 }

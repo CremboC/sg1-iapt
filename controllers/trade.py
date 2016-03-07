@@ -1,3 +1,4 @@
+# coding=utf-8
 import json
 
 @auth.requires_login()
@@ -91,23 +92,28 @@ def edit():
 
     # Get objects currently in trade from sender
     trade_objects2 = db(
-        (db.trades_sending.trade_id == tradeid) & (db.trades_sending.sent_object_id == db.objects.id)).select(
+        (db.trades_sending.trade_id == tradeid) & (db.trades_sending.sent_object_id == db.objects.id) & (db.objects.type_id == db.types.id)).select(
         db.objects.id,
+        db.types.name,
         db.objects.name,
         db.objects.currency_value,
         db.objects.image,
         db.objects.summary)
-
+    for obj in trade_objects2:
+        obj.string = format_string(obj)
 
     # Get objects currently in trade from receiver
     trade_objects1 = db(
-        (db.trades_receiving.trade_id == tradeid) & (db.trades_receiving.recv_object_id == db.objects.id)).select(
+        (db.trades_receiving.trade_id == tradeid) & (db.trades_receiving.recv_object_id == db.objects.id) & (db.objects.type_id == db.types.id)).select(
         db.objects.id,
+        db.types.name,
         db.objects.name,
         db.objects.currency_value,
         db.objects.image,
         db.objects.summary)
 
+    for obj in trade_objects1:
+        obj.string = format_string(obj)
     # Get other user's username
     if trade.sender == auth.user_id:
         trader_id = trade.receiver
@@ -128,14 +134,18 @@ def edit():
             "trade_objects": trade_objects, "available_objects": available_objects
             }
 
+
 def getobjectdata():
-    objectId = request.vars.id
-    object = db(db.objects.id == objectId).select()
-    if object[0].image is not None:
-        object[0].image = URL('download', args=object[0].image)
-    else:
-        object[0].image = URL('static', 'images/missing-image.png')
-    return object.json()
+    object_ids = (request.vars.ids).split(",")
+    print object_ids
+    object_ids = map(int, object_ids)
+    objects = db(db.objects.id.belongs(object_ids)).select()
+    for row in objects:
+        if row.image is not None:
+            row.image = URL('download', args=row.image)
+        else:
+            row.image = URL('static', 'images/missing-image.png')
+    return objects.json()
 
 
 @auth.requires_login()
@@ -307,15 +317,26 @@ def get_available_user_items(userid):
         (db.trades_sending.trade_id == db.trades.id) &
         (db.trades.status == 0)).select(
         db.objects.id).column())
-
-    return db((db.objects.owner_id == userid) & (db.objects.status == 2) & ~db.objects.id.belongs(
+    available_objects = db((db.objects.owner_id == userid) & (db.objects.status == 2) & ~db.objects.id.belongs(
         excludedobjects1) & ~db.objects.id.belongs(
-        excludedobjects2)).select(
-        db.objects.id,
+        excludedobjects2) & (db.types.id == db.objects.type_id)).select(
+        db.objects.id, db.types.name,
         db.objects.name,
         db.objects.currency_value,
         db.objects.image,
         db.objects.summary)
+
+    for obj in available_objects:
+        obj.string = format_string(obj)
+    return available_objects
+
+
+def format_string(object):
+    name = object.objects.name + "  "
+    name += str(object.objects.currency_value) + "£"
+
+    return name
+
 
 @auth.requires_login()
 def history():

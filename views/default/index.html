@@ -9,8 +9,10 @@
                 {{print_trade(trade)}}
             </div>
         {{pass}}
+        {{if len(trades)==0:}}
+            No trades to display :(
+        {{pass}}
         </div>
-
     </div>
 {{else:}}
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
