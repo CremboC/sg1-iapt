@@ -43,7 +43,6 @@ def show():
 @auth.requires_login()
 def edit():
     collection_id = request.args[0] or redirect(URL('collections', 'index'))
-
     collection = db(db.collections.id == collection_id).select().first()
 
     if collection.owner_id != auth.user_id:
@@ -54,6 +53,12 @@ def edit():
     obj_query = db.objects.owner_id == auth.user_id
     obj_query &= ~db.objects.id.belongs([col.id for col in objects_in_collection])
     objects = db(obj_query).select()
+
+    is_unfiled = collection.name == "Unfiled"
+
+    if is_unfiled:
+        db.collections.name.writable = False
+        db.collections.private.writable = False
 
     form = SQLFORM(db.collections, record=collection, showid=False, deletable=True, submit_button='Update')
 
@@ -70,7 +75,7 @@ def edit():
             for obj_id in objects_to_add:
                 db.object_collection.insert(object_id=obj_id, collection_id=form.vars.id)
 
-        if form.vars.delete_this_record:
+        if not is_unfiled and form.vars.delete_this_record:
             # cleanup linking table
             query = db.object_collection.collection_id == form.vars.id
             db(query).delete()
@@ -80,4 +85,4 @@ def edit():
         session.flash = dict(status='success', message='Successfully updated collection.')
         return redirect(URL('collections', 'show', args=form.vars.id))
 
-    return dict(collection=collection, form=form, objects=objects, objects_in_collection=objects_in_collection)
+    return dict(collection=collection, form=form, objects=objects, objects_in_collection=objects_in_collection, is_unfiled=is_unfiled)

@@ -47,23 +47,21 @@
 }
 
 .object .panel-body {
-    /*padding: 0;*/
-    padding: 10px 10px 10px 0;
+    padding: 10px;
 }
 
 .object .object-image {
 }
 
 .object .object-image img {
-    border-top-left-radius: 4px;
-    margin-top: -10px;
+    border-radius: 4px;
 }
 
 .object .object-text {
 }
 
 .object .object-status {
-    padding-right: 5px;
+    /*padding-right: 5px;*/
 }
 
 .form-comment {
@@ -135,46 +133,45 @@
 
 .item-preview {
     position: relative;
-    background-size:cover;
+    background-size: cover;
     height: 100px;
     width: 100px;
-    float:left;
+    float: left;
     opacity: 1;
     transition: opacity 0.3s;
 }
 
-
-.hovertext{
+.hovertext {
     position: relative;
-    top:0;
-    left:0;
-    height:100%;
-    width:100%;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
     opacity: 0;
     transition: opacity 0.3s ease-in-out, background 0.3s ease-in-out;
-    background: rgba(255,255,255,0);
+    background: rgba(255, 255, 255, 0);
     padding: 0.5em;
     overflow: hidden;
-    z-index:1;
+    z-index: 1;
 }
 
 /*background-image: url({{=URL('download', args=row.comicbook.cover, host=True)}});*/
-.hovertext:hover{
+.hovertext:hover {
     opacity: 1;
     transition: opacity 0.3s ease-in-out, background 0.3s ease-in-out;
-    background: rgba(255,255,255,0.8);
+    background: rgba(255, 255, 255, 0.8);
 }
 
-.rmvItemPreview{
-    float:right;
+.rmvItemPreview {
+    float: right;
     position: absolute;
     top: 0;
     right: 0;
-    z-index:2;
+    z-index: 2;
 }
 
-.vcenter{
-    height:3em;
+.vcenter {
+    height: 3em;
     vertical-align: middle;
     display: table-cell;
 }

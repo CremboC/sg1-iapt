@@ -31,7 +31,7 @@
                     </li>
                 {{if show_owner:}}
                     <li>Posted By:
-                        <a href="{{=URL('collections', 'show', args=owner.id)}}">
+                        <a href="{{=URL('collections', 'index', args=owner.id)}}">
                         {{=owner.username}}
                         </a>
                     </li>

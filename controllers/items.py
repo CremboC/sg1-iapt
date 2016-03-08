@@ -3,10 +3,7 @@ def create():
     form = SQLFORM(db.objects)
     types = db(db.types.id > 0).select()
     collections = db(db.collections.owner_id == auth.user_id).select()
-    if request.vars.collection is not None:
-        selected_collection = int(request.vars.collection)
-    else:
-        selected_collection = None
+    selected_collection = request.vars.collection or -1
 
     if form.process().accepted:
         if request.vars.collections is not None:
@@ -19,7 +16,7 @@ def create():
     elif form.errors:
         response.flash = {"status": "danger", "message": "An error has occured. See below."}
 
-    return dict(form=form, types=types, collections=collections, selected_collection=selected_collection)
+    return dict(form=form, types=types, collections=collections, selected_collection=int(selected_collection))
 
 
 @auth.requires_login()
@@ -37,10 +34,15 @@ def edit():
     collections = db(db.collections.owner_id == auth.user_id).select()
 
     if form.process().accepted:
-        chosen_cols = [int(col) for col in request.vars.collections] or [request.vars.collections]
 
-        for col in chosen_cols:
-            db.object_collection.insert(object_id=form.vars.id, collection_id=col)
+        if request.vars.collections:
+            chosen_cols = [int(col) for col in request.vars.collections] or [request.vars.collections]
+
+            for col in chosen_cols:
+                link_object_collections(form.vars.id, col)
+        else:
+            col = get_unfiled_collection()
+            link_object_collections(form.vars.id, col.id)
 
         session.flash = {"status": "success", "message": "Item successfully saved"}
         return redirect(URL('items', 'show', args=form.vars.id))

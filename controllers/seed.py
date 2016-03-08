@@ -25,8 +25,10 @@ def index():
     db.types.insert(name='Toys and Games')
 
     db.collections.truncate()
+    db.collections.insert(owner_id=1, name='Unfiled', private=True)
     db.collections.insert(owner_id=1, name='Carrots', private=False)
     db.collections.insert(owner_id=1, name='Coins', private=True)
+    db.collections.insert(owner_id=2, name='Unfiled', private=True)
     db.collections.insert(owner_id=2, name='Collection Three', private=False)
     db.collections.insert(owner_id=2, name='Collection', private=True)
 

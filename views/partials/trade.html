@@ -1,5 +1,5 @@
 {{def print_trade(trade):}}
-    <div class="panel panel-default object">
+    <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
                 <div class="object-header clearfix col-xs-12">
@@ -22,7 +22,7 @@
                             <li>You gave {{=trade.receivedItems}} objects.</li>
                             <li>In exchange of {{=trade.sentItems}} objects.</li>
                         {{pass}}
-                            <li>The trade was worth: {{=trade.value}}£</li>
+                            <li>The trade was worth: &pound;{{="{:0,.2f}".format(trade.value)}}</li>
                     </ul>
                 </div>
                 <div class="col-md-5 object-image clearfix">
