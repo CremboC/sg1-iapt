@@ -1,6 +1,7 @@
 # coding=utf-8
 import json
 
+
 @auth.requires_login()
 def view():
     # Todo: implement view with completed trades
@@ -58,19 +59,30 @@ def view():
 def new():
     receiver_username = request.vars.receiver_username
     receiver_id = request.vars.receiver_id
+    item_id = request.vars.item_id
     if (receiver_username is None) & (receiver_id is not None):
         receiver_username = db(db.auth_user.id == receiver_id).select(db.auth_user.username).column()[0]
 
+    object = None
+    if item_id is not None:
+        object = db((db.objects.id == item_id) & (db.types.id == db.objects.type_id)).select(db.objects.id,
+                                                     db.types.name, db.objects.name, db.objects.currency_value,
+                                                     db.objects.image,
+                                                     db.objects.summary,
+                                                     db.types.name, db.objects.owner_id)[0]
+        object.string = format_string(object)
+        receiver_username = db(db.auth_user.id==object.objects.owner_id).select(db.auth_user.username).column()[0]
+
     if receiver_username is None:
         return {"user_id": auth.user_id, "trader_id": "", "trader_username": None,
-                "available_objects": [get_available_user_items(auth.user_id)]}
+                "available_objects": [get_available_user_items(auth.user_id)], "wanted_object": object}
     elif receiver_username == db(db.auth_user.id == auth.user_id).select(db.auth_user.username).column()[0]:
         raise HTTP(404, "Cannot trade with yourself")
     else:
-        receiver_id = db(db.auth_user.username==receiver_username).select(db.auth_user.id).column()[0]
+        receiver_id = db(db.auth_user.username == receiver_username).select(db.auth_user.id).column()[0]
         available_items = [get_available_user_items(auth.user_id), get_available_user_items(receiver_id)]
         return {"user_id": auth.user_id, "trader_id": receiver_id, "trader_username": receiver_username,
-                    "available_objects": available_items}
+                "available_objects": available_items, "wanted_object": object}
 
 
 @auth.requires_login()
@@ -92,7 +104,8 @@ def edit():
 
     # Get objects currently in trade from sender
     trade_objects2 = db(
-        (db.trades_sending.trade_id == tradeid) & (db.trades_sending.sent_object_id == db.objects.id) & (db.objects.type_id == db.types.id)).select(
+        (db.trades_sending.trade_id == tradeid) & (db.trades_sending.sent_object_id == db.objects.id) & (
+        db.objects.type_id == db.types.id)).select(
         db.objects.id,
         db.types.name,
         db.objects.name,
@@ -104,7 +117,8 @@ def edit():
 
     # Get objects currently in trade from receiver
     trade_objects1 = db(
-        (db.trades_receiving.trade_id == tradeid) & (db.trades_receiving.recv_object_id == db.objects.id) & (db.objects.type_id == db.types.id)).select(
+        (db.trades_receiving.trade_id == tradeid) & (db.trades_receiving.recv_object_id == db.objects.id) & (
+        db.objects.type_id == db.types.id)).select(
         db.objects.id,
         db.types.name,
         db.objects.name,
@@ -153,7 +167,6 @@ def createNew():
     if (request.vars['youritems'] is None) | (request.vars['theiritems'] is None):
         response.status = 400
         return 'Error 400: incomplete trade, please enter trade items or select other user'
-
 
     youritems = request.vars['youritems'].split(",")
     theiritems = request.vars['theiritems'].split(",")
@@ -340,7 +353,6 @@ def format_string(object):
 
 @auth.requires_login()
 def history():
-
     numPerPage = 20
     if request.vars.index is None:
         minIndex = 0
@@ -349,12 +361,14 @@ def history():
 
     trades = db((((db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)) | (
         (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender))) &
-        db.trades.status.belongs([1, 2, 3])).select(db.trades.id, db.trades.date_created, db.trades.sender, db.trades.receiver, db.trades.status,
-                         db.trades.superseded_by, db.auth_user.username, limitby=(minIndex, minIndex+numPerPage))
+                db.trades.status.belongs([1, 2, 3])).select(db.trades.id, db.trades.date_created, db.trades.sender,
+                                                            db.trades.receiver, db.trades.status,
+                                                            db.trades.superseded_by, db.auth_user.username,
+                                                            limitby=(minIndex, minIndex + numPerPage))
 
     numTrades = db((((db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)) | (
         (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender))) &
-        db.trades.status.belongs([1, 2, 3])).count()
+                   db.trades.status.belongs([1, 2, 3])).count()
 
     for trade in trades:
         sentItems = db(db.trades_sending.trade_id == trade.trades.id).count()
@@ -380,7 +394,9 @@ def history():
             trade.trades.otheruser = trade.trades.sender
         trade.trades.otheruser = db(db.auth_user.id == trade.trades.otheruser).select(db.auth_user.username).column()[0]
     print trades
-    return {"trades": trades, "user_id": auth.user_id, "hasPrevPage": minIndex>0, "hasNextPage": numTrades > minIndex+numPerPage, "minIndex": minIndex, "numPerPage":numPerPage}
+    return {"trades": trades, "user_id": auth.user_id, "hasPrevPage": minIndex > 0,
+            "hasNextPage": numTrades > minIndex + numPerPage, "minIndex": minIndex, "numPerPage": numPerPage}
+
 
 @cache.action()
 def download():

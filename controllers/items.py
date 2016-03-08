@@ -3,7 +3,10 @@ def create():
     form = SQLFORM(db.objects)
     types = db(db.types.id > 0).select()
     collections = db(db.collections.owner_id == auth.user_id).select()
-    selected_collection = int(request.vars.collection) or None
+    if request.vars.collection is not None:
+        selected_collection = int(request.vars.collection)
+    else:
+        selected_collection = None
 
     if form.process().accepted:
         if request.vars.collections is not None:

@@ -84,6 +84,9 @@
                     </div>
 
                     <div class="panel-body" id="hisItemDisplay">
+                        {{if wanted_object is not None:}}
+                            <script> addItemToTrade("{{=wanted_object.objects.id}}", $('#hisItemDisplay'), $('#theirAvailableObjects'), createOption("{{=wanted_object.objects.id}}", "{{=wanted_object.string}}"), true)</script>
+                        {{pass}}
                     </div>
                 </div>
             </div>
