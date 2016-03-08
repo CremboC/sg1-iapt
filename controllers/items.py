@@ -5,11 +5,10 @@ def create():
     collections = db(db.collections.owner_id == auth.user_id).select()
 
     if form.process().accepted:
-
-        chosen_cols = [int(col) for col in request.vars.collections] or [request.vars.collections]
-
-        for col in chosen_cols:
-            db.object_collection.insert(object_id=form.vars.id, collection_id=col)
+        if request.vars.collections is not None:
+            chosen_cols = [int(col) for col in request.vars.collections] or [request.vars.collections]
+            for col in chosen_cols:
+                db.object_collection.insert(object_id=form.vars.id, collection_id=col)
 
         session.flash = {"status": "success", "message": "Item successfully saved"}
         return redirect(URL('items', 'show', args=form.vars.id))
