@@ -199,6 +199,8 @@ def createNew():
     receiver_username = db(db.auth_user.id == receiverId).select(db.auth_user.username).column()[0]
     session.flash = T('Successfully created trade with ' + receiver_username)
 
+    db( db.auth_user.id == receiverId ).update( notifications = True )
+
     if request.vars.prevtrade is not None:
         db(db.trades.id == int(request.vars.prevtrade)).update(status=4, superseded_by=newTradeId)
 
@@ -258,6 +260,8 @@ def delete():
 
 @auth.requires_login()
 def index():
+    db( db.auth_user.id == auth.user_id ).update( notifications = False )
+
     trades = db((((db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)) | (
         (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender)))
                 ).select(db.trades.id, db.trades.date_created, db.trades.sender, db.trades.receiver, db.trades.status,
