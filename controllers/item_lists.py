@@ -6,9 +6,9 @@ def view():
         user_id = auth.user_id
     if user_id is None:
         if want:
-            redirect(URL('default', 'user/login', vars={'_next':URL('item_lists', 'want')}))
+            redirect(URL('default', 'user/login', vars={'_next':URL('item_lists', 'view', vars={"want": "true"})}))
         else:
-            redirect(URL('default', 'user/login', vars={'_next':URL('item_lists', 'have')}))
+            redirect(URL('default', 'user/login', vars={'_next':URL('item_lists', 'have', vars={"want": "false"})}))
 
     username = db(db.auth_user.id == user_id).select(db.auth_user.username).column()
     if len(username) == 0:
