@@ -81,7 +81,11 @@
                 <br>
                 <select id="objects_collection" multiple="multiple" name="collections">
                 {{for collection in collections:}}
+                    {{if collection.id == selected_collection:}}
+                    <option value="{{=collection.id}}" selected="selected">{{=collection.name}}</option>
+                    {{else:}}
                     <option value="{{=collection.id}}">{{=collection.name}}</option>
+                    {{pass}}
                 {{pass}}
                 </select>
             </div>

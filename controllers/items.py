@@ -3,6 +3,7 @@ def create():
     form = SQLFORM(db.objects)
     types = db(db.types.id > 0).select()
     collections = db(db.collections.owner_id == auth.user_id).select()
+    selected_collection = int(request.vars.collection) or None
 
     if form.process().accepted:
         if request.vars.collections is not None:
@@ -15,25 +16,24 @@ def create():
     elif form.errors:
         response.flash = {"status": "danger", "message": "An error has occured. See below."}
 
-    return dict(form=form, types=types, collections=collections)
+    return dict(form=form, types=types, collections=collections, selected_collection=selected_collection)
 
 
 @auth.requires_login()
 def edit():
     object_id = request.args[0] or redirect(URL('items', 'index'))
 
-    object = db(db.objects.id == object_id).select().first()
-    object_collections = [col.id for col in object.collections()]
+    obj = db(db.objects.id == object_id).select().first()
+    object_collections = [col.id for col in obj.collections()]
 
-    if object.owner_id != auth.user_id:
+    if obj.owner_id != auth.user_id:
         return redirect(URL('items', 'index'))
 
-    form = SQLFORM(db.objects, record=object, showid=False, deletable=True, submit_button='Update')
+    form = SQLFORM(db.objects, record=obj, showid=False, deletable=True, submit_button='Update')
     types = db(db.types.id > 0).select()
     collections = db(db.collections.owner_id == auth.user_id).select()
 
     if form.process().accepted:
-
         chosen_cols = [int(col) for col in request.vars.collections] or [request.vars.collections]
 
         for col in chosen_cols:
@@ -44,7 +44,7 @@ def edit():
     elif form.errors:
         response.flash = {"status": "danger", "message": "An error has occured. See below."}
 
-    return dict(object=object, form=form, types=types, collections=collections, object_collections=object_collections)
+    return dict(object=obj, form=form, types=types, collections=collections, object_collections=object_collections)
 
 
 @auth.requires_login()

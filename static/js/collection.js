@@ -23,7 +23,7 @@
 //});
 
 function createInput(id) {
-    return $('<input type="hidden" name="objects" value="' + id + '" id="object-removal-' + id + '">');
+    return $('<input type="hidden" name="objects_to_remove" value="' + id + '" id="object-removal-' + id + '">');
 }
 
 $(document).ready(function () {
@@ -63,5 +63,13 @@ $(document).ready(function () {
 
         if (objects.length == 0) $undo.hide();
     });
+
+    $('#new_objects').multiselect({
+        enableFiltering: true,
+        enableCaseInsensitiveFiltering: true,
+        filterBehavior: 'text',
+        buttonWidth: '350px'
+    });
+
 
 });

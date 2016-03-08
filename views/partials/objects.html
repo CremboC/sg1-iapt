@@ -40,8 +40,11 @@
                 </div>
             </div>
             <div class="col-md-5 object-image clearfix">
-                <img src="http://lorempixel.com/100/100/cats/{{=obj.id}}/" alt=""
-                     class="img-responsive pull-right">
+                {{if obj.image:}}
+                <img src="{{=URL('default', 'download', args=obj.image)}}" alt="" class="img-responsive pull-right">
+                {{else:}}
+                <img src="http://lorempixel.com/100/100/cats/" alt="" class="img-responsive pull-right">
+                {{pass}}
             </div>
         </div>
     </div>

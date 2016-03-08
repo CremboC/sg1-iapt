@@ -38,16 +38,28 @@ def edit():
     if collection.owner_id != auth.user_id:
         return redirect(URL('collections', 'index'))
 
+    objects_in_collection = collection.objects()
+
+    obj_query = db.objects.owner_id == auth.user_id
+    obj_query &= ~db.objects.id.belongs([col.id for col in objects_in_collection])
+    objects = db(obj_query).select()
+
     form = SQLFORM(db.collections, record=collection, showid=False, deletable=True, submit_button='Update')
 
     if form.process().accepted:
-        if request.vars.objects:
-            objects_to_remove = [int(obj) for obj in request.vars.objects] or [request.vars.objects]
+        if request.vars.objects_to_remove:
+            objects_to_remove = [int(obj) for obj in request.vars.objects_to_remove] or [request.vars.objects_to_remove]
 
             query = db.object_collection.object_id.belongs(objects_to_remove)
             db(query).delete()
 
+        if request.vars.new_objects:
+            objects_to_add = [int(obj) for obj in request.vars.new_objects] or [request.vars.new_objects]
+
+            for obj_id in objects_to_add:
+                db.object_collection.insert(object_id=obj_id, collection_id=form.vars.id)
+
         session.flash = dict(status='success', message='Successfully updated collection.')
         return redirect(URL('collections', 'show', args=form.vars.id))
 
-    return dict(collection=collection, form=form)
+    return dict(collection=collection, form=form, objects=objects, objects_in_collection=objects_in_collection)

@@ -17,19 +17,21 @@
 
         <div class="pull-right">
         {{if is_owner:}}
-            <a href="{{=URL('collections', 'add', args=collection.id)}}" class="btn btn-success">Add Item</a>
+            <a href="{{=URL('items', 'create', vars={'collection':collection.id})}}" class="btn btn-success">
+                Create and Add Item
+            </a>
             <a href="{{=URL('collections', 'edit', args=collection.id)}}" class="btn btn-warning">Edit Collection</a>
         {{pass}}
         </div>
     </div>
 
-    {{if is_owner:}}
+{{if is_owner:}}
     <p>
         <i>
             This collection is {{if collection.private:}} private{{else:}} public{{pass}}.
         </i>
     </p>
-    {{pass}}
+{{pass}}
 
     <div class="panel panel-default">
         <div class="panel-body">
