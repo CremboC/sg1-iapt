@@ -2,6 +2,7 @@
 {{include 'partials/trade_list.html'}}
 {{include 'partials/trade.html'}}
 {{include 'partials/collections.html'}}
+{{include 'partials/have_want_lists.html'}}
 {{include 'partials/sortby.html'}}
 {{include 'partials/users.html'}}
 
@@ -98,10 +99,10 @@
                     <a href="{{=URL('collections', 'index')}}">Collections</a>
                 </li>
                 <li>
-                    <a href="#">Have</a>
+                    <a href="{{=URL('item_lists', 'have')}}">Have</a>
                 </li>
                 <li>
-                    <a href="#">Want</a>
+                    <a href="{{=URL('item_lists', 'want')}}">Want</a>
                 </li>
                 <li>
                     <a href="{{=URL('trade', 'index')}}">Trades</a>

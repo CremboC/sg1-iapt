@@ -1,0 +1,39 @@
+{{extend 'layout.html'}}
+        
+<div class="container">
+    <div class="clearfix">
+        <div class="pull-left">
+            <h2>
+            Have items
+                <small>
+                    by
+                    <a href="{{=URL('collections', 'index', args=user_id)}}">
+                    {{=username}}
+                    </a>
+                </small>
+            </h2>
+        </div>
+
+        <div class="pull-right">
+        {{if is_owner:}}
+            <a href="{{=URL('items', 'create', vars={'status':1})}}" class="btn btn-success">
+                Create and Add Item
+            </a>
+            <a href="{{=URL('collections', 'edit', args=1)}}" class="btn btn-warning">Edit Collection</a>
+        {{pass}}
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+        {{print_sortby()}}
+            <div class="row">
+            {{for item in items:}}
+                <div class="col-xs-4 object-wrapper">
+                {{print_object(item, False)}}
+                </div>
+            {{pass}}
+            </div>
+        </div>
+    </div>
+</div>
