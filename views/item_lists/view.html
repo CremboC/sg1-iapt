@@ -4,7 +4,11 @@
     <div class="clearfix">
         <div class="pull-left">
             <h2>
-            Have items
+            {{if is_want:}}
+                Want items
+            {{else:}}
+                Have items
+            {{pass}}
                 <small>
                     by
                     <a href="{{=URL('collections', 'index', args=user_id)}}">
@@ -12,15 +16,6 @@
                     </a>
                 </small>
             </h2>
-        </div>
-
-        <div class="pull-right">
-        {{if is_owner:}}
-            <a href="{{=URL('items', 'create', vars={'status':1})}}" class="btn btn-success">
-                Create and Add Item
-            </a>
-            <a href="{{=URL('collections', 'edit', args=1)}}" class="btn btn-warning">Edit Collection</a>
-        {{pass}}
         </div>
     </div>
 
