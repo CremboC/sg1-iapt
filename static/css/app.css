@@ -74,6 +74,10 @@
     vertical-align: -1px;
 }
 
+#filters-types ul li {
+    padding: 7px 10px;
+}
+
 /*Trade index*/
 
 .tradeborder {

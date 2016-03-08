@@ -1,71 +1,78 @@
 {{extend 'layout.html'}}
 
 <script src="{{=URL('static','js/trade.js')}}"></script>
-<link rel="stylesheet" type="text/css" href="{{=URL('static','css/app.css')}}">
+
 <div class="container">
-    <div class="text-center clearfix">
+    <div class="text-center row row-bottom-margin">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            <p>Trade between you and <a href="{{=URL('collections', 'show', vars={'user': trader_id})}}">{{=trader_username}}</a></p>
+            <p>Trade between you and <a
+                    href="{{=URL('collections', 'show', vars={'user': trader_id})}}">{{=trader_username}}</a></p>
         </div>
-        <div class="col-md-4 text-right"> <a class="btn btn-default" href="{{=URL('trade', 'index')}}">Back to all trades</a></div>
+        <div class="col-md-4 text-right">
+            <a class="btn btn-default" href="{{=URL('trade', 'index')}}">Back to all trades</a>
+        </div>
     </div>
 
     <!-- TODO: create search features for multi-selects -->
-    <div class="clearfix">
-            <div class="col-md-6 tradeborder">
-                <div class="panel panel-default">
+    <div class="row row-bottom-margin">
+        <div class="col-md-6 tradeborder">
+            <div class="panel panel-default">
 
-                    <div class="panel-heading">
-                        <h2 class="panel-title">{{="You give"}}</h2>
-                    </div>
-
-                    <div class="panel-body" id="yourItemDisplay">
-                        {{for row in trade_objects[0]:}}
-                            <script> addItemToTrade("{{=row.id}}", $('#yourItemDisplay'), $('#yourAvailableObjects'), createOption("{{=row.id}}", "{{=row.name}}"))</script>
-                        {{pass}}
-                    </div>
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{="You give"}}</h2>
                 </div>
-            </div>
 
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h2 class="panel-title">{{="He gives"}}</h2>
-                    </div>
-
-                    <div class="panel-body" id="hisItemDisplay">
-                        {{for row in trade_objects[1]:}}
-                            <script> addItemToTrade("{{=row.id}}", $('#hisItemDisplay'), $('#theirAvailableObjects'), createOption("{{=row.id}}", "{{=row.name}}"))</script>
-                        {{pass}}
-                    </div>
+                <div class="panel-body" id="yourItemDisplay">
+                {{for row in trade_objects[0]:}}
+                    <script> addItemToTrade("{{=row.id}}", $('#yourItemDisplay'), $('#yourAvailableObjects'), createOption("{{=row.id}}", "{{=row.name}}"))</script>
+                {{pass}}
                 </div>
             </div>
         </div>
-        {{if editable:}}
-        <div class="row">
-            <div class="col-md-4">
-                {{if user_is_receiver:}}
-                    <a type="submit" class="btn btn-default btn-danger" href="{{=URL('trade', 'delete', vars={'tradeid':tradeid})}}">Reject trade</a>
-                {{else:}}
-                    <a type="submit" class="btn btn-default btn-danger" href="{{=URL('trade', 'delete', vars={'tradeid':tradeid})}}">Cancel proposal</a>
-                {{pass}}
-            </div>
 
-            <div class="col-md-4 text-center">
-                {{if user_is_receiver:}}
-                    <a type="submit" class="btn btn-default btn-warning" href="{{=URL('trade', 'edit', vars={'tradeid':tradeid})}}">Counter-offer</a>
-                {{else:}}
-                    <a type="submit" class="btn btn-default btn-warning" href="{{=URL('trade', 'edit', vars={'tradeid':tradeid})}}">Edit proposal</a>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{="He gives"}}</h2>
+                </div>
+
+                <div class="panel-body" id="hisItemDisplay">
+                {{for row in trade_objects[1]:}}
+                    <script> addItemToTrade("{{=row.id}}", $('#hisItemDisplay'), $('#theirAvailableObjects'), createOption("{{=row.id}}", "{{=row.name}}"))</script>
                 {{pass}}
-            </div>
-            <div class="col-md-4 pull-right text-right">
-                {{if user_is_receiver:}}
-                    <a type="submit" class="btn btn-default pull-right btn-success" href="{{=URL('trade', 'accept', vars={'tradeid':tradeid})}}">Accept trade</a>
-                {{pass}}
+                </div>
             </div>
         </div>
-        {{pass}}
-
     </div>
+{{if editable:}}
+    <div class="row row-bottom-margin">
+        <div class="col-md-4">
+        {{if user_is_receiver:}}
+            <a type="submit" class="btn btn-default btn-danger"
+               href="{{=URL('trade', 'delete', vars={'tradeid':tradeid})}}">Reject trade</a>
+        {{else:}}
+            <a type="submit" class="btn btn-default btn-danger"
+               href="{{=URL('trade', 'delete', vars={'tradeid':tradeid})}}">Cancel proposal</a>
+        {{pass}}
+        </div>
+
+        <div class="col-md-4 text-center">
+        {{if user_is_receiver:}}
+            <a type="submit" class="btn btn-default btn-warning"
+               href="{{=URL('trade', 'edit', vars={'tradeid':tradeid})}}">Counter-offer</a>
+        {{else:}}
+            <a type="submit" class="btn btn-default btn-warning"
+               href="{{=URL('trade', 'edit', vars={'tradeid':tradeid})}}">Edit proposal</a>
+        {{pass}}
+        </div>
+        <div class="col-md-4 pull-right text-right">
+        {{if user_is_receiver:}}
+            <a type="submit" class="btn btn-default pull-right btn-success"
+               href="{{=URL('trade', 'accept', vars={'tradeid':tradeid})}}">Accept trade</a>
+        {{pass}}
+        </div>
+    </div>
+{{pass}}
+
 </div>
