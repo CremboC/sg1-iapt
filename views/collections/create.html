@@ -1,0 +1,32 @@
+{{extend 'layout.html'}}
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Create new collection</h3>
+        </div>
+        <div class="panel-body">
+        {{=form.custom.begin}}
+            <div class="form-group">
+                <label for="collections_name">
+                {{=form.custom.label.name}}
+                </label>
+                {{=form.custom.widget.name}}
+            </div>
+
+            <div class="form-group">
+                <label for="collections_private">
+                {{=form.custom.widget.private}}
+                {{=form.custom.label.private}}
+                </label>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">
+                    Create Collection
+                </button>
+            </div>
+        {{=form.custom.end}}
+        </div>
+    </div>
+</div>

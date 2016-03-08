@@ -3,48 +3,50 @@
 {{type = obj.type()}}
 <div class="panel panel-default object">
     <div class="panel-body">
-        <div class="row">
-            <div class="object-header clearfix col-xs-12">
-                <div class="pull-left">
-                    <a href="{{=URL('items', 'show', args=obj.id)}}">
-                        <strong>{{=obj.name}}</strong>
-                    </a>
-                </div>
 
-                <div class="pull-right">
-                    Value: &pound;{{="{:0,.2f}".format(obj.currency_value)}}
-                </div>
+        <div class="row no-margin">
+            <div class="col-xs-4 object-image">
+                <a href="{{=URL('items', 'show', args=obj.id)}}">
+                {{if obj.image:}}
+                    <img src="{{=URL('default', 'download', args=obj.image)}}" alt="" class="img-responsive pull-right">
+                {{else:}}
+                    <img src="http://lorempixel.com/100/100/cats/" alt="" class="img-responsive pull-right">
+                {{pass}}
+                </a>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-7 object-text">
+            <div class="col-xs-6 object-details">
                 <ul class="list-unstyled">
+                    <li>
+                        <a href="{{=URL('items', 'show', args=obj.id)}}">
+                            <strong>{{=obj.name}}</strong>
+                        </a>
+                    </li>
+                    <li>
+                        Value: &pound;{{="{:0,.2f}".format(obj.currency_value)}}
+                    </li>
                     <li>{{=type.name}}</li>
-                    {{if show_owner:}}
+                    <li>
+                        {{=obj.summary}}
+                    </li>
+                {{if show_owner:}}
                     <li>Posted By:
                         <a href="{{=URL('collections', 'show', args=owner.id)}}">
                         {{=owner.username}}
                         </a>
                     </li>
-                    {{pass}}
+                {{pass}}
                 </ul>
-                <div class="object-status">
-                {{if obj.status == 0:}}
-                    Want
-                {{elif obj.status == 1:}}
-                    Have
-                {{elif obj.status == 2:}}
-                    InCol
-                {{pass}}
-                </div>
             </div>
-            <div class="col-md-5 object-image clearfix">
-                {{if obj.image:}}
-                <img src="{{=URL('default', 'download', args=obj.image)}}" alt="" class="img-responsive pull-right">
-                {{else:}}
-                <img src="http://lorempixel.com/100/100/cats/" alt="" class="img-responsive pull-right">
-                {{pass}}
+
+            <div class="col-xs-2 object-status">
+            {{if obj.status == 0:}}
+                Want
+            {{elif obj.status == 1:}}
+                Have
+            {{elif obj.status == 2:}}
+                InCol
+            {{pass}}
             </div>
         </div>
     </div>
