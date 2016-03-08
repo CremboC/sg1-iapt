@@ -173,6 +173,8 @@ db.collections.owner = Field.Lazy(
     lambda row: db(db.auth_user.id == row.collections.owner_id).select()[0]
 )
 
+db.collections.name.requires = IS_NOT_EMPTY()
+
 db.define_table("object_collection",
                 Field("object_id", "reference objects",
                       required=True),

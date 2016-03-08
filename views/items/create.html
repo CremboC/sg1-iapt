@@ -46,7 +46,7 @@
             <div class="form-group">
                 <label for="objects_summary">{{=form.custom.label.summary}}</label>
 
-                <textarea name="summary" id="objects_summary" cols="10" rows="5" class="form-control"></textarea>
+                {{=form.custom.widget.summary}}
 
                 <div class="clearfix">
                     <div class="pull-left">
@@ -93,7 +93,7 @@
             <!--image-->
             <div class="form-group">
                 <label for="objects_image">{{=form.custom.label.image}}</label>
-                <input type="file" name="image" id="objects_image" class="form-control">
+                {{=form.custom.widget.image}}
 
                 <p class="form-comment">
                 {{=form.custom.comment.image}}

@@ -2,8 +2,10 @@
 <div class="container">
 {{if auth_logged_in:}}
     <div class="panel panel-default">
-        <div class="panel panel-heading">Your most recent trades</div>
-        <div class="panel panel-body">
+        <div class="panel-heading">
+            <h3 class="panel-title">Your most recent trades</h3>
+        </div>
+        <div class="panel-body">
         {{for trade in trades:}}
             <div class="col-md-4">
                 {{print_trade(trade)}}
@@ -52,8 +54,10 @@
     </div>
 {{pass}}
     <div class="panel panel-default">
-        <div class="panel panel-heading">Most recent items</div>
-        <div class="panel panel-body">
+        <div class="panel-heading">
+            <h3 class="panel-title">Most recent items</h3>
+        </div>
+        <div class="panel-body">
         {{for item in newest_items:}}
             <div class="col-md-4">
             {{print_object(item, show_owner = True)}}

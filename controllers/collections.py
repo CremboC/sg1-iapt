@@ -14,6 +14,17 @@ def index():
 
 
 @auth.requires_login()
+def create():
+    form = SQLFORM(db.collections)
+
+    if form.process().accepted:
+        session.flash = {"status": "success", "message": "Collection successfully created."}
+        return redirect(URL('collections', 'show', args=form.vars.id))
+
+    return dict(form=form)
+
+
+@auth.requires_login()
 def show():
     collection_id = request.args[0] or redirect(URL('collections', 'index'))
 
@@ -58,6 +69,13 @@ def edit():
 
             for obj_id in objects_to_add:
                 db.object_collection.insert(object_id=obj_id, collection_id=form.vars.id)
+
+        if form.vars.delete_this_record:
+            # cleanup linking table
+            query = db.object_collection.collection_id == form.vars.id
+            db(query).delete()
+            session.flash = dict(status='success', message='Successfully deleted collection.')
+            return redirect(URL('collections', 'index'))
 
         session.flash = dict(status='success', message='Successfully updated collection.')
         return redirect(URL('collections', 'show', args=form.vars.id))
