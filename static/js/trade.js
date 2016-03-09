@@ -1,6 +1,5 @@
 function transferOptionsToTrade(select1, itemPreviewDiv, enableRemove) {
     var itemIds = select1.val();
-    console.log(enableRemove);
     addItemToTrade(itemIds, itemPreviewDiv, select1, enableRemove);
 }
 
@@ -9,14 +8,12 @@ function createOption(id, name) {
 }
 
 function addItemToTrade(ids, displayDiv, availableSelect, enableRemove) {
-    console.log(enableRemove);
     var joined_ids;
     if (ids instanceof Array) {
         joined_ids = ids.join();
     } else {
         joined_ids = [ids].join();
     }
-    console.log(enableRemove);
     $.getJSON('getobjectdata?ids=' + joined_ids, function (data) {
         for (var x = 0; x < data.length; x++) {
             var object = data[x];
@@ -32,7 +29,6 @@ function makeObjectDisplay(object, availableSelect, enableRemove) {
 
     var div = $("<div itemid=" + object.id + " class='item-preview' style='background-image: url(" + object.image + ");'> </div>");
     var hovertext = $("<div class='hovertext'><p>" + object.name + "</p><p>Value: " + object['currency_value'] + " </div>");
-    console.log(enableRemove);
     if (enableRemove) {
         var removeBtn = $("<div class='rmvItemPreview'><span class='glyphicon glyphicon glyphicon-remove' style='color:red'></span></div>");
         removeBtn.click(function () {
