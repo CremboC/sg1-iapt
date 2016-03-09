@@ -30,7 +30,7 @@ function addItemToTrade(ids, displayDiv, availableSelect, option, enableRemove) 
 
 function makeObjectDisplay(object, availableSelect, option, enableRemove) {
 
-    var div = $("<div itemid=" + object.id + " class='item-preview' style='background-image: url(" + object.image + ")';> </div>");
+    var div = $("<div itemid=" + object.id + " class='item-preview' style='background-image: url(" + object.image + ");'> </div>");
     var hovertext = $("<div class='hovertext'><p>" + object.name + "</p><p>Value: " + object['currency_value'] + " </div>");
     console.log(enableRemove);
     if (enableRemove) {
@@ -120,11 +120,3 @@ $(function () {
         });
     });
 });
-
-
-
-
-
-
-
-
