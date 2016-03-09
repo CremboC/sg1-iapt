@@ -52,12 +52,15 @@ def edit():
     return dict(object=obj, form=form, types=types, collections=collections, object_collections=object_collections)
 
 
-@auth.requires_login()
 def show():
     item_id = request.args[0] or redirect(URL('default', 'index'))
     item = db(db.objects.id == item_id).select().first()
     user = db(db.auth_user.id == item.owner_id).select().first()
 
     is_owner = user.id == auth.user_id
+
+    # Item doesn't exist or is private
+    if not item or not is_owner and item_is_private(item_id):
+        raise HTTP(404, "Error 404: Invalid request, item does not exist")
 
     return dict(item=item, is_owner=is_owner, user=user)
