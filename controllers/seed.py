@@ -34,12 +34,13 @@ def index():
 
     db.objects.truncate()
     db.object_collection.truncate()
+
     #Not tradable
-    db.objects.insert(owner_id=1, type_id=1, status=1, name='Golden Carrot', summary='A magical carrot found down a rabbit hole',
-        description='You\'l need some belief for this one, this carrot is filled with magical powers! A great addition to any collection', currency_value=500.0, image='objects.image.817cd3ab9d568442.636172726f742e6a7067.jpg')
+    db.objects.insert(owner_id=1, type_id=1, status=2, name='Golden Carrot', summary='A magical carrot found down a rabbit hole',
+        description='You\'l need some belief for this one, this carrot is filled with magical powers! A great addition to any collection', currency_value=500.0, image='objects.image.830cf596c2763ad5.636172726f742e6a7067.jpg')
     db.object_collection.insert(object_id=1, collection_id=2)
 
-    db.objects.insert(owner_id=1, type_id=1, status=2, name='A carrot', summary='A normal carrot',
+    db.objects.insert(owner_id=2, type_id=1, status=2, name='A carrot', summary='A normal carrot',
         description='A more natural carrot, but you can eat this one!', currency_value=1.0, image='objects.image.830cf596c2763ad5.636172726f742e6a7067.jpg')
     db.object_collection.insert(object_id=2, collection_id=2)
 
