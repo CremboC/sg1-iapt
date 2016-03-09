@@ -72,6 +72,8 @@ mail.settings.login = myconf.take('smtp.login')
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
+auth.settings.register_onaccept.append(
+    lambda form: db.collections.insert(owner_id=form.vars.id, name='Unfiled', private=True))
 
 #########################################################################
 ## Define your tables below (or better in another model file) for example
@@ -228,6 +230,5 @@ def link_object_collections(object_id, collection_id):
     db.object_collection.insert(object_id=object_id, collection_id=collection_id)
 
 
-def get_unfiled_collection():
-    db.collections((db.collections.name == "Unfiled") & (db.collections.owner_id == auth.user_id)).select().first()
-
+def get_unfiled_collection(user_id=auth.user_id):
+    db.collections((db.collections.name == "Unfiled") & (db.collections.owner_id == user_id)).select().first()
