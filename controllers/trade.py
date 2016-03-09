@@ -249,7 +249,7 @@ def accept():
     for id in new_sender_objects:
         db.object_collection.insert(object_id=id, collection_id=unfiled_sender)
 
-    unfiled_receiver = db((db.collections.name == "Unfiled") & (db.collections.owner_id == trade.sender)).select(db.collections.id).column()[0]
+    unfiled_receiver = db((db.collections.name == "Unfiled") & (db.collections.owner_id == trade.receiver)).select(db.collections.id).column()[0]
 
     for id in new_receiver_objects:
         db.object_collection.insert(object_id=id, collection_id=unfiled_receiver)
