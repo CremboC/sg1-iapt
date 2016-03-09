@@ -36,14 +36,16 @@
     <div class="panel panel-default">
         <div class="panel-body">
         {{print_sortby()}}
+        {{items = collection.objects()}}
+        {{for chunk in chunks(items, 3):}}
             <div class="row">
-            {{items = collection.objects()}}
-            {{for item in items:}}
+            {{for item in chunk:}}
                 <div class="col-xs-4 object-wrapper">
                 {{print_object(item, False)}}
                 </div>
             {{pass}}
             </div>
+        {{pass}}
         </div>
     </div>
 

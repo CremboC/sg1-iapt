@@ -26,16 +26,16 @@
                         Value: &pound;{{="{:0,.2f}".format(obj.currency_value)}}
                     </li>
                     <li>{{=type.name}}</li>
-                    <li>
-                        {{=obj.summary}}
-                    </li>
                 {{if show_owner:}}
-                    <li>Posted By:
+                    <li>
                         <a href="{{=URL('collections', 'index', args=owner.id)}}">
                         {{=owner.username}}
                         </a>
                     </li>
                 {{pass}}
+                    <li>
+                    {{=obj.summary}}
+                    </li>
                 </ul>
             </div>
 

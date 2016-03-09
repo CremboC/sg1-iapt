@@ -13,3 +13,9 @@ def link_object_collections(object_id, collection_id):
 
 def get_unfiled_collection(user_id=auth.user_id):
     return db((db.collections.name == "Unfiled") & (db.collections.owner_id == user_id)).select().first()
+
+
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in xrange(0, len(l), n):
+        yield l[i:i + n]

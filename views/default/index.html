@@ -8,7 +8,7 @@
         <div class="panel-body">
         {{for trade in trades:}}
             <div class="col-md-4">
-                {{print_trade(trade)}}
+            {{print_trade(trade)}}
             </div>
         {{pass}}
         {{if len(trades)==0:}}
@@ -58,9 +58,13 @@
             <h3 class="panel-title">Most recent items</h3>
         </div>
         <div class="panel-body">
-        {{for item in newest_items:}}
-            <div class="col-md-4">
-            {{print_object(item, show_owner = True)}}
+        {{for chunk in chunks(newest_items, 3):}}
+            <div class="row">
+            {{for item in newest_items:}}
+                <div class="col-md-4">
+                {{print_object(item, show_owner = True)}}
+                </div>
+            {{pass}}
             </div>
         {{pass}}
         </div>

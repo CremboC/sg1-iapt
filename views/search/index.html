@@ -49,13 +49,15 @@
                 {{if len(results) == 0:}}
                     <strong>No results found.</strong>
                 {{else:}}
+                {{for chunk in chunks(results, 2):}}
                     <div class="row">
-                    {{for result in results:}}
+                    {{for result in chunk:}}
                         <div class="col-md-6">
                         {{print_object(result)}}
                         </div>
                     {{pass}}
                     </div>
+                {{pass}}
                 {{pass}}
                 </div>
             {{elif page == 'collections':}}
