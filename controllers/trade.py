@@ -12,11 +12,13 @@ def view():
 
     # TradeId specified but non-existant,
     if trade is None:
-        raise HTTP(404, "Error 404: Invalid request, trade does not exist")
+        session.flash = {"status": "danger", "message": "Error: trade does not exist"}
+        return redirect(URL('trade', 'index'))
 
     # or user is not permitted to view
     if (auth.user_id != trade.sender) & (auth.user_id != trade.receiver):
-        raise HTTP(404, "Error 404: Invalid request, trade does not exist")
+        session.flash = {"status": "danger", "message": "Error: cannot view a trade in which you do not participate"}
+        return redirect(URL('trade', 'index'))
 
     # Get objects currently in trade from sender
     trade_objects_from_sender = db(
@@ -66,7 +68,8 @@ def new():
         return {"user_id": auth.user_id, "trader_id": "", "trader_username": None,
                 "available_objects": [get_available_user_items(auth.user_id)], "wanted_object": object}
     elif receiver_username == db(db.auth_user.id == auth.user_id).select(db.auth_user.username).column()[0]:
-        raise HTTP(404, "Cannot trade with yourself")
+        session.flash = {"status": "danger", "message": "Error: you can't trade with yourself!"}
+        return redirect(URL('trade', 'index'))
     else:
         receiver_id = db(db.auth_user.username == receiver_username).select(db.auth_user.id).column()[0]
         available_items = [get_available_user_items(auth.user_id), get_available_user_items(receiver_id)]
@@ -83,13 +86,16 @@ def edit():
 
     # TradeId specified but non-existant,
     if trade is None:
-        raise HTTP(404, "Error 404: Invalid request, trade does not exist")
+        session.flash = {"status": "danger", "message": "Error: trade does not exist"}
+        return redirect(URL('trade', 'index'))
 
     if (trade.status >= 1) & (trade.status <= 3):
-        raise HTTP(403, "Error 403: Trade has already been completed")
+        session.flash = {"status": "danger", "message": "Error: trade has already been completed!"}
+        return redirect(URL('trade', 'index'))
     # or user is not permitted to view
     if (auth.user_id != trade.sender) & (auth.user_id != trade.receiver):
-        raise HTTP(404, "Error 404: Invalid request, trade does not exist")
+        session.flash = {"status": "danger", "message": "Error: cannot view a trade in which you do not participate"}
+        return redirect(URL('trade', 'index'))
 
     trade_query_sender = db.trades_sending.trade_id == trade_id
     trade_query_sender &= db.trades_sending.sent_object_id == db.objects.id
@@ -208,13 +214,16 @@ def createNew():
 def accept():
     tradeid = request.vars.tradeid
     if (tradeid is None) | (not isinstance(tradeid, str)):
-        raise HTTP(400, "Error 400: Trade id invalid or does not exist")
+        session.flash = {"status": "danger", "message": "Error: trade does not exist"}
+        return redirect(URL('trade', 'index'))
     trade = db.trades[tradeid]
     if trade is None:
-        raise HTTP(400, "Error 400: Trade id invalid or does not exist")
+        session.flash = {"status": "danger", "message": "Error: trade does not exist"}
+        return redirect(URL('trade', 'index'))
 
     if trade.receiver != auth.user_id:
-        raise HTTP(403, "Error 400: not permitted to accept trade")
+        session.flash = {"status": "danger", "message": "Error: you cannot accept a trade that wasn't sent to you"}
+        return redirect(URL('trade', 'index'))
 
     new_sender_objects = map(int, db(db.trades_receiving.trade_id == tradeid).select(
         db.trades_receiving.recv_object_id).column())
@@ -250,14 +259,16 @@ def delete():
     trade_id = request.vars.tradeid
 
     if (trade_id is None) | (not isinstance(trade_id, str)):
-        raise HTTP(400, "Error 400: Trade id invalid or does not exist")
+        session.flash = {"status": "danger", "message": "Error: trade does not exist"}
+        return redirect(URL('trade', 'index'))
     trade = db(db.trades.id == trade_id).select(db.trades.receiver, db.trades.sender)[0]
 
     if trade is None:
-        raise HTTP(400, "Error 400: Trade id invalid or does not exist")
-    print trade
+        session.flash = {"status": "danger", "message": "Error: trade does not exist"}
+        return redirect(URL('trade', 'index'))
     if (trade.receiver != auth.user_id) & (trade.sender != auth.user_id):
-        raise HTTP(403, "Error 400: not permitted to accept trade")
+        session.flash = {"status": "danger", "message": "Error: cannot delete a trade you didn't participate in"}
+        return redirect(URL('trade', 'index'))
 
     # Mark as rejected or cancelled
     if auth.user_id == trade.sender:
@@ -394,7 +405,6 @@ def history():
         else:
             trade.trades.otheruser = trade.trades.sender
         trade.trades.otheruser = db(db.auth_user.id == trade.trades.otheruser).select(db.auth_user.username).column()[0]
-    print trades
     return {"trades": trades, "user_id": auth.user_id, "hasPrevPage": min_index > 0,
             "hasNextPage": trade_count > min_index + num_per_page, "minIndex": min_index, "numPerPage": num_per_page}
 
