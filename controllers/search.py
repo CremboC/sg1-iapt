@@ -60,10 +60,10 @@ def _items(query_string, filtered):
         if request.vars.user_id:
             search_query &= db.objects.owner_id == request.vars.user_id
 
-        if request.vars.min_value:
+        if request.vars.min_value and request.vars.min_value != "0":
             search_query &= db.objects.currency_value >= request.vars.min_value
 
-        if request.vars.max_value:
+        if request.vars.max_value and request.vars.min_value != "0":
             search_query &= db.objects.currency_value <= request.vars.max_value
 
         if request.vars.statuses:

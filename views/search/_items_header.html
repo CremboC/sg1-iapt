@@ -10,15 +10,15 @@
 -->{{if request.vars.user:}}
     from user <strong>{{=request.vars.user}}</strong><!--
 -->{{pass}}<!--
--->{{if request.vars.min_value and request.vars.max_value:}}
+-->{{if request.vars.min_value and request.vars.max_value and request.vars.min_value != "0" and request.vars.max_value != "0":}}
     worth between
     <strong>&pound;{{=request.vars.min_value}}</strong>
     -
     <strong>&pound;{{=request.vars.max_value}}</strong><!--
--->{{elif request.vars.max_value:}}
+-->{{elif request.vars.max_value and request.vars.max_value != "0":}}
     worth less than
     <strong>&pound;{{=request.vars.max_value}}</strong><!--
--->{{elif request.vars.min_value:}}
+-->{{elif request.vars.min_value and request.vars.min_value != "0":}}
     worth more than
     <strong>&pound;{{=request.vars.min_value}}</strong><!--
 -->{{pass}}.
