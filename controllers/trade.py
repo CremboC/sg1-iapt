@@ -209,6 +209,7 @@ def createNew():
         db.trades_sending.insert(trade_id=newTradeId, sent_object_id=itemId)
     for itemId in receiverobjectIds:
         db.trades_receiving.insert(trade_id=newTradeId, recv_object_id=itemId)
+
     receiver_username = db(db.auth_user.id == receiverId).select(db.auth_user.username).column()[0]
     session.flash = T('Successfully created trade with ' + receiver_username)
 
@@ -232,13 +233,26 @@ def accept():
     if trade.receiver != auth.user_id:
         raise HTTP(403, "Error 400: not permitted to accept trade")
 
-    newSenderObjects = map(int, db(db.trades_receiving.trade_id == tradeid).select(
+    new_sender_objects = map(int, db(db.trades_receiving.trade_id == tradeid).select(
         db.trades_receiving.recv_object_id).column())
-    db(db.objects.id.belongs(newSenderObjects)).update(owner_id=trade.sender)
+    db(db.objects.id.belongs(new_sender_objects)).update(owner_id=trade.sender)
 
-    newReceiverObjects = map(int, db(db.trades_sending.trade_id == tradeid).select(
+    new_receiver_objects = map(int, db(db.trades_sending.trade_id == tradeid).select(
         db.trades_sending.sent_object_id).column())
-    db(db.objects.id.belongs(newReceiverObjects)).update(owner_id=trade.receiver)
+    db(db.objects.id.belongs(new_receiver_objects)).update(owner_id=trade.receiver)
+
+    # Remove all items from user's previous collections
+    db(db.object_collection.object_id.belongs(new_sender_objects+new_receiver_objects)).delete()
+    print trade
+    unfiled_sender = db((db.collections.name == "Unfiled") & (db.collections.owner_id == trade.sender)).select(db.collections.id).column()[0]
+
+    for id in new_sender_objects:
+        db.object_collection.insert(object_id=id, collection_id=unfiled_sender)
+
+    unfiled_receiver = db((db.collections.name == "Unfiled") & (db.collections.owner_id == trade.sender)).select(db.collections.id).column()[0]
+
+    for id in new_receiver_objects:
+        db.object_collection.insert(object_id=id, collection_id=unfiled_receiver)
 
     # Mark as Accepted
     db(db.trades.id == tradeid).update(status=3)
