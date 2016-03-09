@@ -8,7 +8,7 @@ function createOption(id, name) {
     return $("<option value='" + id + "'>" + name + "</option>")
 }
 
-function addItemToTrade(ids, displayDiv, availableSelect, option, enableRemove) {
+function addItemToTrade(ids, displayDiv, availableSelect, enableRemove) {
     console.log(enableRemove);
     var joined_ids;
     if (ids instanceof Array) {
@@ -21,14 +21,14 @@ function addItemToTrade(ids, displayDiv, availableSelect, option, enableRemove) 
         for (var x = 0; x < data.length; x++) {
             var object = data[x];
             console.log(enableRemove);
-            displayDiv.append(makeObjectDisplay(object, availableSelect, option, enableRemove));
+            displayDiv.append(makeObjectDisplay(object, availableSelect, enableRemove));
             availableSelect.children("option[value='" + object.id + "']").remove();
         }
     });
 
 }
 
-function makeObjectDisplay(object, availableSelect, option, enableRemove) {
+function makeObjectDisplay(object, availableSelect, enableRemove) {
 
     var div = $("<div itemid=" + object.id + " class='item-preview' style='background-image: url(" + object.image + ");'> </div>");
     var hovertext = $("<div class='hovertext'><p>" + object.name + "</p><p>Value: " + object['currency_value'] + " </div>");
@@ -37,7 +37,7 @@ function makeObjectDisplay(object, availableSelect, option, enableRemove) {
         var removeBtn = $("<div class='rmvItemPreview'><span class='glyphicon glyphicon glyphicon-remove' style='color:red'></span></div>");
         removeBtn.click(function () {
             $(this).parent().remove();
-            availableSelect.append(option);
+            availableSelect.append(createOption(object.id, object.name));
 
         });
         div.append(removeBtn).append(hovertext);

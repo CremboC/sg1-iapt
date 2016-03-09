@@ -44,7 +44,7 @@
 
                     <div class="panel-body" id="yourItemDisplay">
                         {{for row in trade_objects[0]:}}
-                            <script> addItemToTrade("{{=row.objects.id}}", $('#yourItemDisplay'), $('#yourAvailableObjects'), createOption("{{=row.objects.id}}", "{{=row.string}}"), true)</script>
+                            <script> addItemToTrade("{{=row.objects.id}}", $('#yourItemDisplay'), $('#yourAvailableObjects'), true)</script>
                         {{pass}}
                     </div>
                 </div>
@@ -82,7 +82,7 @@
 
                     <div class="panel-body" id="hisItemDisplay">
                         {{for row in trade_objects[1]:}}
-                            <script> addItemToTrade("{{=row.objects.id}}", $('#hisItemDisplay'), $('#theirAvailableObjects'), createOption("{{=row.objects.id}}", "{{=row.string}}"), true)</script>
+                            <script> addItemToTrade("{{=row.objects.id}}", $('#hisItemDisplay'), $('#theirAvailableObjects'),  true)</script>
                         {{pass}}
                     </div>
                 </div>

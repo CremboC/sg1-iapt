@@ -140,7 +140,6 @@ def edit():
 
 def getobjectdata():
     object_ids = request.vars.ids.split(",")
-    print object_ids
     object_ids = map(int, object_ids)
     objects = db(db.objects.id.belongs(object_ids)).select()
     for row in objects:
@@ -217,6 +216,7 @@ def accept():
         session.flash = {"status": "danger", "message": "Error: trade does not exist"}
         return redirect(URL('trade', 'index'))
     trade = db.trades[tradeid]
+
     if trade is None:
         session.flash = {"status": "danger", "message": "Error: trade does not exist"}
         return redirect(URL('trade', 'index'))
@@ -238,7 +238,6 @@ def accept():
     db(db.object_collection.object_id.belongs(new_sender_objects + new_receiver_objects)).delete()
 
     unfiled_sender = get_unfiled_collection(trade.sender).id
-
 
     for id in new_sender_objects:
         db.object_collection.insert(object_id=id, collection_id=unfiled_sender)
