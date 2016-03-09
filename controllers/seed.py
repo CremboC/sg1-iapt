@@ -40,20 +40,21 @@ def index():
     db.object_collection.insert(object_id=1, collection_id=2)
 
     db.objects.insert(owner_id=1, type_id=1, status=2, name='A carrot', summary='A normal carrot',
-        description='A more natural carrot, but you can eat this one!', currency_value=1.0, image='objects.image.817cd3ab9d568442.636172726f742e6a7067.jpg')
+        description='A more natural carrot, but you can eat this one!', currency_value=1.0, image='objects.image.830cf596c2763ad5.636172726f742e6a7067.jpg')
     db.object_collection.insert(object_id=2, collection_id=2)
 
 
     db.objects.insert(owner_id=1, type_id=7, status=1, name='A common pound coin', summary='A pound coin from the British Mint.',
         description='This is an unbelievably common coin, yet I still collect thousands of these!', currency_value=5.0, image='objects.image.a89ad6219dfb0f20.636f696e312e6a7067.jpg')
-
+    db.object_collection.insert(object_id=3, collection_id=1)
 
     db.objects.insert(owner_id=2, type_id=5, status=2, name='Comic book artists', summary='A short collection of great graphic art.',
-        description='A collection of the best of the golden era\'s graphic art.', currency_value=4.0, image='objects.image.add0002dc8d85839.636f6d6963312e6a7067.jpg')
+        description='A collection of the best of the golden era\'s graphic art.', currency_value=4.0, image='objects.image.8766f395aa23f0d1.636f6d6963312e6a7067.jpg')
+    db.object_collection.insert(object_id=4, collection_id=4)
 
     db.objects.insert(owner_id=1, type_id=1, status=0, name='A carrot', summary='A normal carrot',
-        description='I\'m trying to find a golden magic carrot, does anyone have any to trade?', currency_value=1.0, image='objects.image.817cd3ab9d568442.636172726f742e6a7067.jpg')
-
+        description='I\'m trying to find a golden magic carrot, does anyone have any to trade?', currency_value=1.0, image='objects.image.830cf596c2763ad5.636172726f742e6a7067.jpg')
+    db.object_collection.insert(object_id=5, collection_id=1)
 
     db.trades.truncate()
     db.trades.insert(sender=1, receiver=2, status=0)
