@@ -60,12 +60,12 @@ def new():
                                                                                              db.types.name)[0]
         object.string = format_string(object)
         receiver_username = db(db.auth_user.id == object.objects.owner_id).select(
-            db.auth_user.username).column().first()
+            db.auth_user.username).column()[0]
 
     if receiver_username is None:
         return {"user_id": auth.user_id, "trader_id": "", "trader_username": None,
                 "available_objects": [get_available_user_items(auth.user_id)], "wanted_object": object}
-    elif receiver_username == db(db.auth_user.id == auth.user_id).select(db.auth_user.username).column().first():
+    elif receiver_username == db(db.auth_user.id == auth.user_id).select(db.auth_user.username).column()[0]:
         raise HTTP(404, "Cannot trade with yourself")
     else:
         receiver_id = db(db.auth_user.username == receiver_username).select(db.auth_user.id).column()[0]

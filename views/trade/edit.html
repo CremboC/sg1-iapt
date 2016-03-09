@@ -1,5 +1,6 @@
 {{extend 'layout.html'}}
 
+<script src="{{=URL('static','js/trade.js')}}"></script>
 
 <link rel="stylesheet" type="text/css" href="{{=URL('static','css/app.css')}}">
 <div class="container">
@@ -31,7 +32,7 @@
                         </select>
 
                         <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#yourAvailableObjects'), $('#yourItemDisplay'))">Add item</button>
+                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#yourAvailableObjects'), $('#yourItemDisplay'), true)">Add item</button>
                         </div>
                     </div>
                 </div>
@@ -69,7 +70,7 @@
                         {{pass}}
                         </select>
                         <div class="pull-right">
-                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#theirAvailableObjects'), $('#hisItemDisplay'))">Add item</button>
+                            <button type="button" class="btn btn-default" onclick="transferOptionsToTrade($('#theirAvailableObjects'), $('#hisItemDisplay'), true)">Add item</button>
                         </div>
                     </div>
                 </div>
@@ -99,3 +100,6 @@
         </div>
     </form>
 </div>
+<script>
+    var __users_url__ = "{{=URL('users', 'index.json')}}";
+</script>
