@@ -1,6 +1,7 @@
 from collections import namedtuple
 
 
+# TODO: Check privacy of items before returning
 def index():
     query_string = request.vars.query or ''
     page = request.vars.page or 'items'
