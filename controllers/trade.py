@@ -243,7 +243,6 @@ def accept():
 
     # Remove all items from user's previous collections
     db(db.object_collection.object_id.belongs(new_sender_objects+new_receiver_objects)).delete()
-    print trade
     unfiled_sender = db((db.collections.name == "Unfiled") & (db.collections.owner_id == trade.sender)).select(db.collections.id).column()[0]
 
     for id in new_sender_objects:
