@@ -103,8 +103,10 @@
             <!--value-->
             <div class="form-group">
                 <label for="objects_value">{{=form.custom.label.currency_value}}</label>
-                {{=form.custom.widget.currency_value}}
-                <!-- <input type="number" name="currency_value" id="objects_value" class="form-control"> -->
+                <div class="input-group">
+                    <span class="input-group-addon">&pound;</span>
+                    <input type="number" name="currency_value" id="objects_value" class="form-control" min="0" step="0.01" value="{{=form.custom.inpval.currency_value}}">
+                </div>
 
                 <p class="form-comment">
                 {{=form.custom.comment.currency_value}}
