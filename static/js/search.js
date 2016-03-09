@@ -1,12 +1,3 @@
-function watcher($toWatch, $toUpdate) {
-    $toWatch.change(function (e) {
-        $toUpdate.html(e.target.value);
-    });
-    $toWatch.keypress(function (e) {
-        $toUpdate.html(e.target.value);
-    });
-}
-
 $(document).ready(function () {
     $.getJSON(__users_url__, function (data) {
         var $hiddenUserId = $('#filter_user_id');
@@ -25,7 +16,4 @@ $(document).ready(function () {
             autoSelect: true
         });
     });
-
-    watcher($('#min_value'), $('#current_min_value'));
-    watcher($('#max_value'), $('#current_max_value'));
 });
