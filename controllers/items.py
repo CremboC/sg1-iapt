@@ -27,7 +27,8 @@ def edit():
     object_collections = [col.id for col in obj.collections()]
 
     if obj.owner_id != auth.user_id:
-        return redirect(URL('items', 'index'))
+        session.flash = {"status": "danger", "message": "Error: you cannot edit an item that doesn't belong to you"}
+        return redirect(URL('default', 'index'))
 
     form = SQLFORM(db.objects, record=obj, showid=False, deletable=True, submit_button='Update')
     types = db(db.types.id > 0).select()
@@ -59,8 +60,12 @@ def show():
 
     is_owner = user.id == auth.user_id
 
-    # Item doesn't exist or is private
-    if not item or not is_owner and item_is_private(item_id):
-        raise HTTP(404, "Error 404: Invalid request, item does not exist")
+    if not item:
+        session.flash = {"status": "danger", "message": "Error: this item does not exist"}
+        return redirect(URL('default', 'index'))
+    if not is_owner and item_is_private(item_id):
+        session.flash = {"status": "danger", "message": "Error: you cannot view another user's private items"}
+        return redirect(URL('default', 'index'))
+
 
     return dict(item=item, is_owner=is_owner, user=user)

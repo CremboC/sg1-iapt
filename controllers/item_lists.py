@@ -11,7 +11,8 @@ def view():
 
     username = db(db.auth_user.id == user_id).select(db.auth_user.username).column()
     if len(username) == 0:
-        raise HTTP(404, "Error 404: Invalid request, userid does not exist")
+        session.flash = {"status": "danger", "message": "Error: user does not exist"}
+        return redirect(URL('default', 'index'))
     else:
         username = username[0]
     if want:

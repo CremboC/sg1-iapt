@@ -29,22 +29,30 @@ def show():
 
     collection = db.collections[collection_id]
     if not collection:
-        raise HTTP(404, "Error 404: Invalid request, collection does not exist")
+        session.flash = {"status": "danger", "message": "Error: collection does not exist"}
+        return redirect(URL('collections', 'index'))
 
     user = db.auth_user[collection.owner_id]
     is_owner = user.id == auth.user_id
     if collection.private and not is_owner:
-        raise HTTP(404, "Error 404: Invalid request, collection does not exist")
+        session.flash = {"status": "danger", "message": "Error: you cannot view a collection that is private and doesn't belong to you"}
+        return redirect(URL('collections', 'index'))
 
     return dict(collection=collection, user=user, is_owner=is_owner)
 
 
 @auth.requires_login()
 def edit():
-    collection_id = request.args[0] or redirect(URL('collections', 'index'))
+    if request.args[0] is None:
+        session.flash = {"status": "danger", "message": "Error: collection does not exist"}
+        return redirect(URL('collections', 'index'))
+
+    collection_id = request.args[0]
+
     collection = db(db.collections.id == collection_id).select().first()
 
     if collection.owner_id != auth.user_id:
+        session.flash = {"status": "danger", "message": "Error: Cannot edit a collection that doesn't belong to you"}
         return redirect(URL('collections', 'index'))
 
     objects_in_collection = collection.objects()
