@@ -60,13 +60,13 @@
             {{ if auth.user_id: }}
             {{ if notifications(): }}
                 <li>
-                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="You have notifications!">
+                    <a href="{{=URL('trade', 'index')}}" data-toggle="tooltip" data-placement="bottom" title="You have notifications!">
                         <span class="glyphicon glyphicon-bell notification-icon middle" aria-hidden="true"></span>
                     </a>
                 </li>
             {{ else: }}
                 <li>
-                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="No Notifications">
+                    <a href="{{=URL('trade', 'index')}}" data-toggle="tooltip" data-placement="bottom" title="No Notifications">
                         <span class="glyphicon glyphicon-bell middle" aria-hidden="true"></span>
                     </a>
                 </li>
@@ -80,12 +80,17 @@
                     <ul class="dropdown-menu">
                         <li>
                             <a href="{{=URL('items', 'create')}}">
-                                Add Item
+                                New Item
                             </a>
                         </li>
                         <li>
                             <a href="{{=URL('collections', 'create')}}">
-                                Create Collection
+                                New Collection
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{=URL('trade', 'new')}}">
+                                New Trade
                             </a>
                         </li>
                     </ul>
