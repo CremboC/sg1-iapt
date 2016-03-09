@@ -34,13 +34,25 @@ def edit():
     collections = db(db.collections.owner_id == auth.user_id).select()
 
     if form.process().accepted:
-
         if request.vars.collections:
             chosen_cols = [int(col) for col in request.vars.collections] or [request.vars.collections]
 
+            # remove from collections
+            removed_collections = list(set(object_collections) - set(chosen_cols))
+            for col in removed_collections:
+                db((db.object_collection.collection_id == col) & (
+                    db.object_collection.object_id == form.vars.id)).delete()
+
+            # add to new collections
             for col in chosen_cols:
                 link_object_collections(form.vars.id, col)
         else:
+            # remove from all collections it was previously in
+            for col in object_collections:
+                db((db.object_collection.collection_id == col) & (
+                    db.object_collection.object_id == form.vars.id)).delete()
+
+            # since the item must be in a collection, re-add to the unfiled for simplicity
             col = get_unfiled_collection()
             link_object_collections(form.vars.id, col.id)
 
