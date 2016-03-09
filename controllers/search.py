@@ -42,8 +42,8 @@ def _items(query_string, filtered):
     StatusRecord = namedtuple('Status', 'id name')
 
     statuses = [
-        StatusRecord(id=0, name='Wanted'),
-        StatusRecord(id=1, name='Had'),
+        StatusRecord(id=0, name='Wish List'),
+        StatusRecord(id=1, name='For Trade'),
         StatusRecord(id=2, name='InCol'),
     ]
 
