@@ -5,10 +5,10 @@ import json
 @auth.requires_login()
 def view():
     # Todo: implement view with completed trades
-    tradeid = request.vars.tradeid
+    trade_id = request.vars.tradeid
     trader_username = request.vars.trader_username
 
-    trade = db.trades(tradeid)
+    trade = db.trades(trade_id)
 
     # TradeId specified but non-existant,
     if trade is None:
@@ -18,38 +18,29 @@ def view():
     if (auth.user_id != trade.sender) & (auth.user_id != trade.receiver):
         raise HTTP(404, "Error 404: Invalid request, trade does not exist")
 
-
     # Get objects currently in trade from sender
-    trade_objects2 = db(
-        (db.trades_sending.trade_id == tradeid) & (db.trades_sending.sent_object_id == db.objects.id)).select(
-        db.objects.id,
-        db.objects.name,
-        db.objects.currency_value,
-        db.objects.image,
-        db.objects.summary)
+    trade_objects_from_sender = db(
+        (db.trades_sending.trade_id == trade_id) & (db.trades_sending.sent_object_id == db.objects.id)).select(
+        db.objects.ALL)
 
     # Get objects currently in trade from receiver
-    trade_objects1 = db(
-        (db.trades_receiving.trade_id == tradeid) & (db.trades_receiving.recv_object_id == db.objects.id)).select(
-        db.objects.id,
-        db.objects.name,
-        db.objects.currency_value,
-        db.objects.image,
-        db.objects.summary)
+    trade_objects_from_receiver = db(
+        (db.trades_receiving.trade_id == trade_id) & (db.trades_receiving.recv_object_id == db.objects.id)).select(
+        db.objects.ALL)
 
     # Get other user's username
     if trade.sender == auth.user_id:
         trader_id = trade.receiver
-        trade_objects = [trade_objects2, trade_objects1]
+        trade_objects = [trade_objects_from_sender, trade_objects_from_receiver]
     else:
         trader_id = trade.sender
-        trade_objects = [trade_objects1, trade_objects2]
+        trade_objects = [trade_objects_from_receiver, trade_objects_from_sender]
 
     # Verify whether trade is editable
     editable = (trade.status == 0) | (trade.status == 4)
     if trader_username is None:
         trader_username = db(db.auth_user.id == trader_id).select(db.auth_user.username).column()[0]
-    return {"user_is_receiver": auth.user_id == trade.receiver, "tradeid": tradeid, "trader_id": trader_id,
+    return {"user_is_receiver": auth.user_id == trade.receiver, "tradeid": trade_id, "trader_id": trader_id,
             "status": trade.status, "trader_username": trader_username,
             "editable": editable,
             "trade_objects": trade_objects}
@@ -65,18 +56,16 @@ def new():
 
     object = None
     if item_id is not None:
-        object = db((db.objects.id == item_id) & (db.types.id == db.objects.type_id)).select(db.objects.id,
-                                                     db.types.name, db.objects.name, db.objects.currency_value,
-                                                     db.objects.image,
-                                                     db.objects.summary,
-                                                     db.types.name, db.objects.owner_id)[0]
+        object = db((db.objects.id == item_id) & (db.types.id == db.objects.type_id)).select(db.objects.ALL,
+                                                                                             db.types.name)[0]
         object.string = format_string(object)
-        receiver_username = db(db.auth_user.id==object.objects.owner_id).select(db.auth_user.username).column()[0]
+        receiver_username = db(db.auth_user.id == object.objects.owner_id).select(
+            db.auth_user.username).column().first()
 
     if receiver_username is None:
         return {"user_id": auth.user_id, "trader_id": "", "trader_username": None,
                 "available_objects": [get_available_user_items(auth.user_id)], "wanted_object": object}
-    elif receiver_username == db(db.auth_user.id == auth.user_id).select(db.auth_user.username).column()[0]:
+    elif receiver_username == db(db.auth_user.id == auth.user_id).select(db.auth_user.username).column().first():
         raise HTTP(404, "Cannot trade with yourself")
     else:
         receiver_id = db(db.auth_user.username == receiver_username).select(db.auth_user.id).column()[0]
@@ -87,10 +76,10 @@ def new():
 
 @auth.requires_login()
 def edit():
-    tradeid = request.vars.tradeid
+    trade_id = request.vars.tradeid
     trader_username = request.vars.trader_username
 
-    trade = db.trades(tradeid)
+    trade = db.trades(trade_id)
 
     # TradeId specified but non-existant,
     if trade is None:
@@ -102,32 +91,26 @@ def edit():
     if (auth.user_id != trade.sender) & (auth.user_id != trade.receiver):
         raise HTTP(404, "Error 404: Invalid request, trade does not exist")
 
+    trade_query_sender = db.trades_sending.trade_id == trade_id
+    trade_query_sender &= db.trades_sending.sent_object_id == db.objects.id
+    trade_query_sender &= db.objects.type_id == db.types.id
+
     # Get objects currently in trade from sender
-    trade_objects2 = db(
-        (db.trades_sending.trade_id == tradeid) & (db.trades_sending.sent_object_id == db.objects.id) & (
-        db.objects.type_id == db.types.id)).select(
-        db.objects.id,
-        db.types.name,
-        db.objects.name,
-        db.objects.currency_value,
-        db.objects.image,
-        db.objects.summary)
+    trade_objects2 = db(trade_query_sender).select(db.objects.ALL, db.types.name)
+
     for obj in trade_objects2:
         obj.string = format_string(obj)
 
+    trade_query_receiver = db.trades_receiving.trade_id == trade_id
+    trade_query_receiver &= db.trades_receiving.recv_object_id == db.objects.id
+    trade_query_receiver &= db.objects.type_id == db.types.id
+
     # Get objects currently in trade from receiver
-    trade_objects1 = db(
-        (db.trades_receiving.trade_id == tradeid) & (db.trades_receiving.recv_object_id == db.objects.id) & (
-        db.objects.type_id == db.types.id)).select(
-        db.objects.id,
-        db.types.name,
-        db.objects.name,
-        db.objects.currency_value,
-        db.objects.image,
-        db.objects.summary)
+    trade_objects1 = db(trade_query_receiver).select(db.objects.ALL, db.types.name)
 
     for obj in trade_objects1:
         obj.string = format_string(obj)
+
     # Get other user's username
     if trade.sender == auth.user_id:
         trader_id = trade.receiver
@@ -142,7 +125,7 @@ def edit():
         trader_username = db(db.auth_user.id == trader_id).select(db.auth_user.username).column()[0]
 
     available_objects = [get_available_user_items(auth.user_id), get_available_user_items(trader_id)]
-    return {"prevtrade": tradeid, "user_id": auth.user_id, "trader_id": trader_id, "status": trade.status,
+    return {"prevtrade": trade_id, "user_id": auth.user_id, "trader_id": trader_id, "status": trade.status,
             "trader_username": trader_username,
             "editable": editable,
             "trade_objects": trade_objects, "available_objects": available_objects
@@ -150,7 +133,7 @@ def edit():
 
 
 def getobjectdata():
-    object_ids = (request.vars.ids).split(",")
+    object_ids = request.vars.ids.split(",")
     print object_ids
     object_ids = map(int, object_ids)
     objects = db(db.objects.id.belongs(object_ids)).select()
@@ -213,7 +196,7 @@ def createNew():
     receiver_username = db(db.auth_user.id == receiverId).select(db.auth_user.username).column()[0]
     session.flash = T('Successfully created trade with ' + receiver_username)
 
-    db( db.auth_user.id == receiverId ).update( notifications = True )
+    db(db.auth_user.id == receiverId).update(notifications=True)
 
     if request.vars.prevtrade is not None:
         db(db.trades.id == int(request.vars.prevtrade)).update(status=4, superseded_by=newTradeId)
@@ -242,13 +225,14 @@ def accept():
     db(db.objects.id.belongs(new_receiver_objects)).update(owner_id=trade.receiver)
 
     # Remove all items from user's previous collections
-    db(db.object_collection.object_id.belongs(new_sender_objects+new_receiver_objects)).delete()
-    unfiled_sender = db((db.collections.name == "Unfiled") & (db.collections.owner_id == trade.sender)).select(db.collections.id).column()[0]
+    db(db.object_collection.object_id.belongs(new_sender_objects + new_receiver_objects)).delete()
+
+    unfiled_sender = get_unfiled_collection(trade.sender).id
 
     for id in new_sender_objects:
         db.object_collection.insert(object_id=id, collection_id=unfiled_sender)
 
-    unfiled_receiver = db((db.collections.name == "Unfiled") & (db.collections.owner_id == trade.receiver)).select(db.collections.id).column()[0]
+    unfiled_receiver = get_unfiled_collection(trade.receiver).id
 
     for id in new_receiver_objects:
         db.object_collection.insert(object_id=id, collection_id=unfiled_receiver)
@@ -256,16 +240,16 @@ def accept():
     # Mark as Accepted
     db(db.trades.id == tradeid).update(status=3)
     session.flash = T("Trade was accepted")
-    redirect(URL('trade', 'index'), client_side=True)
+    return redirect(URL('trade', 'index'), client_side=True)
 
 
 @auth.requires_login()
 def delete():
-    tradeid = request.vars.tradeid
+    trade_id = request.vars.tradeid
 
-    if (tradeid is None) | (not isinstance(tradeid, str)):
+    if (trade_id is None) | (not isinstance(trade_id, str)):
         raise HTTP(400, "Error 400: Trade id invalid or does not exist")
-    trade = db(db.trades.id == tradeid).select(db.trades.receiver, db.trades.sender)[0]
+    trade = db(db.trades.id == trade_id).select(db.trades.receiver, db.trades.sender)[0]
 
     if trade is None:
         raise HTTP(400, "Error 400: Trade id invalid or does not exist")
@@ -276,42 +260,42 @@ def delete():
     # Mark as rejected or cancelled
     if auth.user_id == trade.sender:
         session.flash = T("Trade was cancelled")
-        db(db.trades.id == tradeid).update(status=1)
+        db(db.trades.id == trade_id).update(status=1)
     else:
         session.flash = T("Trade was deleted")
-        db(db.trades.id == tradeid).update(status=2)
+        db(db.trades.id == trade_id).update(status=2)
 
     redirect(URL('trade', 'index'), client_side=True)
 
 
 @auth.requires_login()
 def index():
-    db( db.auth_user.id == auth.user_id ).update( notifications = False )
+    db(db.auth_user.id == auth.user_id).update(notifications=False)
 
-    trades = db((((db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)) | (
-        (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender)))
-                ).select(db.trades.id, db.trades.date_created, db.trades.sender, db.trades.receiver, db.trades.status,
-                         db.trades.superseded_by, db.auth_user.username)
+    trades_query = (db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)
+    trades_query |= (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender)
+
+    trades = db(trades_query).select(db.trades.ALL, db.auth_user.username)
     incoming = []
     sent = []
     completed = []
 
     for trade in trades:
-        sentItems = db(db.trades_sending.trade_id == trade.trades.id).count()
-        sentItemValue = map(int, db((db.trades_sending.trade_id == trade.trades.id) & (
+        sent_items = db(db.trades_sending.trade_id == trade.trades.id).count()
+        sent_item_value = map(int, db((db.trades_sending.trade_id == trade.trades.id) & (
             db.objects.id == db.trades_sending.sent_object_id)).select(db.objects.currency_value).column())
-        receivedItems = db(db.trades_receiving.trade_id == trade.trades.id).count()
-        recvItemValue = map(int, db((db.trades_receiving.trade_id == trade.trades.id) & (
+        received_items = db(db.trades_receiving.trade_id == trade.trades.id).count()
+        received_item_value = map(int, db((db.trades_receiving.trade_id == trade.trades.id) & (
             db.objects.id == db.trades_receiving.recv_object_id)).select(db.objects.currency_value).column())
 
-        trade.value = sum(sentItemValue) + sum(recvItemValue)
+        trade.value = sum(sent_item_value) + sum(received_item_value)
 
         if trade.trades.sender != auth.user_id:
-            a = receivedItems
-            receivedItems = sentItems
-            sentItems = a
-        trade.sentItems = sentItems
-        trade.receivedItems = receivedItems
+            a = received_items
+            received_items = sent_items
+            sent_items = a
+        trade.sentItems = sent_items
+        trade.receivedItems = received_items
         trade.trades.status = int(trade.trades.status)
 
         if trade.trades.superseded_by is not None:
@@ -363,46 +347,44 @@ def get_available_user_items(userid):
 
 def format_string(object):
     name = object.objects.name + "  "
-    name += str(object.objects.currency_value) + "£"
+    name + "{:0,.2f}".format(object.objects.currency_value)
 
     return name
 
 
 @auth.requires_login()
 def history():
-    numPerPage = 20
+    num_per_page = 20
     if request.vars.index is None:
-        minIndex = 0
+        min_index = 0
     else:
-        minIndex = int(request.vars.index)
+        min_index = int(request.vars.index)
 
-    trades = db((((db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)) | (
-        (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender))) &
-                db.trades.status.belongs([1, 2, 3])).select(db.trades.id, db.trades.date_created, db.trades.sender,
-                                                            db.trades.receiver, db.trades.status,
-                                                            db.trades.superseded_by, db.auth_user.username,
-                                                            limitby=(minIndex, minIndex + numPerPage))
+    trades_query = (db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)
+    trades_query |= (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender)
+    trades_query &= db.trades.status.belongs([1, 2, 3])
 
-    numTrades = db((((db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)) | (
-        (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender))) &
-                   db.trades.status.belongs([1, 2, 3])).count()
+    trades = db(trades_query).select(db.trades.ALL, db.auth_user.username,
+                                     limitby=(min_index, min_index + num_per_page))
+
+    trade_count = db(trades_query).count()
 
     for trade in trades:
-        sentItems = db(db.trades_sending.trade_id == trade.trades.id).count()
-        sentItemValue = map(int, db((db.trades_sending.trade_id == trade.trades.id) & (
+        sent_items = db(db.trades_sending.trade_id == trade.trades.id).count()
+        sent_item_value = map(int, db((db.trades_sending.trade_id == trade.trades.id) & (
             db.objects.id == db.trades_sending.sent_object_id)).select(db.objects.currency_value).column())
-        receivedItems = db(db.trades_receiving.trade_id == trade.trades.id).count()
-        recvItemValue = map(int, db((db.trades_receiving.trade_id == trade.trades.id) & (
+        received_items = db(db.trades_receiving.trade_id == trade.trades.id).count()
+        received_item_value = map(int, db((db.trades_receiving.trade_id == trade.trades.id) & (
             db.objects.id == db.trades_receiving.recv_object_id)).select(db.objects.currency_value).column())
 
-        trade.value = sum(sentItemValue) + sum(recvItemValue)
+        trade.value = sum(sent_item_value) + sum(received_item_value)
 
         if trade.trades.sender != auth.user_id:
-            a = receivedItems
-            receivedItems = sentItems
-            sentItems = a
-        trade.sentItems = sentItems
-        trade.receivedItems = receivedItems
+            a = received_items
+            received_items = sent_items
+            sent_items = a
+        trade.sentItems = sent_items
+        trade.receivedItems = received_items
         trade.trades.status = int(trade.trades.status)
 
         if trade.trades.sender == auth.user_id:
@@ -411,8 +393,8 @@ def history():
             trade.trades.otheruser = trade.trades.sender
         trade.trades.otheruser = db(db.auth_user.id == trade.trades.otheruser).select(db.auth_user.username).column()[0]
     print trades
-    return {"trades": trades, "user_id": auth.user_id, "hasPrevPage": minIndex > 0,
-            "hasNextPage": numTrades > minIndex + numPerPage, "minIndex": minIndex, "numPerPage": numPerPage}
+    return {"trades": trades, "user_id": auth.user_id, "hasPrevPage": min_index > 0,
+            "hasNextPage": trade_count > min_index + num_per_page, "minIndex": min_index, "numPerPage": num_per_page}
 
 
 @cache.action()
