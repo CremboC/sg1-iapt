@@ -20,7 +20,7 @@
 
     <ul class="list-unstyled">
         <li><strong>Type:</strong> {{=item.type().name}}</li>
-        <li><strong>Value:</strong> {{=item.currency_value}}</li>
+        <li><strong>Value:</strong> &pound;{{="{:0,.2f}".format(item.currency_value)}}</li>
         {{if not is_owner:}}
         <li>
             <strong>Owner:</strong> <a href="{{=URL('collections', 'index', args=user.id)}}">{{=user.username}}</a>
