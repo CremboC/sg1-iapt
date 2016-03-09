@@ -24,18 +24,17 @@ def create():
     return dict(form=form)
 
 
-@auth.requires_login()
 def show():
     collection_id = request.args[0] or redirect(URL('collections', 'index'))
 
-    collection = db(db.collections.id == collection_id).select().first()
-    user = db(db.auth_user.id == collection.owner_id).select().first()
-    is_owner = user.id == auth.user_id
-
-    if collection.private and not is_owner:
+    collection = db.collections[collection_id]
+    if not collection:
         raise HTTP(404, "Error 404: Invalid request, collection does not exist")
 
-    # TODO: Ask to log in / Redirect if collection not found / collection private
+    user = db.auth_user[collection.owner_id]
+    is_owner = user.id == auth.user_id
+    if collection.private and not is_owner:
+        raise HTTP(404, "Error 404: Invalid request, collection does not exist")
 
     return dict(collection=collection, user=user, is_owner=is_owner)
 
