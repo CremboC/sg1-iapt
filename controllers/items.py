@@ -54,8 +54,8 @@ def edit():
 
 def show():
     item_id = request.args[0] or redirect(URL('default', 'index'))
-    item = db(db.objects.id == item_id).select().first()
-    user = db(db.auth_user.id == item.owner_id).select().first()
+    item = db.objects[item_id]
+    user = db.auth_user[item.owner_id]
 
     is_owner = user.id == auth.user_id
 
