@@ -41,9 +41,11 @@
 
             <div class="col-xs-2 object-status">
             {{if obj.status == 0:}}
-                Want
+                <span class="glyphicon glyphicon-heart middle"></span>
+                Wish List
             {{elif obj.status == 1:}}
-                Have
+                <span class="glyphicon glyphicon-tags middle"></span>
+                For Trade
             {{elif obj.status == 2:}}
                 InCol
             {{pass}}
