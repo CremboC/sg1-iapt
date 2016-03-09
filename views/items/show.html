@@ -28,6 +28,9 @@
         {{pass}}
         <li>
             <strong>Collections:</strong>
+            {{if not item.collections():}}
+                None assigned
+            {{pass}}
             {{for col in item.collections():}}
                 <a href="{{=URL('collection', 'show', args=col.id)}}">{{=col.name}}</a>&nbsp;
             {{pass}}
