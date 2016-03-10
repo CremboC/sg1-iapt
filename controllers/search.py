@@ -1,7 +1,6 @@
 from collections import namedtuple
 
 
-# TODO: Check privacy of items before returning
 def index():
     query_string = request.vars.query or ''
     page = request.vars.page or 'items'
@@ -11,7 +10,10 @@ def index():
 
     if page == 'items':
         (search_query, selected_statuses, selected_types, types, statuses) = _items(query_string, filtered)
-        results = db(search_query).select()
+        results = db(search_query).select(orderby=translate_sortby(request.vars.sort))
+
+        # check if item is not private
+        results = [result for result in results if not item_is_private(result)]
 
         returns = dict(
             results=results,

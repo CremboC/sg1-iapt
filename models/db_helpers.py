@@ -19,3 +19,20 @@ def chunks(l, n):
     """Yield successive n-sized chunks from l."""
     for i in xrange(0, len(l), n):
         yield l[i:i + n]
+
+
+def translate_sortby(query):
+    if query == 'date-new':
+        return ~db.objects.created_on
+    elif query == 'date-old':
+        return db.objects.created_on
+    elif query == 'a-z':
+        return db.objects.name
+    elif query == 'z-a':
+        return ~db.objects.name
+    elif query == 'value-high':
+        return ~db.objects.currency_value
+    elif query == 'value-low':
+        return db.objects.currency_value
+    else:  # default
+        return ~db.objects.updated_on

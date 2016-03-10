@@ -36,7 +36,6 @@
     <div class="panel panel-default">
         <div class="panel-body">
         {{print_sortby()}}
-        {{items = collection.objects()}}
         {{for chunk in chunks(items, 3):}}
             <div class="row">
             {{for item in chunk:}}

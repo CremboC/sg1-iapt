@@ -164,10 +164,10 @@ db.define_table("collections",
                       readable=False),
                 )
 
-db.collections.objects = Field.Lazy(
+db.collections.objects = Field.Method(
     'objects',
-    lambda row: collections_and_objects(db.collections.id == row.collections.id).select(db.objects.ALL,
-                                                                                        orderby=~db.objects.updated_on)
+    lambda row, orderby=~db.objects.updated_on: collections_and_objects(db.collections.id == row.collections.id).select(
+        db.objects.ALL, orderby=orderby)
 )
 
 db.collections.owner = Field.Lazy(
@@ -224,4 +224,3 @@ db.define_table("trades_receiving",
 
 collections_and_objects = db(
     (db.collections.id == db.object_collection.collection_id) & (db.objects.id == db.object_collection.object_id))
-

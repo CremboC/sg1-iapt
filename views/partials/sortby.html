@@ -7,9 +7,59 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="sortby-menu">
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Date Added</a></li>
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something</a></li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#" class="sort-by" data-sort="date-new">Date Added (Newest First)</a>
+            </li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#" class="sort-by" data-sort="date-old">Date Added (Oldest First)</a>
+            </li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#" class="sort-by" data-sort="a-z">A-Z</a>
+            </li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#" class="sort-by" data-sort="z-a">Z-A</a>
+            </li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#" class="sort-by" data-sort="value-high">Value (Highest First)</a>
+            </li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#" class="sort-by" data-sort="value-low">Value (Lowest First)</a>
+            </li>
         </ul>
     </div>
 </div>
+
+<script>
+    function setGetParameter(paramName, paramValue) {
+        var url = window.location.href;
+        var hash = location.hash;
+
+        url = url.replace(hash, '');
+
+        if (url.indexOf(paramName + "=") >= 0) {
+            var prefix = url.substring(0, url.indexOf(paramName));
+            var suffix = url.substring(url.indexOf(paramName));
+
+            suffix = suffix.substring(suffix.indexOf("=") + 1);
+            suffix = (suffix.indexOf("&") >= 0) ? suffix.substring(suffix.indexOf("&")) : "";
+            url = prefix + paramName + "=" + paramValue + suffix;
+        } else {
+            if (url.indexOf("?") < 0) {
+                url += "?" + paramName + "=" + paramValue;
+            } else {
+                url += "&" + paramName + "=" + paramValue;
+            }
+        }
+
+        window.location.href = url + hash;
+    }
+
+    $(function () {
+        $('.sort-by').on('click', function (e) {
+            e.preventDefault();
+
+            setGetParameter('sort', $(this).data('sort'));
+        })
+    });
+</script>
 {{return}}

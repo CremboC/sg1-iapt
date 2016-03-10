@@ -35,10 +35,16 @@ def show():
     user = db.auth_user[collection.owner_id]
     is_owner = user.id == auth.user_id
     if collection.private and not is_owner:
-        session.flash = {"status": "danger", "message": "Error: you cannot view a collection that is private and doesn't belong to you"}
+        session.flash = {"status": "danger",
+                         "message": "Error: you cannot view a collection that is private and doesn't belong to you"}
         return redirect(URL('collections', 'index'))
 
-    return dict(collection=collection, user=user, is_owner=is_owner)
+    if request.vars.sort:
+        items = collection.objects(translate_sortby(request.vars.sort))
+    else:
+        items = collection.objects()
+
+    return dict(collection=collection, user=user, is_owner=is_owner, items=items)
 
 
 @auth.requires_login()
@@ -55,7 +61,10 @@ def edit():
         session.flash = {"status": "danger", "message": "Error: Cannot edit a collection that doesn't belong to you"}
         return redirect(URL('collections', 'index'))
 
-    objects_in_collection = collection.objects()
+    if request.vars.sort:
+        objects_in_collection = collection.objects(translate_sortby(request.vars.sort))
+    else:
+        objects_in_collection = collection.objects()
 
     obj_query = db.objects.owner_id == auth.user_id
     obj_query &= ~db.objects.id.belongs([col.id for col in objects_in_collection])
@@ -92,4 +101,5 @@ def edit():
         session.flash = dict(status='success', message='Successfully updated collection.')
         return redirect(URL('collections', 'show', args=form.vars.id))
 
-    return dict(collection=collection, form=form, objects=objects, objects_in_collection=objects_in_collection, is_unfiled=is_unfiled)
+    return dict(collection=collection, form=form, objects=objects,
+                objects_in_collection=objects_in_collection, is_unfiled=is_unfiled)

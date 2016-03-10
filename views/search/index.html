@@ -49,6 +49,7 @@
                 {{if len(results) == 0:}}
                     <strong>No results found.</strong>
                 {{else:}}
+                {{print_sortby()}}
                 {{for chunk in chunks(results, 2):}}
                     <div class="row">
                     {{for result in chunk:}}
