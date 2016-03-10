@@ -122,7 +122,6 @@ $(function () {
 
 function submitForm(){
     generateFormFields();
-    console.log("Submitting");
     var form = $("#tradeform");
     $.ajax({
         url: form.attr('action'),
@@ -131,11 +130,12 @@ function submitForm(){
         success: function (data, textStatus, errorThrown){
         },
         error: function (jXHR, textStatus, errorThrown){
+            $(".alert").remove();
+            var error = $("<div class='alert alert-danger' role='alert'>"+jXHR.responseText+"</div>");
+            var closeError = $("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>");
+            error.append(closeError);
+            $("#errorcontainer").prepend(error);
             deleteHiddenFormFields();
-            console.log(jXHR);
-            console.log(textStatus);
-            console.log(errorThrown);
-            $.web2py.flash(400);
         }
-    })
+    });
 }
