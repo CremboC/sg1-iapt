@@ -22,10 +22,16 @@
         <div class="panel-body">
         {{=form.custom.begin}}
 
+            <p class="text-info">
+                Fields marked with an asterisk (*) are mandatory.
+            </p>
+
             <!--name-->
             <div class="form-group">
-                <label for="objects_name">{{=form.custom.label.name}}</label>
-            {{=form.custom.widget.name}}
+                <label for="objects_name" class="mandatory">
+                {{=form.custom.label.name}}
+                </label>
+                {{=form.custom.widget.name}}
 
                 <p class="form-comment">
                 {{=form.custom.comment.name}}

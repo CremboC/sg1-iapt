@@ -125,7 +125,7 @@ db.define_table("objects",
                       required=True,
                       requires=[IS_NOT_EMPTY(
                           error_message="An item must have a name assigned to it.")]),
-                Field("currency_value", "float", label="Monetary value:",
+                Field("currency_value", "float", label="Monetary value:", default=0.0, required=True,
                       comment="Your own assigned value in Great British Sterling"),
                 Field("description", "text"),
                 Field("summary", "string"),

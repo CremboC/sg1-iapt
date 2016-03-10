@@ -7,8 +7,12 @@
         </div>
         <div class="panel-body">
         {{=form.custom.begin}}
+            <p class="text-info">
+                Fields marked with an asterisk (*) are mandatory.
+            </p>
+
             <div class="form-group">
-                <label for="collections_name">
+                <label for="collections_name" class="mandatory">
                 {{=form.custom.label.name}}
                 </label>
                 {{=form.custom.widget.name}}

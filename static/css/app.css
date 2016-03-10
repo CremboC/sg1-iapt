@@ -68,6 +68,11 @@
     font-style: italic;
 }
 
+.mandatory:after {
+    content: ' *';
+    color: red;
+}
+
 .glyphicon.middle {
     vertical-align: -1px;
 }
