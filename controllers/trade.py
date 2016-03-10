@@ -152,13 +152,16 @@ def getobjectdata():
 
 @auth.requires_login()
 def createNew():
+    print request.vars
     if (request.vars['youritems'] is None) | (request.vars['theiritems'] is None):
+        print 'Incomplete trade'
         response.status = 400
         return 'Error 400: incomplete trade, please enter trade items or select other user'
 
     youritems = request.vars['youritems'].split(",")
     theiritems = request.vars['theiritems'].split(",")
     if (youritems == ['']) | (theiritems == ['']):
+        print 'Incomplete trade2'
         response.status = 400
         return 'Error 400: incomplete trade, please enter trade items or select other user'
 
@@ -168,23 +171,26 @@ def createNew():
     # Check target user owns all objects proposed
     # Verify all objects belong to correct user
     senderobjectIds = map(int, youritems)
-    senderobjects = db(db.objects.id.belongs(senderobjectIds)).select(db.objects.owner_id, db.objects.status)
+    senderobjects = db(db.objects.id.belongs(senderobjectIds)).select(db.objects.owner_id, db.objects.status, db.objects.name)
     for row in senderobjects:
-        if row.owner_id != senderId:
+        print row
+        if int(row.owner_id) != senderId:
             response.status = 400
+            print 'Invalid ID'
             return 'Error 400: invalid item ID, please refresh page'
-        if row.status != 2:
+        if int(row.status) != 2:
             response.status = 400
+            print 'Unavailable item'
             return 'Error 400: Item not available for trade'
     receiverobjectIds = map(int, theiritems)
     receiverobjects = db(db.objects.id.belongs(receiverobjectIds)).select(db.objects.owner_id, db.objects.status)
 
     receiverId = receiverobjects[0].owner_id
     for row in receiverobjects:
-        if row.owner_id != receiverId:
+        if int(row.owner_id) != receiverId:
             response.status = 400
             return 'Error 400: invalid item ID, please refresh page'
-        if row.status != 2:
+        if int(row.status) != 2:
             response.status = 400
             return 'Error 400: Item not available for trade'
 

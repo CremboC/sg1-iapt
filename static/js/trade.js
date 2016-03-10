@@ -17,7 +17,6 @@ function addItemToTrade(ids, displayDiv, availableSelect, enableRemove) {
     $.getJSON('getobjectdata?ids=' + joined_ids, function (data) {
         for (var x = 0; x < data.length; x++) {
             var object = data[x];
-            console.log(enableRemove);
             displayDiv.append(makeObjectDisplay(object, availableSelect, enableRemove));
             availableSelect.children("option[value='" + object.id + "']").remove();
         }
@@ -56,7 +55,6 @@ $.urlParam = function (name) {
 function generateFormFields() {
     var yourItemIds = [];
     $("#yourItemDisplay").children('div').each(function () {
-        console.log(this);
         yourItemIds.push($(this).attr('itemid'));
     });
 
@@ -67,6 +65,11 @@ function generateFormFields() {
     var yourItems = $('<input style="display:none" name="youritems" value="' + yourItemIds + '">');
     var hisItems = $("<input style='display:none' name='theiritems' value=" + hisItemIds + ">");
     $("#tradeform").append(yourItems).append(hisItems);
+}
+
+function deleteHiddenFormFields(){
+    $("input[name=youritems]").remove();
+    $("input[name=theiritems]").remove();
 }
 
 $(function () {
@@ -116,3 +119,23 @@ $(function () {
         });
     });
 });
+
+function submitForm(){
+    generateFormFields();
+    console.log("Submitting");
+    var form = $("#tradeform");
+    $.ajax({
+        url: form.attr('action'),
+        type: "POST",
+        data: form.serialize(),
+        success: function (data, textStatus, errorThrown){
+        },
+        error: function (jXHR, textStatus, errorThrown){
+            deleteHiddenFormFields();
+            console.log(jXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+            $.web2py.flash(400);
+        }
+    })
+}
