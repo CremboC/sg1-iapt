@@ -152,16 +152,16 @@ def getobjectdata():
 
 @auth.requires_login()
 def createNew():
-    print request.vars
+
+    #TODO permit trades where 1 party does not give any objects
+
     if (request.vars['youritems'] is None) | (request.vars['theiritems'] is None):
-        print 'Incomplete trade'
         response.status = 400
         return 'Error 400: incomplete trade, please enter trade items or select other user'
 
     youritems = request.vars['youritems'].split(",")
     theiritems = request.vars['theiritems'].split(",")
     if (youritems == ['']) | (theiritems == ['']):
-        print 'Incomplete trade2'
         response.status = 400
         return 'Error 400: incomplete trade, please enter trade items or select other user'
 
@@ -173,15 +173,13 @@ def createNew():
     senderobjectIds = map(int, youritems)
     senderobjects = db(db.objects.id.belongs(senderobjectIds)).select(db.objects.owner_id, db.objects.status, db.objects.name)
     for row in senderobjects:
-        print row
         if int(row.owner_id) != senderId:
             response.status = 400
-            print 'Invalid ID'
             return 'Error 400: invalid item ID, please refresh page'
         if int(row.status) != 2:
             response.status = 400
-            print 'Unavailable item'
             return 'Error 400: Item not available for trade'
+
     receiverobjectIds = map(int, theiritems)
     receiverobjects = db(db.objects.id.belongs(receiverobjectIds)).select(db.objects.owner_id, db.objects.status)
 

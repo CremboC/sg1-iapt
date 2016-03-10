@@ -33,9 +33,10 @@ def index():
 
     db.collections.insert(owner_id=1, name="old clothes", private='T') #1
     db.collections.insert(owner_id=1, name="media", private=False) #2
-    db.collections.insert(owner_id=1, name="unfiled", private=False) #3
+    db.collections.insert(owner_id=2, name="unfiled", private=False) #3
+    db.collections.insert(owner_id=1, name="unfiled", private=False) #4
 
-    #Not tradable
+
     id = db.objects.insert(owner_id=1, type_id=6, status=2, name='Red Dress', currency_value=30.0, summary='Red party dress',
                       description='strapless red dress from french connection', image='objects.image.80fb30d10234f5eb.7265642064726573732e6a706567.jpeg')
     db.object_collection.insert(object_id=id, collection_id=1)
@@ -60,11 +61,11 @@ def index():
                       description='pixar\'s first full length animated feature', image='objects.image.b2f0850ff0ac6915.746f792073746f7279206476642e6a706567.jpeg')
     db.object_collection.insert(object_id=id, collection_id=2)
 
-    id = db.objects.insert(owner_id=1, type_id=10, status=2, name='Desk chair', currency_value=70.0, summary='chair for computer desk',
+    id = db.objects.insert(owner_id=2, type_id=10, status=2, name='Desk chair', currency_value=70.0, summary='chair for computer desk',
                       description='The seat height of the chair can be adjusted from 440mm -520mm, allowing you to adjust the chair to give you the optimum working height. It is a dark red colour and is perfect for use in front of a computer', image='objects.image.903db7462241a973.6465736b2063686169722e6a706567.jpeg')
     db.object_collection.insert(object_id=id, collection_id=3)
 
-    id = db.objects.insert(owner_id=1, type_id=10, status=2, name='Coffee table', currency_value=120.0, summary='wooden coffee table',
+    id = db.objects.insert(owner_id=2, type_id=10, status=2, name='Coffee table', currency_value=120.0, summary='wooden coffee table',
                       description='wooden coffee table which looks great in any living room', image='objects.image.b8b5db81540cdfdb.636f66666565207461626c652e6a706567.jpeg')
     db.object_collection.insert(object_id=id, collection_id=3)
 
