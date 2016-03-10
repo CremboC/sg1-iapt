@@ -102,25 +102,33 @@
                 <li>
                     <a href="{{=URL('collections', 'index')}}">
                         <span class="glyphicon glyphicon-star middle"></span>
-                        Collections
+                        <span class="hidden-sm">
+                            Collections
+                        </span>
                     </a>
                 </li>
                 <li>
                     <a href="{{=URL('item_lists', 'view', vars={"want": "false"})}}">
                         <span class="glyphicon glyphicon-tags middle"></span>
-                        For Trade
+                        <span class="hidden-sm">
+                            For Trade
+                        </span>
                     </a>
                 </li>
                 <li>
                     <a href="{{=URL('item_lists', 'view', vars={"want": "true"})}}">
                         <span class="glyphicon glyphicon-heart middle"></span>
-                        Wish List
+                        <span class="hidden-sm">
+                            Wish List
+                        </span>
                     </a>
                 </li>
                 <li>
                     <a href="{{=URL('trade', 'index')}}">
                         <span class="glyphicon glyphicon-retweet middle"></span>
-                        Trades
+                        <span class="hidden-sm">
+                            Trades
+                        </span>
                     </a>
                 </li>
             </ul>
