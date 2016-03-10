@@ -138,12 +138,12 @@ db.define_table("objects",
 
 db.objects.owner = Field.Lazy(
     'owner',
-    lambda row: db(db.auth_user.id == row.objects.owner_id).select()[0]
+    lambda row: db.auth_user[row.objects.owner_id]
 )
 
 db.objects.type = Field.Lazy(
     'type',
-    lambda row: db(db.types.id == row.objects.type_id).select()[0]
+    lambda row: db.types[row.objects.type_id]
 )
 
 db.objects.collections = Field.Lazy(
@@ -172,7 +172,7 @@ db.collections.objects = Field.Method(
 
 db.collections.owner = Field.Lazy(
     'owner',
-    lambda row: db(db.auth_user.id == row.collections.owner_id).select()[0]
+    lambda row: db.auth_user[row.collections.owner_id]
 )
 
 db.collections.name.requires = IS_NOT_EMPTY()

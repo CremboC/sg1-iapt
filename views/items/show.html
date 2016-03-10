@@ -16,7 +16,11 @@
         {{=item.summary}}
     </p>
 
+    {{if item.image:}}
     <img src="{{=URL('default', 'download', args=item.image)}}" height="400" />
+    {{else:}}
+    <img src="http://cumbrianrun.co.uk/wp-content/uploads/2014/02/default-placeholder.png" height="400" />
+    {{pass}}
 
     <ul class="list-unstyled">
         <li><strong>Type:</strong> {{=item.type().name}}</li>
