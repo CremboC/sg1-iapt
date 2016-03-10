@@ -60,7 +60,7 @@
         <div class="panel-body">
         {{for chunk in chunks(newest_items, 3):}}
             <div class="row">
-            {{for item in newest_items:}}
+            {{for item in chunk:}}
                 <div class="col-md-4">
                 {{print_object(item, show_owner = True)}}
                 </div>
