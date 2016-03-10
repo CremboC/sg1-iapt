@@ -351,7 +351,7 @@ def get_available_user_items(userid):
         db.objects.id).column())
     available_objects = db((db.objects.owner_id == userid) & (db.objects.status == 2) & ~db.objects.id.belongs(
         excludedobjects1) & ~db.objects.id.belongs(
-        excludedobjects2) & (db.types.id == db.objects.type_id)).select(
+        excludedobjects2) & (db.types.id == db.objects.type_id) & (db.objects.id == db.object_collection.object_id) & (db.object_collection.collection_id == db.collections.id) & (db.collections.private == 'F')).select(
         db.objects.id, db.types.name,
         db.objects.name,
         db.objects.currency_value,
