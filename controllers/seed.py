@@ -31,7 +31,7 @@ def index():
     db.trades_sending.truncate()
     db.trades_receiving.truncate()
 
-    db.collections.insert(owner_id=1, name="old clothes", private=False) #1
+    db.collections.insert(owner_id=1, name="old clothes", private=True) #1
     db.collections.insert(owner_id=1, name="media", private=False) #2
     db.collections.insert(owner_id=1, name="unfiled", private=False) #3
 
