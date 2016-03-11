@@ -6,7 +6,7 @@
         <a href="{{=URL('items', 'show', args=obj.id)}}">
             {{= obj.name }}
         </a>
-        {{ if obj.status == 0: }}
+        {{ if obj.status == 1: }}
             <span
                 class="pull-right object-status on-wishlist"
                 data-toggle="tooltip"
@@ -14,7 +14,7 @@
                 <span
                     class="glyphicon glyphicon-heart"></span>
             </span>
-        {{ elif obj.status == 1: }}
+        {{ elif obj.status == 2: }}
             <span
                 class="pull-right object-status for-trade"
                 data-toggle="tooltip"
