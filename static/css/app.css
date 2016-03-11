@@ -50,22 +50,30 @@
     margin-bottom: 15px;
 }
 
-.object .panel-body {
-    padding: 10px;
-}
+.object-status {
+    box-sizing: content-box;
 
-.object .object-image {
-}
+    width: 2em;
+    margin: -5px -10px -5px -5px;
+    padding: 5px;
 
-.object .object-image img {
+    background: red;
+
+    text-align: center;
+
     border-radius: 4px;
 }
-
-.object .object-text {
+.object-status.for-trade {
+    background: #09c;
+    color: #fff;
+}
+.object-status.on-wishlist {
+    background: #f90;
+    color: #fff;
 }
 
-.object .object-status {
-    /*padding-right: 5px;*/
+.object-icon {
+    margin-right: .5em;
 }
 
 .form-comment {

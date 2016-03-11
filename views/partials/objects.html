@@ -1,7 +1,81 @@
 {{def print_object(obj, show_owner = True):}}
 {{owner = obj.owner()}}
 {{type = obj.type()}}
-<div class="panel panel-default object">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <a href="{{=URL('items', 'show', args=obj.id)}}">
+            {{= obj.name }}
+        </a>
+        {{ if obj.status == 1: }}
+            <span
+                class="pull-right object-status on-wishlist"
+                data-toggle="tooltip"
+                title="This item is on {{= "your" if owner.id == auth.user_id else owner.username + '\'s'}} wishlist!">
+                <span
+                    class="glyphicon glyphicon-heart"></span>
+            </span>
+        {{ elif obj.status == 2: }}
+            <span
+                class="pull-right object-status for-trade"
+                data-toggle="tooltip"
+                title="This item is up for trade!">
+                <span
+                    class="glyphicon glyphicon-tag"></span>
+            </span>
+        {{ pass }}
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-5">
+                <a href="{{=URL('items', 'show', args=obj.id)}}">
+                {{if obj.image:}}
+                    <img src="{{=URL('default', 'download', args=obj.image)}}" alt="" class="img-responsive">
+                {{else:}}
+                    <img src="http://lorempixel.com/100/100/cats/" alt="" class="img-responsive pull-right">
+                {{pass}}
+                </a>
+            </div>
+            <div class="col-xs-7">
+                {{ if show_owner: }}
+                    <div class="row">
+                        <span class="glyphicon glyphicon-user object-icon"></span>
+                        <a href="#">
+                            {{=owner.username}}
+                        </a>
+                    </div>
+                {{ pass }}
+                <div class="row">
+                    <span class="glyphicon glyphicon-gbp object-icon"></span>
+                    {{="{:0,.2f}".format(obj.currency_value)}}
+                </div>
+            </div>
+        </div>
+        <br />
+        <i class="small">{{=obj.summary}}</i>
+    </div>
+    <div class="panel-footer">
+        <div class="btn-group btn-group-xs" role="group" aria-label="Object Actions">
+            <!-- TODO: Contextual Actions -->
+            <a
+                class="btn btn-default"
+                href="{{=URL('items', 'show', args=obj.id)}}"
+                data-toggle="tooltip"
+                title="View">
+
+                <span class="glyphicon glyphicon-eye-open"></span>
+            </a>
+            <a
+                class="btn btn-default"
+                href="{{=URL('items', 'show', args=obj.id)}}"
+                data-toggle="tooltip"
+                title="View">
+
+                <span class="glyphicon glyphicon-eye-open"></span>
+            </a>
+        </div>
+    </div>
+</div>
+<!-- <div class="panel panel-default object">
     <div class="panel-body">
 
         <div class="row no-margin">
@@ -50,5 +124,5 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 {{return}}
