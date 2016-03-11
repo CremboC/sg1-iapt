@@ -43,7 +43,7 @@
                             <label for="ownAvailableObjects" class="sr-only">Your own items you can trade</label>
                             <select id="ownAvailableObjects" multiple size="5" class="form-control">
                             {{for row in available_objects[0]:}}
-                                <option value="{{=row.objects.id}}">{{=row.string}}</option>
+                                    <option value="{{=row.objects.id}}" data-currency_value="{{=row.objects.currency_value}}">{{=row.string}}</option>
                             {{pass}}
                             </select>
                         </div>
@@ -95,9 +95,9 @@
                             </label>
                             <select id="theirAvailableObjects" multiple size="5" class="form-control">
                             {{if len(available_objects)>1:}}
-                            {{for row in available_objects[1]:}}
-                                <option value="{{=row.objects.id}}">{{=row.string}}</option>
-                            {{pass}}
+                                {{for row in available_objects[1]:}}
+                                    <option value="{{=row.objects.id}}" data-currency_value="{{=row.objects.currency_value}}">{{=row.string}}</option>
+                                {{pass}}
                             {{pass}}
                             </select>
                         </div>
@@ -130,8 +130,12 @@
             </div>
         </div>
 
-
-        <div class="clearfix">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2>Total profit = <span id="tradevalue">0</span> £</h2>
+            </div>
+        </div>
+        <div class="row">
             <div class="pull-left">
                 <a class="btn btn-danger" href="{{=URL('trade', 'index')}}">Cancel</a>
             </div>

@@ -3,8 +3,8 @@ function transferOptionsToTrade(select1, itemPreviewDiv, enableRemove) {
     addItemToTrade(itemIds, itemPreviewDiv, select1, enableRemove);
 }
 
-function createOption(id, name) {
-    return $("<option value='" + id + "'>" + name + "</option>")
+function createOption(id, name, currency_value) {
+    return $("<option value='" + id + "' data-currency_value="+currency_value+">" + name + "</option>")
 }
 
 function addItemToTrade(ids, displayDiv, availableSelect, enableRemove) {
@@ -20,20 +20,38 @@ function addItemToTrade(ids, displayDiv, availableSelect, enableRemove) {
             displayDiv.append(makeObjectDisplay(object, availableSelect, enableRemove));
             availableSelect.children("option[value='" + object.id + "']").remove();
         }
+        updateTradeValue($("#yourItemDisplay"), $("#hisItemDisplay"))
     });
-
 }
+
+function updateTradeValue(yourItems, hisItems){
+
+    var totalVal = 0;
+    $(">div", yourItems).each(function(){
+        totalVal-=parseFloat($(this).attr('data-currency_value'));
+    });
+    $(">div", hisItems).each(function(){
+        totalVal+=parseFloat($(this).attr('data-currency_value'));
+    });
+    if (isNaN(totalVal)){
+        totalVal = 0;
+    } else {
+        totalVal.toFixed(2);
+    }
+    $("#tradevalue").text(totalVal);
+}
+
 
 function makeObjectDisplay(object, availableSelect, enableRemove) {
 
-    var div = $("<div itemid=" + object.id + " class='item-preview' style='background-image: url(" + object.image + ");'> </div>");
+    var div = $("<div  data-currency_value="+object.currency_value+" itemid=" + object.id + " class='item-preview' style='background-image: url(" + object.image + ");'> </div>");
     var hovertext = $("<div class='hovertext'><p>" + object.name + "</p><p>Value: " + object['currency_value'] + " </div>");
     if (enableRemove) {
         var removeBtn = $("<div class='rmvItemPreview'><span class='glyphicon glyphicon glyphicon-remove' style='color:red'></span></div>");
         removeBtn.click(function () {
             $(this).parent().remove();
-            availableSelect.append(createOption(object.id, object.name));
-
+            availableSelect.append(createOption(object.id, object.name, object.currency_value));
+            updateTradeValue($("#yourItemDisplay"), $("#hisItemDisplay"))
         });
         div.append(removeBtn).append(hovertext);
     } else {

@@ -1,5 +1,6 @@
 # coding=utf-8
 import json
+import urllib
 
 
 @auth.requires_login()
@@ -131,9 +132,17 @@ def edit():
         trader_username = db(db.auth_user.id == trader_id).select(db.auth_user.username).column()[0]
 
     available_objects = [get_available_user_items(auth.user_id), get_available_user_items(trader_id)]
+
+    trade_profit = 0
+    for object in trade_objects[0]:
+        trade_profit -= object.objects.currency_value
+
+    for object in trade_objects[1]:
+        trade_profit += object.objects.currency_value
+
     return {"prevtrade": trade_id, "user_id": auth.user_id, "trader_id": trader_id, "status": trade.status,
             "trader_username": trader_username,
-            "editable": editable,
+            "editable": editable, "trade_profit": trade_profit,
             "trade_objects": trade_objects, "available_objects": available_objects
             }
 
@@ -141,7 +150,7 @@ def edit():
 def getobjectdata():
     object_ids = request.vars.ids.split(",")
     object_ids = map(int, object_ids)
-    objects = db(db.objects.id.belongs(object_ids)).select()
+    objects = db(db.objects.id.belongs(object_ids)).select(db.objects.ALL)
     for row in objects:
         if row.image is not None:
             row.image = URL('download', args=row.image)
@@ -159,33 +168,33 @@ def createNew():
         response.status = 400
         return 'Error 400: incomplete trade, please enter trade items or select other user'
 
-    youritems = request.vars['youritems'].split(",")
-    theiritems = request.vars['theiritems'].split(",")
-    if (youritems == ['']) | (theiritems == ['']):
+    your_items = request.vars['youritems'].split(",")
+    their_items = request.vars['theiritems'].split(",")
+    if (your_items == ['']) | (their_items == ['']):
         response.status = 400
         return 'Error 400: incomplete trade, please enter trade items or select other user'
 
-    senderId = int(auth.user_id)
+    sender_id = int(auth.user_id)
     # Check user owns all objects he proposes
 
     # Check target user owns all objects proposed
     # Verify all objects belong to correct user
-    senderobjectIds = map(int, youritems)
-    senderobjects = db(db.objects.id.belongs(senderobjectIds)).select(db.objects.owner_id, db.objects.status, db.objects.name)
-    for row in senderobjects:
-        if int(row.owner_id) != senderId:
+    sender_objects_id = map(int, your_items)
+    sender_objects = db(db.objects.id.belongs(sender_objects_id)).select(db.objects.owner_id, db.objects.status, db.objects.name)
+    for row in sender_objects:
+        if int(row.owner_id) != sender_id:
             response.status = 400
             return 'Error 400: invalid item ID, please refresh page'
         if int(row.status) != 2:
             response.status = 400
             return 'Error 400: Item not available for trade'
 
-    receiverobjectIds = map(int, theiritems)
-    receiverobjects = db(db.objects.id.belongs(receiverobjectIds)).select(db.objects.owner_id, db.objects.status)
+    receiver_objects_id = map(int, their_items)
+    receiver_objects = db(db.objects.id.belongs(receiver_objects_id)).select(db.objects.owner_id, db.objects.status)
 
-    receiverId = receiverobjects[0].owner_id
-    for row in receiverobjects:
-        if int(row.owner_id) != receiverId:
+    receiver_id = receiver_objects[0].owner_id
+    for row in receiver_objects:
+        if int(row.owner_id) != receiver_id:
             response.status = 400
             return 'Error 400: invalid item ID, please refresh page'
         if int(row.status) != 2:
@@ -193,22 +202,22 @@ def createNew():
             return 'Error 400: Item not available for trade'
 
     if request.vars.prevtrade is not None:
-        newTradeId = db.trades.insert(sender=senderId, receiver=receiverId, status=4, seen=False)
+        new_trade_id = db.trades.insert(sender=sender_id, receiver=receiver_id, status=4, seen=False)
     else:
-        newTradeId = db.trades.insert(sender=senderId, receiver=receiverId, status=0, seen=False)
+        new_trade_id = db.trades.insert(sender=sender_id, receiver=receiver_id, status=0, seen=False)
 
-    for itemId in senderobjectIds:
-        db.trades_sending.insert(trade_id=newTradeId, sent_object_id=itemId)
-    for itemId in receiverobjectIds:
-        db.trades_receiving.insert(trade_id=newTradeId, recv_object_id=itemId)
+    for itemId in sender_objects_id:
+        db.trades_sending.insert(trade_id=new_trade_id, sent_object_id=itemId)
+    for itemId in receiver_objects_id:
+        db.trades_receiving.insert(trade_id=new_trade_id, recv_object_id=itemId)
 
-    receiver_username = db(db.auth_user.id == receiverId).select(db.auth_user.username).column()[0]
+    receiver_username = db(db.auth_user.id == receiver_id).select(db.auth_user.username).column()[0]
     session.flash = T('Successfully created trade with ' + receiver_username)
 
-    db(db.auth_user.id == receiverId).update(notifications=True)
+    db(db.auth_user.id == receiver_id).update(notifications=True)
 
     if request.vars.prevtrade is not None:
-        db(db.trades.id == int(request.vars.prevtrade)).update(status=4, superseded_by=newTradeId)
+        db(db.trades.id == int(request.vars.prevtrade)).update(status=4, superseded_by=new_trade_id)
 
     redirect(URL('trade', 'index'), client_side=True)
 
@@ -350,7 +359,8 @@ def get_available_user_items(userid):
     available_objects = db((db.objects.owner_id == userid) & (db.objects.status == 2) & ~db.objects.id.belongs(
         excludedobjects1) & ~db.objects.id.belongs(
         excludedobjects2) & (db.types.id == db.objects.type_id) & (db.objects.id == db.object_collection.object_id) & (db.object_collection.collection_id == db.collections.id) & (db.collections.private == 'F')).select(
-        db.objects.id, db.types.name,
+        db.objects.id,
+        db.types.name,
         db.objects.name,
         db.objects.currency_value,
         db.objects.image,
@@ -363,8 +373,7 @@ def get_available_user_items(userid):
 
 def format_string(object):
     name = object.objects.name + "  "
-    name + "{:0,.2f}".format(object.objects.currency_value)
-
+    name += "(£{:0,.2f})".format(object.objects.currency_value)
     return name
 
 
