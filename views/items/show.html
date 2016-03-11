@@ -3,12 +3,14 @@
 <div class="container">
     <div class="clearfix">
         <h2 class="pull-left">{{=item.name}}</h2>
+        {{if is_owner:}}
         <div class="pull-right">
             <a href="{{=URL('items', 'edit', args=item.id)}}" class="btn btn-success">
                 <span class="glyphicon glyphicon-edit middle" aria-hidden="true"></span>
                 Edit
             </a>
         </div>
+        {{pass}}
     </div>
 
     <h4>Short summary:</h4>
