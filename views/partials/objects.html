@@ -115,13 +115,11 @@
 
             <div class="col-xs-2 object-status">
             {{if obj.status == 0:}}
-                <span class="glyphicon glyphicon-heart middle"></span>
-                Wish List
+                <span class="glyphicon glyphicon-star middle" data-toggle="tooltip" data-placement="top" title="In a normal collection"></span>
             {{elif obj.status == 1:}}
-                <span class="glyphicon glyphicon-tags middle"></span>
-                For Trade
+                <span class="glyphicon glyphicon-heart middle" data-toggle="tooltip" data-placement="top" title="Item is in a Wish List"></span>
             {{elif obj.status == 2:}}
-                InCol
+                <span class="glyphicon glyphicon-tags middle" data-toggle="tooltip" data-placement="top" title="Item is available for trade"></span>
             {{pass}}
             </div>
         </div>
