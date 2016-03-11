@@ -47,13 +47,18 @@
                             {{pass}}
                             </select>
                         </div>
-
-                        <div class="pull-right">
-                            <button type="button" class="btn btn-default"
+                        <div class="row">
+                            <div class="col-md-8">
+                                *Items which are currently in other trades or are not set as 'for trade' will not be available to trade
+                            </div>
+                            <div class="col-md-4">
+                            <button type="button" class="btn btn-default pull-right"
                                     onclick="transferOptionsToTrade($('#ownAvailableObjects'), $('#yourItemDisplay'), true)">
                                 Add item
                             </button>
+                           </div>
                         </div>
+
                     </div>
                 </div>
                 <div class="panel panel-default">
@@ -97,11 +102,16 @@
                             </select>
                         </div>
 
-                        <div class="pull-right">
+                        <div class="row">
+                            <div class="col-md-8">
+                                *Items which are currently in other trades or are not set as 'for trade' will not be available to trade
+                            </div>
+                            <div class="col-md-4">
                             <button type="button" class="btn btn-default"
                                     onclick="transferOptionsToTrade($('#theirAvailableObjects'), $('#hisItemDisplay'), true)">
                                 Add item
                             </button>
+                           </div>
                         </div>
                     </div>
                 </div>
