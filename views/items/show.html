@@ -3,49 +3,58 @@
 <div class="container">
     <div class="clearfix">
         <h2 class="pull-left">{{=item.name}}</h2>
-        {{if is_owner:}}
+
         <div class="pull-right">
+        {{if not is_owner:}}
+            <a href="{{=URL('items', 'wish', args=item.id)}}" class="btn btn-warning">
+                <span class="glyphicon glyphicon-heart middle" aria-hidden="true"></span>
+                Add to My Wish List
+            </a>
+        {{pass}}
+        {{if is_owner:}}
             <a href="{{=URL('items', 'edit', args=item.id)}}" class="btn btn-success">
                 <span class="glyphicon glyphicon-edit middle" aria-hidden="true"></span>
                 Edit
             </a>
-        </div>
         {{pass}}
+        </div>
     </div>
 
     <h4>Short summary:</h4>
+
     <p>
-        {{=item.summary}}
+    {{=item.summary}}
     </p>
 
-    {{if item.image:}}
-    <img src="{{=URL('default', 'download', args=item.image)}}" height="400" />
-    {{else:}}
-    <img src="http://cumbrianrun.co.uk/wp-content/uploads/2014/02/default-placeholder.png" height="400" />
-    {{pass}}
+{{if item.image:}}
+    <img src="{{=URL('default', 'download', args=item.image)}}" height="400"/>
+{{else:}}
+    <img src="http://cumbrianrun.co.uk/wp-content/uploads/2014/02/default-placeholder.png" height="400"/>
+{{pass}}
 
     <ul class="list-unstyled">
         <li><strong>Type:</strong> {{=item.type().name}}</li>
         <li><strong>Value:</strong> &pound;{{="{:0,.2f}".format(item.currency_value)}}</li>
-        {{if not is_owner:}}
+    {{if not is_owner:}}
         <li>
             <strong>Owner:</strong> <a href="{{=URL('collections', 'index', args=user.id)}}">{{=user.username}}</a>
         </li>
-        {{pass}}
+    {{pass}}
         <li>
             <strong>Collections:</strong>
-            {{if not item.collections():}}
-                None assigned
-            {{pass}}
-            {{for col in item.collections():}}
-                <a href="{{=URL('collections', 'show', args=col.id)}}">{{=col.name}}</a>&nbsp;
-            {{pass}}
+        {{if not item.collections():}}
+            None assigned
+        {{pass}}
+        {{for col in item.collections():}}
+            <a href="{{=URL('collections', 'show', args=col.id)}}">{{=col.name}}</a>&nbsp;
+        {{pass}}
         </li>
     </ul>
 
     <h3>Description:</h3>
+
     <p>
-        {{=item.description}}
+    {{=item.description}}
     </p>
 
 </div>

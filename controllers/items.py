@@ -63,7 +63,7 @@ def edit():
         session.flash = {"status": "success", "message": "Item successfully saved"}
         return redirect(URL('items', 'show', args=form.vars.id))
     elif form.errors:
-        response.flash = {"status": "danger", "message": "An error has occured. See below."}
+        response.flash = {"status": "danger", "message": "An error has occurred. See below."}
 
     return dict(object=obj, form=form, types=types, collections=collections, object_collections=object_collections)
 
@@ -82,5 +82,27 @@ def show():
         session.flash = {"status": "danger", "message": "Error: you cannot view another user's private items"}
         return redirect(URL('default', 'index'))
 
-
     return dict(item=item, is_owner=is_owner, user=user)
+
+
+@auth.requires_login()
+def wish():
+    item_id = request.args[0] or redirect(URL('default', 'index'))
+    item = db.objects[item_id]
+
+    # duplicate all fields
+    fields = db.objects._filter_fields(item)
+
+    # set all the fields which need to be changed
+    fields['owner_id'] = auth.user.id
+    fields['status'] = 1  # wish list
+    fields['created_on'] = request.now
+    fields['updated_on'] = request.now
+
+    new_item_id = db.objects.insert(**fields)
+
+    link_object_collections(new_item_id, get_unfiled_collection().id)
+
+    session.flash = {"status": "success", "message": "Item successfully saved"}
+
+    return redirect(URL('items', 'show', args=item_id))

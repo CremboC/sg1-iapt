@@ -5,7 +5,22 @@
 {{if is_me:}}
     <h2>My Collections</h2>
 {{else:}}
-    <h2>{{=user.username}}'s Collections</h2>
+    <div class="clearfix">
+        <div class="pull-left">
+            <h2>{{=user.username}}'s Collections</h2>
+        </div>
+        
+        <div class="pull-right">
+            <a href="{{=URL('item_lists', 'for_trade', vars=dict(user_id=user.id))}}" class="btn btn-primary">
+                <span class="glyphicon glyphicon-tags middle"></span>
+                User's For Trade
+            </a>
+            <a href="{{=URL('item_lists', 'wish_list', vars=dict(user_id=user.id))}}" class="btn btn-warning">
+                <span class="glyphicon glyphicon-heart middle"></span>
+                User's Wish List
+            </a>
+        </div>
+    </div>
 {{pass}}
 
 {{print_collections(collections, is_me, False, is_me)}}
