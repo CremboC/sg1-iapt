@@ -115,12 +115,12 @@ db.define_table("objects",
                       required=True,
                       label="Type",
                       comment="What best describes your object?"),
-                # 0: Want
-                # 1: Own
-                # 2: Own, Willing to Trade
+                # 0: Own (InCol)
+                # 1: Wish List
+                # 2: Own, Willing to Trade (For Trade)
                 Field("status", "integer",
                       default=0,
-                      requires=IS_INT_IN_RANGE(0, 3)),  # TODO: Nice label
+                      requires=IS_IN_SET([0, 1, 2])),  # TODO: Nice label
                 Field("name", "string",
                       required=True,
                       requires=[IS_NOT_EMPTY(

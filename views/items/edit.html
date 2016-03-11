@@ -50,7 +50,8 @@
             <div class="form-group">
                 <label for="objects_summary">{{=form.custom.label.summary}}</label>
 
-                <textarea name="summary" id="objects_summary" cols="10" rows="5" class="form-control">{{=object.summary}}</textarea>
+                <textarea name="summary" id="objects_summary" cols="10" rows="5"
+                          class="form-control">{{=object.summary}}</textarea>
 
                 <div class="clearfix">
                     <div class="pull-left">
@@ -85,13 +86,51 @@
                 <br>
                 <select id="objects_collection" multiple="multiple" name="collections">
                 {{for collection in collections:}}
-                    {{if collection.id in object_collections:}}
+                {{if collection.id in object_collections:}}
                     <option value="{{=collection.id}}" selected="selected">{{=collection.name}}</option>
-                    {{else:}}
+                {{else:}}
                     <option value="{{=collection.id}}">{{=collection.name}}</option>
-                    {{pass}}
+                {{pass}}
                 {{pass}}
                 </select>
+            </div>
+
+            <!--status-->
+            <div class="form-group">
+                <label for="objects_status">{{=form.custom.label.status}}</label>
+
+                <div class="radio">
+                    <label>
+                    {{if object.status == 0:}}
+                        <input type="radio" name="status" value="0" checked="checked">
+                    {{else:}}
+                        <input type="radio" name="status" value="0">
+                    {{pass}}
+                        In a Collection
+                    </label>
+                </div>
+
+                <div class="radio">
+                    <label>
+                    {{if object.status == 1:}}
+                        <input type="radio" name="status" value="1" checked="checked">
+                    {{else:}}
+                        <input type="radio" name="status" value="1">
+                    {{pass}}
+                        Wish List
+                    </label>
+                </div>
+
+                <div class="radio">
+                    <label>
+                    {{if object.status == 2:}}
+                        <input type="radio" name="status" value="2" checked="checked">
+                    {{else:}}
+                        <input type="radio" name="status" value="2">
+                    {{pass}}
+                        For Trade
+                    </label>
+                </div>
             </div>
 
             <!--image-->
@@ -107,18 +146,17 @@
             <!--value-->
             <div class="form-group">
                 <label for="objects_value" class="mandatory">{{=form.custom.label.currency_value}}</label>
+
                 <div class="input-group">
                     <span class="input-group-addon">&pound;</span>
-                    <input type="number" name="currency_value" id="objects_value" class="form-control" min="0" step="0.01" value="{{=form.custom.inpval.currency_value}}">
+                    <input type="number" name="currency_value" id="objects_value" class="form-control" min="0"
+                           step="0.01" value="{{=form.custom.inpval.currency_value}}">
                 </div>
 
                 <p class="form-comment">
                 {{=form.custom.comment.currency_value}}
                 </p>
             </div>
-
-            <!--status-->
-            <input type="hidden" name="status" value="2">
 
             <div class="form-group clearfix">
                 <div class="pull-left">
@@ -131,8 +169,6 @@
                     Save
                 </button>
             </div>
-
-
 
         {{=form.custom.end}}
         </div>

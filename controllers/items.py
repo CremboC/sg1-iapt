@@ -6,10 +6,13 @@ def create():
     selected_collection = request.vars.collection or -1
 
     if form.process().accepted:
-        if request.vars.collections is not None:
+        if request.vars.collections:
             chosen_cols = [int(col) for col in request.vars.collections] or [request.vars.collections]
             for col in chosen_cols:
                 db.object_collection.insert(object_id=form.vars.id, collection_id=col)
+        else:
+            col = get_unfiled_collection()
+            link_object_collections(form.vars.id, col.id)
 
         session.flash = {"status": "success", "message": "Item successfully saved"}
         return redirect(URL('items', 'show', args=form.vars.id))
