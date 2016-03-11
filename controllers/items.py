@@ -103,6 +103,6 @@ def wish():
 
     link_object_collections(new_item_id, get_unfiled_collection().id)
 
-    session.flash = {"status": "success", "message": "Item successfully saved"}
+    session.flash = {"status": "success", "message": "Item successfully added to your wish list."}
 
     return redirect(URL('items', 'show', args=item_id))
