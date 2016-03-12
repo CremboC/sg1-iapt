@@ -63,6 +63,17 @@
 
     border-radius: 4px;
 }
+
+.object-status.not-for-trade {
+    background: #cc0003;
+    color: #fff;
+}
+
+.object-status.in-trade {
+    background: #cc0003;
+    color: #fff;
+}
+
 .object-status.for-trade {
     background: #09c;
     color: #fff;

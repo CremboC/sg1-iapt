@@ -12,12 +12,16 @@ def for_trade():
     else:
         user = user.username
 
-    items = db((db.objects.owner_id == user_id) & (db.objects.status == 2)).select(
+    objects = db((db.objects.owner_id == user_id) & (db.objects.status == 2)).select(
         orderby=translate_sortby(request.vars.sort))
 
     response.view = "item_lists/view.html"
 
-    return {"is_want": False, "user_id": user_id, "username": user, "items": items}
+    for object in objects:
+        object.in_trade = len(db((db.trades_receiving.recv_object_id == object.id) | (db.trades_sending.sent_object_id == object.id)).select())>0
+
+
+    return {"is_want": False, "user_id": user_id, "username": user, "items": objects}
 
 
 def wish_list():
@@ -34,9 +38,12 @@ def wish_list():
     else:
         user = user.username
 
-    items = db((db.objects.owner_id == user_id) & (db.objects.status == 1)).select(
+    objects = db((db.objects.owner_id == user_id) & (db.objects.status == 1)).select(
         orderby=translate_sortby(request.vars.sort))
 
     response.view = "item_lists/view.html"
 
-    return {"is_want": True, "user_id": user_id, "username": user, "items": items}
+    for object in objects:
+        object.in_trade = len(db((db.trades_receiving.recv_object_id == object.id) | (db.trades_sending.sent_object_id == object.id)).select())>0
+
+    return {"is_want": True, "user_id": user_id, "username": user, "items": objects}

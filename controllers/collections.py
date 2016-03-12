@@ -40,11 +40,14 @@ def show():
         return redirect(URL('collections', 'index'))
 
     if request.vars.sort:
-        items = collection.objects(translate_sortby(request.vars.sort))
+        objects = collection.objects(translate_sortby(request.vars.sort))
     else:
-        items = collection.objects()
+        objects = collection.objects()
+    for object in objects:
+        object.in_trade = len(db((db.trades_receiving.recv_object_id == object.id) | (db.trades_sending.sent_object_id == object.id)).select())>0
 
-    return dict(collection=collection, user=user, is_owner=is_owner, items=items)
+
+    return dict(collection=collection, user=user, is_owner=is_owner, items=objects)
 
 
 @auth.requires_login()
@@ -101,5 +104,11 @@ def edit():
         session.flash = dict(status='success', message='Successfully updated collection.')
         return redirect(URL('collections', 'show', args=form.vars.id))
 
+    for object in objects:
+        object.in_trade = len(db((db.trades_receiving.recv_object_id == object.id) | (db.trades_sending.sent_object_id == object.id)).select())>0
+
+
     return dict(collection=collection, form=form, objects=objects,
                 objects_in_collection=objects_in_collection, is_unfiled=is_unfiled)
+
+

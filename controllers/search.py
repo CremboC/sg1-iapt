@@ -14,6 +14,9 @@ def index():
 
         # check if item is not private
         results = [result for result in results if not item_is_private(result)]
+        for item in results:
+            item.in_trade = len(db((db.trades_receiving.recv_object_id == item.id) | (db.trades_sending.sent_object_id == item.id)).select())>0
+
 
         returns = dict(
             results=results,

@@ -41,6 +41,8 @@ def index():
 
     # newest_items = db((db.object_collection.object_id == db.objects.id) & (db.collections.private == 'F')).select(db.objects.id, orderby=~db.objects.created_on, limitby=(0,9))
     newest_items = db((db.objects.id == db.object_collection.object_id) & (db.object_collection.collection_id == db.collections.id) & (db.collections.private == 'F')).select(db.objects.ALL, orderby=~db.objects.created_on, limitby=(0,9))
+    for item in newest_items:
+        item.in_trade = len(db((db.trades_receiving.recv_object_id == item.id) | (db.trades_sending.sent_object_id == item.id)).select())>0
 
     return {"auth_id": auth.user_id, "auth_logged_in": auth.is_logged_in(), "trades": trades, "newest_items": newest_items}
 

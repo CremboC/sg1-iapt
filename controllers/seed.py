@@ -68,7 +68,7 @@ def index():
                       description='wooden coffee table which looks great in any living room', image='objects.image.b8b5db81540cdfdb.636f66666565207461626c652e6a706567.jpeg')
     db.object_collection.insert(object_id=8, collection_id=3)
 
-    db.objects.insert(owner_id=1, type_id=12, status=2, name='Adele 25 cd', currency_value=5.5, summary='25 cd',
+    db.objects.insert(owner_id=1, type_id=12, status=0, name='Adele 25 cd', currency_value=5.5, summary='25 cd',
                       description='music cd of Adele\'s latest album, 25', image='objects.image.a4d37fb614b7c41d.6164656c652032352063642e6a706567.jpeg')
     db.object_collection.insert(object_id=9, collection_id=2)
 

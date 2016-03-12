@@ -6,7 +6,15 @@
         <a href="{{=URL('items', 'show', args=obj.id)}}">
             {{= obj.name }}
         </a>
-        {{ if obj.status == 1: }}
+        {{ if obj.status == 0: }}
+            <span
+                class="pull-right object-status not-for-trade"
+                data-toggle="tooltip"
+                title="This item is in {{= "your" if owner.id == auth.user_id else owner.username + '\'s'}} collection, but is not for trade!">
+                <span
+                    class="glyphicon glyphicon-lock"></span>
+            </span>
+        {{ elif obj.status == 1: }}
             <span
                 class="pull-right object-status on-wishlist"
                 data-toggle="tooltip"
@@ -15,13 +23,23 @@
                     class="glyphicon glyphicon-heart"></span>
             </span>
         {{ elif obj.status == 2: }}
-            <span
-                class="pull-right object-status for-trade"
-                data-toggle="tooltip"
-                title="This item is up for trade!">
+            {{ if obj.in_trade:}}
                 <span
-                    class="glyphicon glyphicon-tag"></span>
-            </span>
+                    class="pull-right object-status in-trade"
+                    data-toggle="tooltip"
+                    title="This item is currently in a trade, but you can add it to your wishlist for when it becomes available!">
+                    <span
+                        class="glyphicon glyphicon-tag"></span>
+                </span>
+            {{else:}}
+                <span
+                    class="pull-right object-status for-trade"
+                    data-toggle="tooltip"
+                    title="This item is up for trade!">
+                    <span
+                        class="glyphicon glyphicon-tag"></span>
+                </span>
+            {{ pass }}
         {{ pass }}
     </div>
     <div class="panel-body">
