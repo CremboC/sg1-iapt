@@ -66,10 +66,15 @@
                     <span class="glyphicon glyphicon-gbp object-icon"></span>
                     {{="{:0,.2f}".format(obj.currency_value)}}
                 </div>
+                <div class="row">
+                    <span class="glyphicon glyphicon-filter"></span>
+                    {{=type.name}}
+                </div>
+                <div class="row">
+                    {{=obj.summary}}
+                </div>
             </div>
         </div>
-        <br />
-        <i class="small">{{=obj.summary}}</i>
     </div>
     <div class="panel-footer">
         <div class="btn-group btn-group-xs" role="group" aria-label="Object Actions">

@@ -57,17 +57,24 @@ def new():
     if (receiver_username is None) & (receiver_id is not None):
         receiver_username = db(db.auth_user.id == receiver_id).select(db.auth_user.username).column()[0]
 
-    object = None
+    obj = None
     if item_id is not None:
-        object = db((db.objects.id == item_id) & (db.types.id == db.objects.type_id)).select(db.objects.ALL,
+        obj = db((db.objects.id == item_id) & (db.types.id == db.objects.type_id)).select(db.objects.ALL,
                                                                                              db.types.name)[0]
-        object.string = format_string(object)
-        receiver_username = db(db.auth_user.id == object.objects.owner_id).select(
+        in_trade = (db((db.trades_receiving.recv_object_id == obj.objects.id) | (
+            db.trades_sending.sent_object_id == obj.objects.id)).select()) > 0
+
+        if in_trade:
+            session.flash = {"status": "danger", "message": "Error: item cannot be traded as it is currently in another trade"}
+            return redirect(URL('trade', 'index'))
+
+        obj.string = format_string(obj)
+        receiver_username = db(db.auth_user.id == obj.objects.owner_id).select(
             db.auth_user.username).column()[0]
 
     if receiver_username is None:
         return {"user_id": auth.user_id, "trader_id": "", "trader_username": None,
-                "available_objects": [get_available_user_items(auth.user_id)], "wanted_object": object}
+                "available_objects": [get_available_user_items(auth.user_id)], "wanted_object": obj}
     elif receiver_username == db(db.auth_user.id == auth.user_id).select(db.auth_user.username).column()[0]:
         session.flash = {"status": "danger", "message": "Error: you can't trade with yourself!"}
         return redirect(URL('trade', 'index'))
@@ -75,7 +82,7 @@ def new():
         receiver_id = db(db.auth_user.username == receiver_username).select(db.auth_user.id).column()[0]
         available_items = [get_available_user_items(auth.user_id), get_available_user_items(receiver_id)]
         return {"user_id": auth.user_id, "trader_id": receiver_id, "trader_username": receiver_username,
-                "available_objects": available_items, "wanted_object": object}
+                "available_objects": available_items, "wanted_object": obj}
 
 
 @auth.requires_login()
