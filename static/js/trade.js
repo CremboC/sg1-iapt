@@ -45,7 +45,12 @@ function updateTradeValue(yourItems, hisItems){
 function makeObjectDisplay(object, availableSelect, enableRemove) {
 
     var div = $("<div  data-currency_value="+object.currency_value+" itemid=" + object.id + " class='item-preview' style='background-image: url(" + object.image + ");'> </div>");
-    var hovertext = $("<div class='hovertext'><p>" + object.name + "</p><p>Value: " + object['currency_value'] + " </div>");
+    var hovertext = $("<div class='hovertext'></div>");
+    var name = $("<div style='clear:both'>"+object.name+"</div>");
+    var value = $("<div style='clear:both'><span class='glyphicon glyphicon-gbp object-icon'></span>"+object['currency_value']+"</div>");
+    hovertext.append(name);
+    hovertext.append(value);
+
     if (enableRemove) {
         var removeBtn = $("<div class='rmvItemPreview'><span class='glyphicon glyphicon glyphicon-remove' style='color:red'></span></div>");
         removeBtn.click(function () {
