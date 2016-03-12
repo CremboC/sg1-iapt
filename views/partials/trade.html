@@ -16,8 +16,8 @@
                 <div class="col-md-7 object-text">
                     <ul class="list-unstyled">
                         {{if trade.trades.sender == auth_id:}}
-                            <li>You gave {{=trade.sentItems}} objects.</li>
-                            <li>In exchange of {{=trade.receivedItems}} objects.</li>
+                            <li>You gave {{=trade.sentItems}} {{="object" if trade.sentItems==1 else "objects"}}.</li>
+                            <li>In exchange of {{=trade.receivedItems}} {{="object" if trade.receivedItems==1 else "objects"}}.</li>
                         {{else:}}
                             <li>You gave {{=trade.receivedItems}} objects.</li>
                             <li>In exchange of {{=trade.sentItems}} objects.</li>
