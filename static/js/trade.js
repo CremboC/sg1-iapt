@@ -83,6 +83,7 @@ function generateFormFields() {
     var yourItems = $('<input style="display:none" name="youritems" value="' + yourItemIds + '">');
     var hisItems = $("<input style='display:none' name='theiritems' value=" + hisItemIds + ">");
     $("#tradeform").append(yourItems).append(hisItems);
+
 }
 
 function deleteHiddenFormFields(){

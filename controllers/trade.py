@@ -161,55 +161,66 @@ def getobjectdata():
 
 @auth.requires_login()
 def createNew():
-
-    #TODO permit trades where 1 party does not give any objects
-
-    if (request.vars['youritems'] is None) | (request.vars['theiritems'] is None):
+    if (request.vars['youritems'] is None) | (request.vars['theiritems'] is None) | (request.vars['receiver_username'] is None):
         response.status = 400
         return 'Error 400: incomplete trade, please enter trade items or select other user'
 
-    your_items = request.vars['youritems'].split(",")
-    their_items = request.vars['theiritems'].split(",")
-    if (your_items == ['']) | (their_items == ['']):
+    receiver_id = db(db.auth_user.username==request.vars['receiver_username']).select(db.auth_user.id).column()[0]
+
+    if receiver_id is None:
+        response.status = 400
+        return 'Error 400: selected user does not exist'
+
+    if request.vars['youritems'] != '':
+        your_items = request.vars['youritems'].split(",")
+    else:
+        your_items = []
+
+    if request.vars['theiritems'] != '':
+        their_items = request.vars['theiritems'].split(",")
+    else:
+        their_items = []
+
+    if (len(your_items) == 0) & (len(their_items) == 0):
         response.status = 400
         return 'Error 400: incomplete trade, please enter trade items or select other user'
 
     sender_id = int(auth.user_id)
+
+    # Verify all objects belong to correct user
     # Check user owns all objects he proposes
+    if len(your_items) > 0:
+        sender_objects_id = map(int, your_items)
+        sender_objects = db(db.objects.id.belongs(sender_objects_id)).select(db.objects.owner_id, db.objects.status, db.objects.name)
+        for row in sender_objects:
+            if int(row.owner_id) != sender_id:
+                response.status = 400
+                return 'Error 400: invalid item ID, please refresh page'
+            if int(row.status) != 2:
+                response.status = 400
+                return 'Error 400: Item not available for trade'
 
     # Check target user owns all objects proposed
-    # Verify all objects belong to correct user
-    sender_objects_id = map(int, your_items)
-    sender_objects = db(db.objects.id.belongs(sender_objects_id)).select(db.objects.owner_id, db.objects.status, db.objects.name)
-    for row in sender_objects:
-        if int(row.owner_id) != sender_id:
-            response.status = 400
-            return 'Error 400: invalid item ID, please refresh page'
-        if int(row.status) != 2:
-            response.status = 400
-            return 'Error 400: Item not available for trade'
+    if len(their_items) > 0:
+        receiver_objects_id = map(int, their_items)
+        receiver_objects = db(db.objects.id.belongs(receiver_objects_id)).select(db.objects.owner_id, db.objects.status)
 
-    receiver_objects_id = map(int, their_items)
-    receiver_objects = db(db.objects.id.belongs(receiver_objects_id)).select(db.objects.owner_id, db.objects.status)
+        for row in receiver_objects:
+            if int(row.owner_id) != receiver_id:
+                response.status = 400
+                return 'Error 400: invalid item ID, please refresh page'
+            if int(row.status) != 2:
+                response.status = 400
+                return 'Error 400: Item not available for trade'
 
-    receiver_id = receiver_objects[0].owner_id
-    for row in receiver_objects:
-        if int(row.owner_id) != receiver_id:
-            response.status = 400
-            return 'Error 400: invalid item ID, please refresh page'
-        if int(row.status) != 2:
-            response.status = 400
-            return 'Error 400: Item not available for trade'
+    new_trade_id = db.trades.insert(sender=sender_id, receiver=receiver_id, status=4, seen=False)
 
-    if request.vars.prevtrade is not None:
-        new_trade_id = db.trades.insert(sender=sender_id, receiver=receiver_id, status=4, seen=False)
-    else:
-        new_trade_id = db.trades.insert(sender=sender_id, receiver=receiver_id, status=0, seen=False)
-
-    for itemId in sender_objects_id:
-        db.trades_sending.insert(trade_id=new_trade_id, sent_object_id=itemId)
-    for itemId in receiver_objects_id:
-        db.trades_receiving.insert(trade_id=new_trade_id, recv_object_id=itemId)
+    if len(your_items) > 0 :
+        for itemId in sender_objects_id:
+            db.trades_sending.insert(trade_id=new_trade_id, sent_object_id=itemId)
+    if len(their_items) > 0:
+        for itemId in receiver_objects_id:
+            db.trades_receiving.insert(trade_id=new_trade_id, recv_object_id=itemId)
 
     receiver_username = db(db.auth_user.id == receiver_id).select(db.auth_user.username).column()[0]
     session.flash = T('Successfully created trade with ' + receiver_username)

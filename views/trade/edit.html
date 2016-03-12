@@ -5,11 +5,12 @@
 <link rel="stylesheet" type="text/css" href="{{=URL('static','css/app.css')}}">
 <div id="errorcontainer" class="container">
     <div class="panel panel-default text-center row">
-        <div class="panel-body">Trading with username: {{=(trader_username if trader_username is not None else '')}} </div>
+        <div class="panel-body">Trading with username: {{=trader_username}} </div>
     </div>
 
     <form  id="tradeform" action="{{=URL('trade', 'createNew')}}">
         <input hidden name="prevtrade" value="{{=prevtrade}}"/>
+        <input hidden name="receiver_username" value="{{=trader_username}}">
         <div class="row">
             <div class="col-md-6 tradeborder">
                 <div class="panel panel-default">
