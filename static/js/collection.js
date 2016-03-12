@@ -1,34 +1,10 @@
-//var ItemsComponent = Vue.extend({
-//    props: ['item-url'],
-//
-//    data: function () {
-//        return {
-//            items: []
-//        };
-//    },
-//
-//    ready: function () {
-//        var self = this;
-//        $.getJSON(this.itemUrl, function (data) {
-//            self.items = data.items;
-//        });
-//    }
-//});
-//
-//Vue.component('items', ItemsComponent);
-//
-//// init vue.js
-//new Vue({
-//   el: 'body'
-//});
-
 function createInput(id) {
     return $('<input type="hidden" name="objects_to_remove" value="' + id + '" id="object-removal-' + id + '">');
 }
 
 $(document).ready(function () {
 
-    var $form = $('form');
+    var $form = $('.content').find('form');
     var $undo = $('.undo');
     var objects = [];
 

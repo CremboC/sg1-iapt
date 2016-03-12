@@ -36,3 +36,10 @@ def translate_sortby(query):
         return db.objects.currency_value
     else:  # default
         return ~db.objects.updated_on
+
+
+def maybe_list(var):
+    if type(var) is list:
+        return [int(v) for v in var]
+    else:
+        return [int(var)]

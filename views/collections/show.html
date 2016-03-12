@@ -5,81 +5,111 @@
     <div class="clearfix">
         <div class="pull-left">
             <h2>
-            {{ if is_owner: }}
+                {{ if is_owner: }}
                 {{ if collection.private: }}
                     <span
-                        class="glyphicon glyphicon-lock"
-                        data-toggle="tooltip"
-                        title="This collection is private.
+                            class="glyphicon glyphicon-lock"
+                            data-toggle="tooltip"
+                            title="This collection is private.
 Only you will be able to see it."
-                        ></span>
+                    ></span>
                 {{ else: }}
                     <span
-                        class="glyphicon glyphicon-eye-open"
-                        data-toggle="tooltip"
-                        title="This collection is public.
+                            class="glyphicon glyphicon-eye-open"
+                            data-toggle="tooltip"
+                            title="This collection is public.
 This collection is visible to everyone."
-                        ></span>
+                    ></span>
                 {{ pass }}
-            {{ pass }}
-            {{=collection.name}}
+                {{ pass }}
+                {{=collection.name}}
                 <small>
                     by
                     <a href="{{=URL('collections', 'index', args=user.id)}}">
-                    {{=user.username}}
+                        {{=user.username}}
                     </a>
                 </small>
             </h2>
         </div>
 
         <div class="pull-right">
-        {{if is_owner:}}
+            {{if is_owner:}}
             <ul class="list-inline">
                 <li>
-                <div class="dropdown clearfix">
-                    <button
-                        id="addDropdown"
-                        class="btn btn-success dropdown-toggle"
-                        data-toggle="dropdown">
+                    <div class="dropdown clearfix">
+                        <button
+                                id="addDropdown"
+                                class="btn btn-success dropdown-toggle"
+                                data-toggle="dropdown">
 
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                        Add Item
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="addDropdown">
-                        <li><a href="{{=URL('items', 'create', vars={'collection':collection.id})}}">Upload New Item</a></li>
-                        <li><a href="#">Add Existing Item</a></li>
-                    </ul>
-                </div>
-            </li>
-            <li>
-                <!-- <a href="{{=URL('items', 'create', vars={'collection':collection.id})}}" class="btn btn-success">
-                    Create and Add Item
-                </a> -->
-                <a href="{{=URL('collections', 'edit', args=collection.id)}}" class="btn btn-warning">
-                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                    Edit
-                </a>
-            </li>
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            Add Item
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="addDropdown">
+                            <li><a href="{{=URL('items', 'create', vars={'collection':collection.id})}}">Upload New
+                                Item</a></li>
+                            <li><a data-toggle="modal" href="#add-existing-item">Add Existing Item</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <!-- <a href="{{=URL('items', 'create', vars={'collection':collection.id})}}" class="btn btn-success">
+                        Create and Add Item
+                    </a> -->
+                    <a href="{{=URL('collections', 'edit', args=collection.id)}}" class="btn btn-warning">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        Edit
+                    </a>
+                </li>
             </ul>
-        {{pass}}
+            {{pass}}
         </div>
     </div>
 
     <div class="panel panel-default">
         <div class="panel-body">
-        {{print_sortby()}}
-        {{for chunk in chunks(items, 3):}}
+            {{print_sortby()}}
+            {{for chunk in chunks(items, 3):}}
             <div class="row">
-            {{for item in chunk:}}
+                {{for item in chunk:}}
                 <div class="col-xs-4 object-wrapper">
-                {{print_object(item, False)}}
+                    {{print_object(item, False)}}
                 </div>
-            {{pass}}
+                {{pass}}
             </div>
-        {{pass}}
+            {{pass}}
         </div>
     </div>
 
-
+    <form action="{{=URL('collections', 'add_items')}}" method="POST">
+        <input type="hidden" name="id" value="{{=collection.id}}">
+        <div class="modal fade" id="add-existing-item">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Add an existing item to this Collection</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="new_objects">Select items to add</label>
+                            <br>
+                            <select id="new_objects" multiple="multiple" name="new_objects">
+                                {{for obj in other_objects:}}
+                                <option value="{{=obj.id}}">{{=obj.name}}</option>
+                                {{pass}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Items</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </form>
 </div>
+
+<script src="{{=URL('static','js/collection.js')}}"></script>

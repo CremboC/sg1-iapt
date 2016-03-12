@@ -43,11 +43,16 @@ def show():
         objects = collection.objects(translate_sortby(request.vars.sort))
     else:
         objects = collection.objects()
+
     for object in objects:
-        object.in_trade = len(db((db.trades_receiving.recv_object_id == object.id) | (db.trades_sending.sent_object_id == object.id)).select())>0
+        object.in_trade = len(db((db.trades_receiving.recv_object_id == object.id) | (
+            db.trades_sending.sent_object_id == object.id)).select()) > 0
 
+    obj_query = db.objects.owner_id == auth.user_id
+    obj_query &= ~db.objects.id.belongs([col.id for col in objects])
+    other_objects = db(obj_query).select()
 
-    return dict(collection=collection, user=user, is_owner=is_owner, items=objects)
+    return dict(collection=collection, user=user, is_owner=is_owner, items=objects, other_objects=other_objects)
 
 
 @auth.requires_login()
@@ -69,10 +74,6 @@ def edit():
     else:
         objects_in_collection = collection.objects()
 
-    obj_query = db.objects.owner_id == auth.user_id
-    obj_query &= ~db.objects.id.belongs([col.id for col in objects_in_collection])
-    objects = db(obj_query).select()
-
     is_unfiled = collection.name == "Unfiled"
 
     if is_unfiled:
@@ -83,16 +84,10 @@ def edit():
 
     if form.process().accepted:
         if request.vars.objects_to_remove:
-            objects_to_remove = [int(obj) for obj in request.vars.objects_to_remove] or [request.vars.objects_to_remove]
+            objects_to_remove = maybe_list(request.vars.objects_to_remove)
 
             query = db.object_collection.object_id.belongs(objects_to_remove)
             db(query).delete()
-
-        if request.vars.new_objects:
-            objects_to_add = [int(obj) for obj in request.vars.new_objects] or [request.vars.new_objects]
-
-            for obj_id in objects_to_add:
-                db.object_collection.insert(object_id=obj_id, collection_id=form.vars.id)
 
         if not is_unfiled and form.vars.delete_this_record:
             # cleanup linking table
@@ -104,11 +99,25 @@ def edit():
         session.flash = dict(status='success', message='Successfully updated collection.')
         return redirect(URL('collections', 'show', args=form.vars.id))
 
-    for object in objects:
-        object.in_trade = len(db((db.trades_receiving.recv_object_id == object.id) | (db.trades_sending.sent_object_id == object.id)).select())>0
+    for object in objects_in_collection:
+        object.in_trade = len(db((db.trades_receiving.recv_object_id == object.id) | (
+            db.trades_sending.sent_object_id == object.id)).select()) > 0
 
-
-    return dict(collection=collection, form=form, objects=objects,
+    return dict(collection=collection, form=form,
                 objects_in_collection=objects_in_collection, is_unfiled=is_unfiled)
 
 
+@auth.requires_login()
+def add_items():
+    if not request.vars.id:
+        return redirect(URL("collections", "index"))
+
+    collection_id = int(request.vars.id)
+
+    if request.vars.new_objects:
+        for obj_id in maybe_list(request.vars.new_objects):
+            link_object_collections(obj_id, collection_id)
+
+        session.flash = dict(status='success', message='Successfully updated collection with new items.')
+
+    return redirect(URL('collections', 'show', args=collection_id))

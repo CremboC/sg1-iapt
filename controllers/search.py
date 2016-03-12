@@ -59,7 +59,7 @@ def _items(query_string, filtered):
 
     if filtered:
         if request.vars.types:
-            selected_types = [int(type) for type in request.vars.types] or [request.vars.types]
+            selected_types = maybe_list(request.vars.types)
             search_query &= db.objects.type_id.belongs(selected_types)
 
         if request.vars.user_id:
@@ -72,7 +72,7 @@ def _items(query_string, filtered):
             search_query &= db.objects.currency_value <= request.vars.max_value
 
         if request.vars.statuses:
-            selected_statuses = [int(status) for status in request.vars.statuses] or [request.vars.statuses]
+            selected_statuses = maybe_list(request.vars.statuses)
             search_query &= db.objects.status.belongs(selected_statuses)
 
     return search_query, selected_statuses, selected_types, types, statuses

@@ -7,7 +7,7 @@ def create():
 
     if form.process().accepted:
         if request.vars.collections:
-            chosen_cols = [int(col) for col in request.vars.collections] or [request.vars.collections]
+            chosen_cols = maybe_list(request.vars.collections)
             for col in chosen_cols:
                 db.object_collection.insert(object_id=form.vars.id, collection_id=col)
         else:
@@ -39,7 +39,7 @@ def edit():
 
     if form.process().accepted:
         if request.vars.collections:
-            chosen_cols = [int(col) for col in request.vars.collections] or [request.vars.collections]
+            chosen_cols = maybe_list(request.vars.collections)
 
             # remove from collections
             removed_collections = list(set(object_collections) - set(chosen_cols))
@@ -47,8 +47,10 @@ def edit():
                 db((db.object_collection.collection_id == col) & (
                     db.object_collection.object_id == form.vars.id)).delete()
 
+            new_collections = list(set(chosen_cols) - set(object_collections))
+
             # add to new collections
-            for col in chosen_cols:
+            for col in new_collections:
                 link_object_collections(form.vars.id, col)
         else:
             # remove from all collections it was previously in
