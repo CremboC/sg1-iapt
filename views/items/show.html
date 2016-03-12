@@ -17,6 +17,12 @@
                 Edit
             </a>
         {{pass}}
+        {{if (not is_owner) & (item.status == 2) & (not item.in_trade):}}
+            <a href="{{=URL('trade', 'new', vars={"item_id": item.id})}}" class="btn btn-default for-trade">
+                <span class="glyphicon glyphicon-tags"></span>
+                Trade for this item
+            </a>
+        {{pass}}
         </div>
     </div>
 

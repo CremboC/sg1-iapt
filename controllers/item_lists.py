@@ -17,9 +17,8 @@ def for_trade():
 
     response.view = "item_lists/view.html"
 
-    for object in objects:
-        object.in_trade = len(db((db.trades_receiving.recv_object_id == object.id) | (db.trades_sending.sent_object_id == object.id)).select())>0
-
+    for obj in objects:
+        obj.in_trade = len(db((db.trades_receiving.recv_object_id == obj.id) | (db.trades_sending.sent_object_id == obj.id)).select())>0
 
     return {"is_want": False, "user_id": user_id, "username": user, "items": objects}
 
