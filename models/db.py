@@ -164,6 +164,10 @@ db.define_table("collections",
                       readable=False),
                 )
 
+db.auth_user._after_insert.append(
+    lambda row, id: db.collections.insert(owner_id=id, name='Unfiled', private=True))
+
+
 db.collections.objects = Field.Method(
     'objects',
     lambda row, orderby=~db.objects.updated_on: collections_and_objects(db.collections.id == row.collections.id).select(
