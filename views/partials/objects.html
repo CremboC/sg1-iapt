@@ -57,7 +57,7 @@
                 {{ if show_owner: }}
                     <div class="row">
                         <span class="glyphicon glyphicon-user object-icon"></span>
-                        <a href="#">
+                        <a href="{{=URL('collections', 'index', args=owner.id)}}">
                             {{=owner.username}}
                         </a>
                     </div>
@@ -87,6 +87,7 @@
 
                 <span class="glyphicon glyphicon-eye-open"></span>
             </a>
+            {{if not obj.status == 1 and not owner.id == auth.user_id:}}
             <a
                 class="btn btn-default"
                 href="{{=URL('items', 'wish', args=obj.id)}}"
@@ -95,10 +96,11 @@
 
                 <span class="glyphicon glyphicon-heart"></span>
             </a>
+            {{pass}}
             {{if (owner.id != auth.user_id) & (obj.status == 2) & (not obj.in_trade):}}
             <a
                 class="btn btn-default"
-                href="{{=URL('trade', 'new', vars={"item_id": obj.id})}}"
+                href="{{=URL('trade', 'new', vars={'item_id': obj.id})}}"
                 data-toggle="tooltip"
                 title="Trade">
 
