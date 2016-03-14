@@ -24,7 +24,10 @@ def create():
 
 @auth.requires_login()
 def edit():
-    object_id = request.args[0] or redirect(URL('items', 'index'))
+    if request.args is None:
+        redirect(URL('items', 'index'))
+
+    object_id = request.args[0]
 
     obj = db(db.objects.id == object_id).select().first()
     object_collections = [col.id for col in obj.collections()]
@@ -38,6 +41,13 @@ def edit():
     collections = db(db.collections.owner_id == auth.user_id).select()
 
     if form.process().accepted:
+        if request.vars.delete == 'yes':
+            db(db.objects.id == object_id).update(status=-1)
+            db(db.object_collection.object_id == object_id).delete()
+
+            session.flash = {"status": "success", "message": "Item successfully deleted."}
+            return redirect(URL('collections', 'index'))
+
         if request.vars.collections:
             chosen_cols = maybe_list(request.vars.collections)
 
@@ -80,9 +90,11 @@ def show():
     if not item:
         session.flash = {"status": "danger", "message": "Error: this item does not exist"}
         return redirect(URL('default', 'index'))
+
     if not is_owner and item_is_private(item_id):
         session.flash = {"status": "danger", "message": "Error: you cannot view another user's private items"}
         return redirect(URL('default', 'index'))
+
     item.in_trade = len(db((db.trades_receiving.recv_object_id == item.id) | (db.trades_sending.sent_object_id == item.id)).select())>0
 
     return dict(item=item, is_owner=is_owner, user=user)

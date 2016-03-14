@@ -115,12 +115,13 @@ db.define_table("objects",
                       required=True,
                       label="Type",
                       comment="What best describes your object?"),
+                # -1: Deleted
                 # 0: Own (InCol)
                 # 1: Wish List
                 # 2: Own, Willing to Trade (For Trade)
                 Field("status", "integer",
                       default=0,
-                      requires=IS_IN_SET([0, 1, 2])),  # TODO: Nice label
+                      requires=IS_IN_SET([-1, 0, 1, 2])),  # TODO: Nice label
                 Field("name", "string",
                       required=True,
                       requires=[IS_NOT_EMPTY(
@@ -167,11 +168,10 @@ db.define_table("collections",
 db.auth_user._after_insert.append(
     lambda row, id: db.collections.insert(owner_id=id, name='Unfiled', private=True))
 
-
 db.collections.objects = Field.Method(
     'objects',
-    lambda row, orderby=~db.objects.updated_on: collections_and_objects(db.collections.id == row.collections.id).select(
-        db.objects.ALL, orderby=orderby)
+    lambda row, orderby=~db.objects.updated_on: collections_and_objects(
+        (db.collections.id == row.collections.id) & (db.objects.status != -1)).select(db.objects.ALL, orderby=orderby)
 )
 
 db.collections.owner = Field.Lazy(

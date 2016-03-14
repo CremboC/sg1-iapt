@@ -1,19 +1,10 @@
-# -*- coding: utf-8 -*-
-# this file is released under public domain and you can use without limitations
-
-#########################################################################
-## This is a sample controller
-## - index is the default action of any application
-## - user is required for authentication and authorization
-## - download is for downloading files uploaded in the db (does streaming)
-#########################################################################
-
 def index():
-
     trades = db((((db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)) | (
         (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender))) &
-        db.trades.status.belongs([1, 2, 3])).select(db.trades.id, db.trades.date_created, db.trades.sender, db.trades.receiver, db.trades.status,
-                         db.trades.superseded_by, db.auth_user.username, orderby=~db.trades.date_created, limitby=(0, 3))
+                db.trades.status.belongs([1, 2, 3])).select(db.trades.id, db.trades.date_created, db.trades.sender,
+                                                            db.trades.receiver, db.trades.status,
+                                                            db.trades.superseded_by, db.auth_user.username,
+                                                            orderby=~db.trades.date_created, limitby=(0, 3))
 
     for trade in trades:
         sent_items = db(db.trades_sending.trade_id == trade.trades.id).count()
@@ -40,11 +31,15 @@ def index():
         trade.otheruser = db(db.auth_user.id == trade.trades.otheruser).select(db.auth_user.username).column()[0]
 
     # newest_items = db((db.object_collection.object_id == db.objects.id) & (db.collections.private == 'F')).select(db.objects.id, orderby=~db.objects.created_on, limitby=(0,9))
-    newest_items = db((db.objects.id == db.object_collection.object_id) & (db.object_collection.collection_id == db.collections.id) & (db.collections.private == 'F')).select(db.objects.ALL, orderby=~db.objects.created_on, limitby=(0,9))
+    newest_items = db((db.objects.id == db.object_collection.object_id) & (
+    db.object_collection.collection_id == db.collections.id) & (db.collections.private == 'F') & (
+                      db.objects.status != -1)).select(db.objects.ALL, orderby=~db.objects.created_on, limitby=(0, 9))
     for item in newest_items:
-        item.in_trade = len(db((db.trades_receiving.recv_object_id == item.id) | (db.trades_sending.sent_object_id == item.id)).select())>0
+        item.in_trade = len(db((db.trades_receiving.recv_object_id == item.id) | (
+        db.trades_sending.sent_object_id == item.id)).select()) > 0
 
-    return {"auth_id": auth.user_id, "auth_logged_in": auth.is_logged_in(), "trades": trades, "newest_items": newest_items}
+    return {"auth_id": auth.user_id, "auth_logged_in": auth.is_logged_in(), "trades": trades,
+            "newest_items": newest_items}
 
 
 def user():
@@ -73,4 +68,3 @@ def download():
     http://..../[app]/default/download/[filename]
     """
     return response.download(request, db)
-
