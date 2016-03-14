@@ -27,6 +27,10 @@ def edit():
     object_id = request.args[0] or redirect(URL('items', 'index'))
 
     obj = db(db.objects.id == object_id).select().first()
+    if obj.status == 3:
+        session.flash = {"status": "danger", "message": "Error: this item was deleted"}
+        return redirect(URL('default', 'index'))
+
     object_collections = [col.id for col in obj.collections()]
 
     if obj.owner_id != auth.user_id:
@@ -71,30 +75,38 @@ def edit():
 
 
 def show():
-    item_id = request.args[0] or redirect(URL('default', 'index'))
-    item = db.objects[item_id]
-    user = db.auth_user[item.owner_id]
+    obj_id = request.args[0] or redirect(URL('default', 'index'))
+    obj = db.objects[obj_id]
+    if obj.status == 3:
+        session.flash = {"status": "danger", "message": "Error: this item was deleted"}
+        return redirect(URL('default', 'index'))
+
+    user = db.auth_user[obj.owner_id]
 
     is_owner = user.id == auth.user_id
 
-    if not item:
+    if not obj:
         session.flash = {"status": "danger", "message": "Error: this item does not exist"}
         return redirect(URL('default', 'index'))
-    if not is_owner and item_is_private(item_id):
+    if not is_owner and item_is_private(obj_id):
         session.flash = {"status": "danger", "message": "Error: you cannot view another user's private items"}
         return redirect(URL('default', 'index'))
-    item.in_trade = len(db((db.trades_receiving.recv_object_id == item.id) | (db.trades_sending.sent_object_id == item.id)).select())>0
+    obj.in_trade = len(db((db.trades_receiving.recv_object_id == obj.id) | (db.trades_sending.sent_object_id == obj.id)).select())>0
 
-    return dict(item=item, is_owner=is_owner, user=user)
+    return dict(item=obj, is_owner=is_owner, user=user)
 
 
 @auth.requires_login()
 def wish():
-    item_id = request.args[0] or redirect(URL('default', 'index'))
-    item = db.objects[item_id]
+    obj_id = request.args[0] or redirect(URL('default', 'index'))
+
+    obj = db.objects[obj_id]
+    if obj.status == 3:
+        session.flash = {"status": "danger", "message": "Error: this item was deleted"}
+        return redirect(URL('default', 'index'))
 
     # duplicate all fields
-    fields = db.objects._filter_fields(item)
+    fields = db.objects._filter_fields(obj)
 
     # set all the fields which need to be changed
     fields['owner_id'] = auth.user.id
@@ -108,4 +120,4 @@ def wish():
 
     session.flash = {"status": "success", "message": "Item successfully added to your wish list."}
 
-    return redirect(URL('items', 'show', args=item_id))
+    return redirect(URL('items', 'show', args=obj_id))
