@@ -3,7 +3,6 @@ cache/
 databases/
 errors/
 sessions/
-uploads/
 
 # python
 **/*.pyc
