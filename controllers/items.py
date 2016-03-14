@@ -27,7 +27,7 @@ def edit():
     object_id = request.args[0] or redirect(URL('items', 'index'))
 
     obj = db(db.objects.id == object_id).select().first()
-    if obj.status == 3:
+    if obj.status == -1:
         session.flash = {"status": "danger", "message": "Error: this item was deleted"}
         return redirect(URL('default', 'index'))
 
@@ -77,7 +77,7 @@ def edit():
 def show():
     obj_id = request.args[0] or redirect(URL('default', 'index'))
     obj = db.objects[obj_id]
-    if obj.status == 3:
+    if obj.status == -1:
         session.flash = {"status": "danger", "message": "Error: this item was deleted"}
         return redirect(URL('default', 'index'))
 
@@ -101,7 +101,7 @@ def wish():
     obj_id = request.args[0] or redirect(URL('default', 'index'))
 
     obj = db.objects[obj_id]
-    if obj.status == 3:
+    if obj.status == -1:
         session.flash = {"status": "danger", "message": "Error: this item was deleted"}
         return redirect(URL('default', 'index'))
 
