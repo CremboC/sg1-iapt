@@ -25,7 +25,13 @@
 
                 <div class="panel-body" id="yourItemDisplay">
                 {{for row in trade_objects[0]:}}
+                    {{if row.status==3:}}
+                    <div class="item-preview deleted">
+                        Item was deleted.
+                    </div>
+                    {{else:}}
                     <script> addItemToTrade("{{=row.id}}", $('#yourItemDisplay'), $('#yourAvailableObjects'), false)</script>
+                    {{pass}}
                 {{pass}}
                 </div>
             </div>
@@ -39,7 +45,13 @@
 
                 <div class="panel-body" id="hisItemDisplay">
                 {{for row in trade_objects[1]:}}
+                    {{if row.status==3:}}
+                    <div class="item-preview deleted">
+                        Item was deleted.
+                    </div>
+                    {{else:}}
                     <script> addItemToTrade("{{=row.id}}", $('#hisItemDisplay'), $('#theirAvailableObjects'), false)</script>
+                    {{pass}}
                 {{pass}}
                 </div>
             </div>

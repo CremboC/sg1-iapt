@@ -169,6 +169,11 @@
     transition: opacity 0.3s;
 }
 
+.item-preview.deleted{
+    text-align:center;
+    border:1px black solid;
+}
+
 .hovertext {
     position: relative;
     top: 0;
