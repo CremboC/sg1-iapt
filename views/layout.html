@@ -71,7 +71,6 @@
                     </a>
                 </li>
             {{ pass}}
-            {{ pass }}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-plus middle"></span>
@@ -95,8 +94,11 @@
                         </li>
                     </ul>
                 </li>
+            {{ pass }}
             {{='auth' in globals() and auth.navbar('Welcome',mode='dropdown') or ''}}
             </ul>
+
+            {{ if auth.user_id: }}
 
             <ul class="nav navbar-nav">
                 <li>
@@ -132,6 +134,7 @@
                     </a>
                 </li>
             </ul>
+            {{ pass }}
         </div>
     </div>
     <div class="container navbar-searchbar">
