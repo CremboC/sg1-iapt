@@ -61,9 +61,11 @@ def new():
     if item_id is not None:
         obj = db((db.objects.id == item_id) & (db.types.id == db.objects.type_id)).select(db.objects.ALL,
                                                                                              db.types.name)[0]
-        in_trade = (db((db.trades_receiving.recv_object_id == obj.objects.id) | (
+        in_trade = len(db((db.trades_receiving.recv_object_id == obj.objects.id) | (
             db.trades_sending.sent_object_id == obj.objects.id)).select()) > 0
 
+        print (db((db.trades_receiving.recv_object_id == obj.objects.id) | (
+            db.trades_sending.sent_object_id == obj.objects.id)).select())
         if in_trade:
             session.flash = {"status": "danger", "message": "Error: item cannot be traded as it is currently in another trade"}
             return redirect(URL('trade', 'index'))
