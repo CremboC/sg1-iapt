@@ -29,6 +29,14 @@
     text-shadow: 0 0 3px #09f;
 }
 
+.nav-fortrade {
+    color: #69c !important;
+}
+
+.nav-wishlist {
+    color: #c90 !important;
+}
+
 .navbar-searchbar input.form-control {
     width: 100%;
 }
