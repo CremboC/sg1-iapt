@@ -6,6 +6,7 @@ $(document).ready(function () {
 
     var $form = $('.content').find('form');
     var $undo = $('.undo');
+    var $undoText = $("#undo-name-display");
     var objects = [];
 
     $undo.hide();
@@ -16,11 +17,14 @@ $(document).ready(function () {
         var objectId = $(this).data('id');
         $form.append(createInput(objectId));
 
-        $('#object-' + objectId).hide();
 
         objects.push(objectId);
 
         $undo.show();
+        $undoText.text(
+            $( "#object-" + objectId + " .object-name" ).text().trim()
+        );
+        $('#object-' + objectId).hide();
         $('body').css({
             'margin-bottom': '60px'
         })

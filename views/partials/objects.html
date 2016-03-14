@@ -3,7 +3,7 @@
 {{type = obj.type()}}
 <div class="panel panel-default">
     <div class="panel-heading">
-        <a href="{{=URL('items', 'show', args=obj.id)}}">
+        <a href="{{=URL('items', 'show', args=obj.id)}}" class="object-name">
             {{= obj.name }}
         </a>
         {{ if obj.status == 0: }}
