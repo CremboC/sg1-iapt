@@ -26,19 +26,23 @@ function addItemToTrade(ids, displayDiv, availableSelect, enableRemove) {
 
 function updateTradeValue(yourItems, hisItems){
 
-    var totalVal = 0;
+    var hisVal = 0;
+    var yourVal = 0;
     $(">div", yourItems).each(function(){
-        totalVal-=parseFloat($(this).attr('data-currency_value'));
+        yourVal+=parseFloat($(this).attr('data-currency_value'));
     });
     $(">div", hisItems).each(function(){
-        totalVal+=parseFloat($(this).attr('data-currency_value'));
+        hisVal+=parseFloat($(this).attr('data-currency_value'));
     });
+    var totalVal = hisVal - yourVal;
     if (isNaN(totalVal)){
         totalVal = 0;
     } else {
         totalVal.toFixed(2);
     }
     $("#tradevalue").text(totalVal);
+    $("#yourVal").text(yourVal);
+    $("#hisVal").text(hisVal);
 }
 
 
