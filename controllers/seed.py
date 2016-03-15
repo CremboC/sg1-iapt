@@ -45,7 +45,7 @@ def index():
                       description='strapless red dress from french connection', image='objects.image.80fb30d10234f5eb.7265642064726573732e6a706567.jpeg')
     db.object_collection.insert(object_id=1, collection_id=4)
 
-    db.objects.insert(owner_id=1, type_id=6, status=2, name='Blue Jeans', currency_value=10.0, summary='blue skinny jeans',
+    db.objects.insert(owner_id=1, type_id=6, status=0, name='Blue Jeans', currency_value=10.0, summary='blue skinny jeans',
                       description='some cheap blue skinny jeans from new look', image='objects.image.b97f08e575344d77.626c75656a65616e732e6a7067.jpg')
     db.object_collection.insert(object_id=2, collection_id=4)
 

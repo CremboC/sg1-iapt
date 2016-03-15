@@ -1,4 +1,4 @@
-@auth.requires_login()
+
 def index():
     user_id = next(iter(request.args), auth.user_id)
     is_me = user_id == auth.user_id
