@@ -47,7 +47,7 @@
             <div class="col-xs-5">
                 <a href="{{=URL('items', 'show', args=obj.id)}}">
                 {{if obj.image:}}
-                    <img src="{{=URL('default', 'download', args=obj.image)}}" alt="" class="img-responsive">
+                    <img style="height: 115px" src="{{=URL('default', 'download', args=obj.image)}}" alt="" class="img-responsive">
                 {{else:}}
                     <img src="http://lorempixel.com/100/100/cats/" alt="" class="img-responsive pull-right">
                 {{pass}}
