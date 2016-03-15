@@ -131,4 +131,4 @@ def wish():
 
     session.flash = {"status": "success", "message": "Item successfully added to your wish list."}
 
-    return redirect(URL('items', 'show', args=obj_id))
+    return redirect(URL('item_lists', 'wish_list', args=auth.user_id))
