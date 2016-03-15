@@ -28,7 +28,7 @@ def index():
             trade.trades.otheruser = trade.trades.receiver
         else:
             trade.trades.otheruser = trade.trades.sender
-        trade.otheruser = db(db.auth_user.id == trade.trades.otheruser).select(db.auth_user.username).column()[0]
+        trade.trades.otheruser = db(db.auth_user.id == trade.trades.otheruser).select(db.auth_user.username).column()[0]
         trade.other_user_id = trade.trades.otheruser
 
     newest_items = db((db.objects.id == db.object_collection.object_id) & (

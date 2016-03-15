@@ -15,7 +15,6 @@
 
         <tbody style="height:inherit">
         {{for trade in trades:}}
-
         <tr>
             {{if (trade.trades.status==0) & (trade.trades.sender==user_id):}}
                 <td><span class="glyphicon glyphicon-send"
@@ -42,7 +41,6 @@
                     data-toggle="tooltip"
                     title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} proposed a modified trade."></span></td>
             {{pass}}
-
                 <td>{{=trade.trades.otheruser}}</td>
                 <td>{{=trade.trades.date_created.date()}}</td>
                 <td>{{=trade.sentItems}}</td>
