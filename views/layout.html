@@ -57,6 +57,43 @@
         </div>
 
         <div id="navbar-ex1-collapse" class="collapse navbar-collapse">
+            {{ if auth.user_id: }}
+
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="{{=URL('collections', 'index')}}">
+                        <span class="glyphicon glyphicon-star middle"></span>
+                        <span class="hidden-sm">
+                            Collections
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{=URL('item_lists', 'for_trade')}}" class="nav-fortrade">
+                        <span class="glyphicon glyphicon-tags middle"></span>
+                        <span class="hidden-sm">
+                            For Trade
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{=URL('item_lists', 'wish_list')}}" class="nav-wishlist">
+                        <span class="glyphicon glyphicon-heart middle"></span>
+                        <span class="hidden-sm">
+                            Wish List
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{=URL('trade', 'index')}}">
+                        <span class="glyphicon glyphicon-retweet middle"></span>
+                        <span class="hidden-sm">
+                            Trades
+                        </span>
+                    </a>
+                </li>
+            </ul>
+            {{ pass }}
             <ul class="nav navbar-nav navbar-right">
             {{ if auth.user_id: }}
             {{ if notifications(): }}
@@ -99,43 +136,6 @@
             {{='auth' in globals() and auth.navbar('Welcome',mode='dropdown') or ''}}
             </ul>
 
-            {{ if auth.user_id: }}
-
-            <ul class="nav navbar-nav">
-                <li>
-                    <a href="{{=URL('collections', 'index')}}">
-                        <span class="glyphicon glyphicon-star middle"></span>
-                        <span class="hidden-sm">
-                            Collections
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{=URL('item_lists', 'for_trade')}}" class="nav-fortrade">
-                        <span class="glyphicon glyphicon-tags middle"></span>
-                        <span class="hidden-sm">
-                            For Trade
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{=URL('item_lists', 'wish_list')}}" class="nav-wishlist">
-                        <span class="glyphicon glyphicon-heart middle"></span>
-                        <span class="hidden-sm">
-                            Wish List
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{=URL('trade', 'index')}}">
-                        <span class="glyphicon glyphicon-retweet middle"></span>
-                        <span class="hidden-sm">
-                            Trades
-                        </span>
-                    </a>
-                </li>
-            </ul>
-            {{ pass }}
         </div>
     </div>
     <div class="container navbar-searchbar">
