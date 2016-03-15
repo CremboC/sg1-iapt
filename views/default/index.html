@@ -1,16 +1,13 @@
 {{extend 'layout.html'}}
 <div class="container">
-{{if auth_logged_in:}}
+    {{if auth_logged_in:}}
+    <h3>
+        Your most recent trades
+    </h3>
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Your most recent trades</h3>
-        </div>
-        <div class="panel-body">
-            {{list_trades(trades, user_id)}}
-
-        </div>
+        {{list_trades(trades, user_id)}}
     </div>
-{{else:}}
+    {{else:}}
     <div class="panel panel-default">
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <!-- Indicators -->
@@ -31,7 +28,8 @@
                 </div>
 
                 <div class="item">
-                    <img src="{{=URL('static', 'images/carrousel3.png')}}" alt="Add them to your wishlist to find traders!">
+                    <img src="{{=URL('static', 'images/carrousel3.png')}}"
+                         alt="Add them to your wishlist to find traders!">
                 </div>
 
 
@@ -47,36 +45,27 @@
             </div>
         </div>
     </div>
-{{pass}}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Largest collections</h3>
+    {{pass}}
+
+    <h3>Largest collections</h3>
+
+    <div class="row">
+        {{for col in largest_collections:}}
+        <div class="col-md-4">
+            {{print_collection(col.collections, col['COUNT(object_collection.object_id)'])}}
         </div>
-        <div class="panel-body">
-            <div class="row">
-                {{for col in largest_collections:}}
-                    <div class="col-md-4">
-                        {{print_collection(col.collections, col['COUNT(object_collection.object_id)'])}}
-                    </div>
-                {{pass}}
-            </div>
-        </div>
+        {{pass}}
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Most recent items</h3>
+    <h3>Most recent items</h3>
+
+    {{for chunk in chunks(newest_items, 3):}}
+    <div class="row">
+        {{for item in chunk:}}
+        <div class="col-md-4">
+            {{print_object(item, show_owner = True)}}
         </div>
-        <div class="panel-body">
-        {{for chunk in chunks(newest_items, 3):}}
-            <div class="row">
-            {{for item in chunk:}}
-                <div class="col-md-4">
-                {{print_object(item, show_owner = True)}}
-                </div>
-            {{pass}}
-            </div>
         {{pass}}
-        </div>
     </div>
+    {{pass}}
 </div>
