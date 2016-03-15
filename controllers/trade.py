@@ -64,8 +64,6 @@ def new():
         in_trade = len(db((db.trades_receiving.recv_object_id == obj.objects.id) | (
             db.trades_sending.sent_object_id == obj.objects.id)).select()) > 0
 
-        print (db((db.trades_receiving.recv_object_id == obj.objects.id) | (
-            db.trades_sending.sent_object_id == obj.objects.id)).select())
         if in_trade:
             session.flash = {"status": "danger", "message": "Error: item cannot be traded as it is currently in another trade"}
             return redirect(URL('trade', 'index'))
@@ -79,9 +77,13 @@ def new():
                 "available_objects": [get_available_user_items(auth.user_id)], "wanted_object": obj}
     elif receiver_username == db(db.auth_user.id == auth.user_id).select(db.auth_user.username).column()[0]:
         session.flash = {"status": "danger", "message": "Error: you can't trade with yourself!"}
-        return redirect(URL('trade', 'index'))
+        return redirect(URL('trade', 'new'))
     else:
-        receiver_id = db(db.auth_user.username == receiver_username).select(db.auth_user.id).column()[0]
+        receiver_id = db(db.auth_user.username == receiver_username).select(db.auth_user.id)
+        if len(receiver_id) == 0:
+            session.flash = {"status": "danger", "message": "Error: username does not exist"}
+            return redirect(URL('trade', 'new'))
+        receiver_id = receiver_id[0].id
         available_items = [get_available_user_items(auth.user_id), get_available_user_items(receiver_id)]
         return {"user_id": auth.user_id, "trader_id": receiver_id, "trader_username": receiver_username,
                 "available_objects": available_items, "wanted_object": obj}
