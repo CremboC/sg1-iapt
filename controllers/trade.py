@@ -193,7 +193,7 @@ def createNew():
     if len(receiver_id) == 0:
         response.status = 400
         return 'Error 400: invalid username, please select another user'
-    receiver_id = receiver_id[0]
+    receiver_id = receiver_id[0].id
 
     if request.vars['youritems'] != '':
         your_items = request.vars['youritems'].split(",")
@@ -232,6 +232,7 @@ def createNew():
         for row in receiver_objects:
             if int(row.owner_id) != receiver_id:
                 response.status = 400
+                print 'out2'
                 return 'Error 400: invalid item ID, please refresh page'
             if int(row.status) != 2:
                 response.status = 400
@@ -308,7 +309,7 @@ def delete():
     if (trade_id is None) | (not isinstance(trade_id, str)):
         session.flash = {"status": "danger", "message": "Error: trade does not exist"}
         return redirect(URL('trade', 'index'))
-    trade = db(db.trades.id == trade_id).select(db.trades.receiver, db.trades.sender)[0]
+    trade = db(db.trades.id == trade_id).select(db.trades.receiver, db.trades.sender).first()
 
     if trade is None:
         session.flash = {"status": "danger", "message": "Error: trade does not exist"}
