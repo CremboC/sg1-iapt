@@ -41,5 +41,5 @@ def wish_list():
     response.view = "item_lists/view.html"
 
     for object in objects:
-        add_in_trade_field(objects)
+        add_in_trade_field(object)
     return {"is_want": True, "user_id": user_id, "username": user, "items": objects}
