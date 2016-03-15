@@ -1,11 +1,6 @@
 # coding=utf-8
-import json
-import urllib
-
-
 @auth.requires_login()
 def view():
-    # Todo: implement view with completed trades
     trade_id = request.vars.tradeid
     trader_username = request.vars.trader_username
 
@@ -39,28 +34,41 @@ def view():
         trader_id = trade.sender
         trade_objects = [trade_objects_from_receiver, trade_objects_from_sender]
 
-    # Verify whether trade is editable
-    editable = (trade.status == 0) | (trade.status == 4)
     if trader_username is None:
-        trader_username = db(db.auth_user.id == trader_id).select(db.auth_user.username).column()[0]
+        trader_username = db(db.auth_user.id == trader_id).select(db.auth_user.username)
+        if len(trader_username) == 0:
+            session.flash = {"status": "danger", "message": "Error: invalid username"}
+            return redirect(URL('trade', 'index'))
+        else:
+            trader_username = trader_username[0].username
+
     return {"user_is_receiver": auth.user_id == trade.receiver, "tradeid": trade_id, "trader_id": trader_id,
             "status": trade.status, "trader_username": trader_username,
-            "editable": editable,
+            "editable": trade.status == 0,
             "trade_objects": trade_objects}
 
 
 @auth.requires_login()
 def new():
+    # Method can accept a user or an item id, the item_id will take precedence over the user if both are specified
     receiver_username = request.vars.receiver_username
     receiver_id = request.vars.receiver_id
     item_id = request.vars.item_id
     if (receiver_username is None) & (receiver_id is not None):
-        receiver_username = db(db.auth_user.id == receiver_id).select(db.auth_user.username).column()[0]
+        receiver_username = db(db.auth_user.id == receiver_id).select(db.auth_user.username)
+        if len(receiver_username) == 0:
+            session.flash = {"status": "danger", "message": "Error: invalid user id"}
+            return redirect(URL('trade', 'index'))
+        receiver_username = receiver_username[0]
 
     obj = None
     if item_id is not None:
-        obj = db((db.objects.id == item_id) & (db.types.id == db.objects.type_id)).select(db.objects.ALL,
-                                                                                             db.types.name)[0]
+        obj = db((db.objects.id == item_id) & (db.types.id == db.objects.type_id)).select(db.objects.ALL, db.types.name)
+        if len(obj) == 0:
+            session.flash = {"status": "danger", "message": "Error: invalid item id"}
+            return redirect(URL('trade', 'index'))
+
+        obj = obj[0]
         add_in_trade_field(obj)
 
         if obj.in_trade:
@@ -136,10 +144,16 @@ def edit():
         trader_id = trade.sender
         trade_objects = [trade_objects1, trade_objects2]
 
-    # Verify whether trade is editable
-    editable = (trade.status == 0)
+    if trade.status != 0:
+        session.flash = {"status": "danger", "message": "Error: trade has been completed or superseeded, and cannot be edited."}
+        return redirect(URL('trade', 'index'))
+
     if trader_username is None:
-        trader_username = db(db.auth_user.id == trader_id).select(db.auth_user.username).column()[0]
+        trader_username = db(db.auth_user.id == trader_id).select(db.auth_user.username)
+        if len(trader_username) == 0:
+            session.flash = {"status": "danger", "message": "Error: invalid user id"}
+            return redirect(URL('trade', 'index'))
+        trader_username = trader_username[0]
 
     available_objects = [get_available_user_items(auth.user_id), get_available_user_items(trader_id)]
 
@@ -151,8 +165,7 @@ def edit():
         trade_profit += object.objects.currency_value
 
     return {"prevtrade": trade_id, "user_id": auth.user_id, "trader_id": trader_id, "status": trade.status,
-            "trader_username": trader_username,
-            "editable": editable, "trade_profit": trade_profit,
+            "trader_username": trader_username, "trade_profit": trade_profit,
             "trade_objects": trade_objects, "available_objects": available_objects
             }
 
@@ -175,11 +188,12 @@ def createNew():
         response.status = 400
         return 'Error 400: incomplete trade, please enter trade items or select other user'
 
-    receiver_id = db(db.auth_user.username==request.vars['receiver_username']).select(db.auth_user.id).column()[0]
+    receiver_id = db(db.auth_user.username == request.vars['receiver_username']).select(db.auth_user.id)
 
-    if receiver_id is None:
+    if len(receiver_id) == 0:
         response.status = 400
-        return 'Error 400: selected user does not exist'
+        return 'Error 400: invalid username, please select another user'
+    receiver_id = receiver_id[0]
 
     if request.vars['youritems'] != '':
         your_items = request.vars['youritems'].split(",")
@@ -223,7 +237,7 @@ def createNew():
                 response.status = 400
                 return 'Error 400: Item not available for trade'
 
-    new_trade_id = db.trades.insert(sender=sender_id, receiver=receiver_id, status=4, seen=False)
+    new_trade_id = db.trades.insert(sender=sender_id, receiver=receiver_id, status=0, seen=False)
 
     if len(your_items) > 0 :
         for itemId in sender_objects_id:

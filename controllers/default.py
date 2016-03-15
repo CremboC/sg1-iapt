@@ -30,7 +30,7 @@ def index():
             trade.trades.otheruser = trade.trades.sender
         trade.otheruser = db(db.auth_user.id == trade.trades.otheruser).select(db.auth_user.username).column()[0]
         trade.other_user_id = trade.trades.otheruser
-    # newest_items = db((db.object_collection.object_id == db.objects.id) & (db.collections.private == 'F')).select(db.objects.id, orderby=~db.objects.created_on, limitby=(0,9))
+
     newest_items = db((db.objects.id == db.object_collection.object_id) & (
     db.object_collection.collection_id == db.collections.id) & (db.collections.private == 'F') & (
                       db.objects.status != -1)).select(db.objects.ALL, orderby=~db.objects.created_on, limitby=(0, 9))
