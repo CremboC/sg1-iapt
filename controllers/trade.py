@@ -69,9 +69,9 @@ def new():
             return redirect(URL('trade', 'index'))
 
         obj = obj[0]
-        add_in_trade_field(obj)
+        add_in_trade_field(obj.objects)
 
-        if obj.in_trade:
+        if obj.objects.in_trade:
             session.flash = {"status": "danger", "message": "Error: item cannot be traded as it is currently in another trade"}
             return redirect(URL('trade', 'index'))
 

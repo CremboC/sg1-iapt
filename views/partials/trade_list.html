@@ -1,4 +1,4 @@
-{{def list_trades(trades):}}
+{{def list_trades(trades, current_user_id):}}
     <table class="table table-striped header-fixed" style="width:100%;">
         <thead>
         <tr>
@@ -8,7 +8,6 @@
             <th>Items given</th>
             <th>Items received</th>
             <th>Total value</th>
-
             <th>Superseded by</th> <!-- Link -->
             <th>Link</th>
         </tr>
@@ -29,19 +28,19 @@
             {{elif trade.trades.status==1:}}
                 <td><span class="glyphicon glyphicon glyphicon-remove" style="color:red"
                     data-toggle="tooltip"
-                    title="You cancelled this trade."></span></td>
+                    title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} cancelled this trade."></span></td>
             {{elif trade.trades.status==2:}}
                 <td><span class="glyphicon glyphicon-thumbs-down" style="color:red"
                     data-toggle="tooltip"
-                    title="The user rejected your trade."></span></td>
+                    title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} rejected your trade."></span></td>
             {{elif trade.trades.status==3:}}
                 <td><span class="glyphicon glyphicon-thumbs-up" style="color:green"
                     data-toggle="tooltip"
-                    title="The user accepted your trade."></span></td>
+                    title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} accepted your trade."></span></td>
             {{elif trade.trades.status==4:}}
                 <td><span class="glyphicon glyphicon-refresh" style="color:darkorange"
                     data-toggle="tooltip"
-                    title="The user proposed a modified trade."></span></td>
+                    title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} proposed a modified trade."></span></td>
             {{pass}}
 
                 <td>{{=trade.trades.otheruser}}</td>
