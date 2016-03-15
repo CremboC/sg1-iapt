@@ -95,6 +95,7 @@
             </div>
 
             <!--collections-->
+            {{if object.status != 1:}}
             <div class="form-group">
                 <label for="objects_collection">Collections</label>
                 <br>
@@ -108,6 +109,15 @@
                     {{pass}}
                 </select>
             </div>
+            {{elif object.status == 1:}}
+                <div class="form-group">
+                    <label for="objects_collection">Collections</label>
+                    <br>
+                    <div class="alert alert-info">
+                    	Items which are in a wish list cannot be added to any collection.
+                    </div>
+                </div>
+            {{pass}}
 
             <!--status-->
             <div class="form-group">

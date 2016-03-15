@@ -127,8 +127,6 @@ def wish():
 
     new_item_id = db.objects.insert(**fields)
 
-    link_object_collections(new_item_id, get_unfiled_collection().id)
-
     session.flash = {"status": "success", "message": "Item successfully added to your wish list."}
 
     return redirect(URL('item_lists', 'wish_list', args=auth.user_id))
