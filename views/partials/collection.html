@@ -1,12 +1,12 @@
 <!-- This is for an individual collection, not multiple collections -->
 {{def print_collection(col, size =-1):}}
-<div class="panel panel-default">
+<div class="panel panel-default ">
     <div class="panel-heading">
         <a href="{{=URL('collections', 'show', args=col.id)}}" class="object-name">
             {{= col.name }}
         </a>
     </div>
-    <div class="panel-body">
+    <div class="panel-body  alert-warning">
             <div class="container">
             {{owner = col.owner()}}
                 <div class="row">
