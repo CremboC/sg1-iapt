@@ -216,3 +216,7 @@
     vertical-align: middle;
     display: table-cell;
 }
+
+.imgPreview {
+    background-size:100% 100%;
+}
