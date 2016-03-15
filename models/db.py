@@ -165,6 +165,7 @@ db.define_table("collections",
                       readable=False),
                 )
 
+
 db.auth_user._after_insert.append(
     lambda row, id: db.collections.insert(owner_id=id, name='Unfiled', private=True))
 

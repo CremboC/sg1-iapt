@@ -38,8 +38,11 @@ def index():
         item.in_trade = len(db((db.trades_receiving.recv_object_id == item.id) | (
         db.trades_sending.sent_object_id == item.id)).select()) > 0
 
+    count = db.object_collection.object_id.count()
+    collections = db((db.collections.id > 0) & (db.collections.id == db.object_collection.collection_id)).select(db.collections.ALL, count, orderby=~count, limitby=(0,3), groupby=db.collections.id)
+
     return {"auth_id": auth.user_id, "auth_logged_in": auth.is_logged_in(), "trades": trades,
-            "newest_items": newest_items}
+            "newest_items": newest_items, "largest_collections": collections}
 
 
 def user():
