@@ -133,7 +133,20 @@
                     </ul>
                 </li>
             {{ pass }}
-            {{='auth' in globals() and auth.navbar('Welcome',mode='dropdown') or ''}}
+            {{if not auth.is_logged_in():}}
+                <li>
+                    <a href="{{=URL('default', 'user', args='register')}}">
+                        Register
+                    </a>
+                </li>
+                <li>
+                    <a href="{{=URL('default', 'user', args='login')}}">
+                        Log In
+                    </a>
+                </li>
+            {{else:}}
+                {{='auth' in globals() and auth.navbar('Welcome', mode='dropdown') or ''}}
+            {{pass}}
             </ul>
 
         </div>
