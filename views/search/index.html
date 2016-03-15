@@ -22,63 +22,63 @@
                     <h2 class="panel-title">Filter your search</h2>
                 </div>
                 <div class="panel-body">
-                {{if page == 'items':}}
+                    {{if page == 'items':}}
                     {{include 'search/_items_filters.html'}}
-                {{elif page == 'collections':}}
+                    {{elif page == 'collections':}}
                     {{include 'search/_collections_filters.html'}}
-                {{pass}}
+                    {{pass}}
                 </div>
             </div>
         </div>
         <div class="col-sm-9">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">
-                    {{if page == 'items':}}
+
+            <div class="clearfix">
+                <div class="pull-left">
+                    <h3>
+                        {{if page == 'items':}}
                         {{include 'search/_items_header.html'}}
-                    {{elif page == 'collections':}}
+                        {{elif page == 'collections':}}
                         {{include 'search/_collections_header.html'}}
-                    {{elif page == 'users':}}
+                        {{elif page == 'users':}}
                         {{include 'search/_users_header.html'}}
-                    {{pass}}
-                    </h2>
+                        {{pass}}
+                    </h3>
                 </div>
+                <div class="pull-right">
+                    {{if page == 'items':}}
+                    {{print_sortby()}}
+                    {{pass}}
+                </div>
+            </div>
+
 
             {{if page == 'items':}}
-                <div class="panel-body">
                 {{if len(results) == 0:}}
-                    <strong>No results found.</strong>
+                <strong>No results found.</strong>
                 {{else:}}
-                {{print_sortby()}}
                 {{for chunk in chunks(results, 2):}}
-                    <div class="row">
+                <div class="row">
                     {{for result in chunk:}}
-                        <div class="col-md-6">
+                    <div class="col-md-6">
                         {{print_object(result)}}
-                        </div>
-                    {{pass}}
                     </div>
-                {{pass}}
-                {{pass}}
+                    {{pass}}
                 </div>
+                {{pass}}
+            {{pass}}
             {{elif page == 'collections':}}
-            {{if len(results) == 0:}}
-                <div class="panel-body">
-                    <strong>No results found.</strong>
-                </div>
-            {{else:}}
-            {{print_collections(results)}}
-            {{pass}}
+                {{if len(results) == 0:}}
+                <strong>No results found.</strong>
+                {{else:}}
+                {{print_collections(results)}}
+                {{pass}}
             {{elif page == 'users':}}
-            {{if len(results) == 0:}}
-                <div class="panel-body">
-                    <strong>No results found.</strong>
-                </div>
-            {{else:}}
-            {{print_users(results)}}
+                {{if len(results) == 0:}}
+                <strong>No results found.</strong>
+                {{else:}}
+                {{print_users(results)}}
+                {{pass}}
             {{pass}}
-            {{pass}}
-            </div>
         </div>
     </div>
 </div>

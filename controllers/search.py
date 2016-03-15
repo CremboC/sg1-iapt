@@ -13,7 +13,8 @@ def index():
         results = db(search_query).select(orderby=translate_sortby(request.vars.sort))
 
         # check if item is not private
-        results = [result for result in results if not item_is_private(result)]
+        results = [result for result in results
+                   if not item_is_private(result) or (auth.user_id and result.owner_id == auth.user_id)]
         for item in results:
             add_in_trade_field(item)
 
