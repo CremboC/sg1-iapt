@@ -101,7 +101,8 @@ def show():
     if not is_owner and item_is_private(obj_id):
         session.flash = {"status": "danger", "message": "Error: you cannot view another user's private items"}
         return redirect(URL('default', 'index'))
-    obj.in_trade = len(db((db.trades_receiving.recv_object_id == obj.id) | (db.trades_sending.sent_object_id == obj.id)).select())>0
+
+    add_in_trade_field(obj)
 
     return dict(item=obj, is_owner=is_owner, user=user)
 

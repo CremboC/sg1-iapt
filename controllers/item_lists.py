@@ -16,10 +16,8 @@ def for_trade():
         orderby=translate_sortby(request.vars.sort))
 
     response.view = "item_lists/view.html"
-
-    for obj in objects:
-        obj.in_trade = len(db((db.trades_receiving.recv_object_id == obj.id) | (db.trades_sending.sent_object_id == obj.id)).select())>0
-
+    for object in objects:
+        add_in_trade_field(object)
     return {"is_want": False, "user_id": user_id, "username": user, "items": objects}
 
 
@@ -43,6 +41,5 @@ def wish_list():
     response.view = "item_lists/view.html"
 
     for object in objects:
-        object.in_trade = len(db((db.trades_receiving.recv_object_id == object.id) | (db.trades_sending.sent_object_id == object.id)).select())>0
-
+        add_in_trade_field(objects)
     return {"is_want": True, "user_id": user_id, "username": user, "items": objects}

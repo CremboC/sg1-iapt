@@ -34,9 +34,9 @@ def index():
     newest_items = db((db.objects.id == db.object_collection.object_id) & (
     db.object_collection.collection_id == db.collections.id) & (db.collections.private == 'F') & (
                       db.objects.status != -1)).select(db.objects.ALL, orderby=~db.objects.created_on, limitby=(0, 9))
+
     for item in newest_items:
-        item.in_trade = len(db((db.trades_receiving.recv_object_id == item.id) | (
-        db.trades_sending.sent_object_id == item.id)).select()) > 0
+        add_in_trade_field(item)
 
     count = db.object_collection.object_id.count()
     collections = db((db.collections.id > 0) & (db.collections.id == db.object_collection.collection_id)).select(db.collections.ALL, count, orderby=~count, limitby=(0,3), groupby=db.collections.id)

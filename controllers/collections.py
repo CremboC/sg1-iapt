@@ -45,8 +45,7 @@ def show():
         objects = collection.objects()
 
     for object in objects:
-        object.in_trade = len(db((db.trades_receiving.recv_object_id == object.id) | (
-            db.trades_sending.sent_object_id == object.id)).select()) > 0
+        add_in_trade_field(object)
 
     obj_query = db.objects.owner_id == auth.user_id
     obj_query &= ~db.objects.id.belongs([col.id for col in objects])
@@ -100,8 +99,7 @@ def edit():
         return redirect(URL('collections', 'show', args=form.vars.id))
 
     for object in objects_in_collection:
-        object.in_trade = len(db((db.trades_receiving.recv_object_id == object.id) | (
-            db.trades_sending.sent_object_id == object.id)).select()) > 0
+        add_in_trade_field(object)
 
     return dict(collection=collection, form=form,
                 objects_in_collection=objects_in_collection, is_unfiled=is_unfiled)
