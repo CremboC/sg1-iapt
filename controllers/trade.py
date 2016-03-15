@@ -72,12 +72,17 @@ def new():
         add_in_trade_field(obj.objects)
 
         if obj.objects.in_trade:
-            session.flash = {"status": "danger", "message": "Error: item cannot be traded as it is currently in another trade"}
+            session.flash = {"status": "danger",
+                             "message": "Error: item cannot be traded as it is currently in another trade"}
             return redirect(URL('trade', 'index'))
 
         obj.string = format_string(obj)
         receiver_username = db(db.auth_user.id == obj.objects.owner_id).select(
             db.auth_user.username).column()[0]
+
+    if len(get_available_user_items(auth.user_id)) == 0:
+        response.flash = {'status': 'warning',
+                         'message': 'You do not have any items to trade. If you wish to trade anything, you must first add items to your For Trade list.'}
 
     if receiver_username is None:
         return {"user_id": auth.user_id, "trader_id": "", "trader_username": None,
@@ -145,7 +150,8 @@ def edit():
         trade_objects = [trade_objects1, trade_objects2]
 
     if trade.status != 0:
-        session.flash = {"status": "danger", "message": "Error: trade has been completed or superseeded, and cannot be edited."}
+        session.flash = {"status": "danger",
+                         "message": "Error: trade has been completed or superseeded, and cannot be edited."}
         return redirect(URL('trade', 'index'))
 
     if trader_username is None:
@@ -184,7 +190,8 @@ def getobjectdata():
 
 @auth.requires_login()
 def createNew():
-    if (request.vars['youritems'] is None) | (request.vars['theiritems'] is None) | (request.vars['receiver_username'] is None):
+    if (request.vars['youritems'] is None) | (request.vars['theiritems'] is None) | (
+        request.vars['receiver_username'] is None):
         response.status = 400
         return 'Error 400: incomplete trade, please enter trade items or select other user'
 
@@ -215,7 +222,8 @@ def createNew():
     # Check user owns all objects he proposes
     if len(your_items) > 0:
         sender_objects_id = map(int, your_items)
-        sender_objects = db(db.objects.id.belongs(sender_objects_id)).select(db.objects.owner_id, db.objects.status, db.objects.name)
+        sender_objects = db(db.objects.id.belongs(sender_objects_id)).select(db.objects.owner_id, db.objects.status,
+                                                                             db.objects.name)
         for row in sender_objects:
             if int(row.owner_id) != sender_id:
                 response.status = 400
@@ -240,7 +248,7 @@ def createNew():
 
     new_trade_id = db.trades.insert(sender=sender_id, receiver=receiver_id, status=0, seen=False)
 
-    if len(your_items) > 0 :
+    if len(your_items) > 0:
         for itemId in sender_objects_id:
             db.trades_sending.insert(trade_id=new_trade_id, sent_object_id=itemId)
     if len(their_items) > 0:
@@ -394,7 +402,9 @@ def get_available_user_items(userid):
         db.objects.id).column())
     available_objects = db((db.objects.owner_id == userid) & (db.objects.status == 2) & ~db.objects.id.belongs(
         excludedobjects1) & ~db.objects.id.belongs(
-        excludedobjects2) & (db.types.id == db.objects.type_id) & (db.objects.id == db.object_collection.object_id) & (db.object_collection.collection_id == db.collections.id) & (db.collections.private == 'F')).select(
+        excludedobjects2) & (db.types.id == db.objects.type_id) & (db.objects.id == db.object_collection.object_id) & (
+                           db.object_collection.collection_id == db.collections.id) & (
+                           db.collections.private == 'F')).select(
         db.objects.id,
         db.types.name,
         db.objects.name,
