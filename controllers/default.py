@@ -4,7 +4,7 @@ def index():
                 db.trades.status.belongs([1, 2, 3])).select(db.trades.id, db.trades.date_created, db.trades.sender,
                                                             db.trades.receiver, db.trades.status,
                                                             db.trades.superseded_by, db.auth_user.username,
-                                                            orderby=~db.trades.date_created, limitby=(0, 3))
+                                                            orderby=~db.trades.date_created, limitby=(0, 5))
 
     for trade in trades:
         sent_items = db(db.trades_sending.trade_id == trade.trades.id).count()
@@ -41,7 +41,7 @@ def index():
     count = db.object_collection.object_id.count()
     collections = db((db.collections.id > 0) & (db.collections.id == db.object_collection.collection_id)).select(db.collections.ALL, count, orderby=~count, limitby=(0,3), groupby=db.collections.id)
 
-    return {"auth_id": auth.user_id, "auth_logged_in": auth.is_logged_in(), "trades": trades,
+    return {"user_id": auth.user_id, "auth_logged_in": auth.is_logged_in(), "trades": trades,
             "newest_items": newest_items, "largest_collections": collections}
 
 

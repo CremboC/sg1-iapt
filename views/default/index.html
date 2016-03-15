@@ -6,14 +6,8 @@
             <h3 class="panel-title">Your most recent trades</h3>
         </div>
         <div class="panel-body">
-        {{for trade in trades:}}
-            <div class="col-md-4">
-            {{print_trade(trade)}}
-            </div>
-        {{pass}}
-        {{if len(trades)==0:}}
-            No trades to display :(
-        {{pass}}
+            {{list_trades(trades, user_id)}}
+
         </div>
     </div>
 {{else:}}
