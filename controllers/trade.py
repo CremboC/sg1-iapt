@@ -153,7 +153,7 @@ def edit():
         if len(trader_username) == 0:
             session.flash = {"status": "danger", "message": "Error: invalid user id"}
             return redirect(URL('trade', 'index'))
-        trader_username = trader_username[0]
+        trader_username = trader_username[0].username
 
     available_objects = [get_available_user_items(auth.user_id), get_available_user_items(trader_id)]
 
