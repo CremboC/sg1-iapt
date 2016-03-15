@@ -27,7 +27,12 @@
                 <span
                     class="pull-right object-status in-trade"
                     data-toggle="tooltip"
-                    title="This item is currently in a trade, but you can add it to your wishlist for when it becomes available!">
+                    {{if owner.id == auth.user_id:}}
+                        title="Your item is currently in a trade!"
+                    {{else:}}
+                        title="This item is currently in a trade, but you can add it to your wishlist for when it becomes available!"
+                    {{pass}}
+                    >
                     <span
                         class="glyphicon glyphicon-tag"></span>
                 </span>
