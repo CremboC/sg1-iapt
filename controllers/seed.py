@@ -91,7 +91,6 @@ def index():
                       description='music cd of Adele\'s latest album, 25', image='objects.image.a4d37fb614b7c41d.6164656c652032352063642e6a706567.jpeg')
     db.object_collection.insert(object_id=12, collection_id=5)
 
-
     db.objects.insert(owner_id=3, type_id=15, status=2, name='iPhone 5', currency_value=180, summary='black 16gb iphone 5',
                       description='black iphone 5 which is fully working with a 16gb memory and no scratches', image='objects.image.94b52f157eb86559.6970686f6e65203520626c61636b2e6a7067.jpg')
     db.object_collection.insert(object_id=13, collection_id=6)
@@ -108,13 +107,18 @@ def index():
     #                   description=, image=)
     # db.object_collection.insert(object_id=, collection_id=)
 
-    db.trades.insert(sender=3, receiver=1, status=0, seen=False)
-    db.trades_sending.insert(trade_id=1, sent_object_id=9)
-    db.trades_receiving.insert(trade_id=1, recv_object_id=1)
+    db.trades.insert(sender=3, receiver=1, status=3)
+    db.trades_sending.insert(trade_id=1, sent_object_id=1)
+    db.trades_receiving.insert(trade_id=1, recv_object_id=9)
+
 
     db.trades.insert(sender=3, receiver=1, status=0, seen=False)
-    db.trades_sending.insert(trade_id=2, sent_object_id=14)
-    db.trades_receiving.insert(trade_id=2, recv_object_id=6)
+    db.trades_sending.insert(trade_id=2, sent_object_id=9)
+    db.trades_receiving.insert(trade_id=2, recv_object_id=1)
+
+    db.trades.insert(sender=3, receiver=1, status=0, seen=False)
+    db.trades_sending.insert(trade_id=3, sent_object_id=14)
+    db.trades_receiving.insert(trade_id=3, recv_object_id=6)
 
     response.flash = T("Truncated & re-inserted database.")
     return {}
