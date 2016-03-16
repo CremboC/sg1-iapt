@@ -92,6 +92,12 @@ def edit():
             # cleanup linking table
             query = db.object_collection.collection_id == form.vars.id
             db(query).delete()
+
+            # move all items in this collection to the unfiled
+            unfiled = get_unfiled_collection()
+            for obj in objects_in_collection:
+                link_object_collections(obj.id, unfiled.id)
+
             session.flash = dict(status='success', message='Successfully deleted collection.')
             return redirect(URL('collections', 'index'))
 
