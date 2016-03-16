@@ -70,14 +70,18 @@ This collection is visible to everyone."
     <div class="panel panel-default">
         <div class="panel-body">
             {{print_sortby()}}
-            {{for chunk in chunks(items, 3):}}
-            <div class="row">
-                {{for item in chunk:}}
-                <div class="col-xs-4 object-wrapper">
-                    {{print_object(item, False)}}
+            {{if len(items)>0:}}
+                {{for chunk in chunks(items, 3):}}
+                <div class="row">
+                    {{for item in chunk:}}
+                    <div class="col-xs-4 object-wrapper">
+                        {{print_object(item, False)}}
+                    </div>
+                    {{pass}}
                 </div>
                 {{pass}}
-            </div>
+            {{else:}}
+                <h2>No items in this collection :( </h2>
             {{pass}}
         </div>
     </div>

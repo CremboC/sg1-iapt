@@ -38,6 +38,7 @@ def index():
     db.collections.insert(owner_id=1, name="old clothes", private=False) #4
     db.collections.insert(owner_id=3, name="media", private=False) #5
     db.collections.insert(owner_id=3, name="gadgets", private=False) #6
+    db.collections.insert(owner_id=1, name="vases", private=False) #7
 
 
     #Annie objects
@@ -57,11 +58,11 @@ def index():
                       description='white iphone 5 which is fully working with a 32gb memory and no scratches on the screen or casing', image='objects.image.85b1a73ffaebf95e.6970686f6e6520352e6a706567.jpeg')
     db.object_collection.insert(object_id=4, collection_id=4)
 
-    db.objects.insert(owner_id=1, type_id=9, status=2, name='Antique vase', currency_value=65, summary='old vase', description='gold coloured antique vase - very rare', image='objects.image.813196559b058f09.766173652e6a7067.jpg')
-    db.object_collection.insert(object_id=5, collection_id=1)
+    db.objects.insert(owner_id=1, type_id=9, status=0, name='Antique vase', currency_value=65, summary='old vase', description='gold coloured antique vase - very rare', image='objects.image.813196559b058f09.766173652e6a7067.jpg')
+    db.object_collection.insert(object_id=5, collection_id=7)
 
     db.objects.insert(owner_id=1, type_id=9, status=2, name='Glass vase', currency_value=3, summary='modern glass vase', description='plain glass vase, not too heavy perfect for medium sized arrangements', image='objects.image.9ae4cf51673c0a92.676c61737320766173652e6a7067.jpg')
-    db.object_collection.insert(object_id=6, collection_id=1)
+    db.object_collection.insert(object_id=6, collection_id=7)
 
     #Bob
     db.objects.insert(owner_id=2, type_id=10, status=2, name='Desk chair', currency_value=70.0, summary='chair for computer desk',
@@ -76,7 +77,7 @@ def index():
 
     db.objects.insert(owner_id=3, type_id=8, status=2, name='Friends blu ray box set', currency_value=30.0, summary='10 friends blu ray discs',
                       description='Synopsis: All 10 Seasons. 236 original broadcast episodes on 21 discs completely remastered. Includes 2 Hours of all-new bonus content featuring: Unaired footage, New one-hour documentary, New interviews, Never before released cast appearances and more. Over 20 total hours of extras. ', image='objects.image.803de930ba7dbcdc.667269656e647320626f78207365742e6a7067.jpg')
-    db.object_collection.insert(object_id=9,  collection_id=5)
+    db.object_collection.insert(object_id=9, collection_id=5)
 
     db.objects.insert(owner_id=3, type_id=8, status=2, name='Star wars: a new hope dvd', currency_value=10.0, summary='dvd of a new hope',
                       description='The Imperial Forces -- under orders from cruel Darth Vader (David Prowse) -- hold Princess Leia (Carrie Fisher) hostage, in their efforts to quell the rebellion against the Galactic Empire. Luke Skywalker (Mark Hamill) and Han Solo (Harrison Ford), captain of the Millennium Falcon, work together.', image='objects.image.92ec11fe45d7c23f.7374617220776172732061206e657720686f70652e6a706567.jpeg')
@@ -106,6 +107,14 @@ def index():
     # db.objects.insert(owner_id=, type_id=, status=, name=, currency_value=, summary=,
     #                   description=, image=)
     # db.object_collection.insert(object_id=, collection_id=)
+
+    db.trades.insert(sender=3, receiver=1, status=0, seen=False)
+    db.trades_sending.insert(trade_id=1, sent_object_id=9)
+    db.trades_receiving.insert(trade_id=1, recv_object_id=1)
+
+    db.trades.insert(sender=3, receiver=1, status=0, seen=False)
+    db.trades_sending.insert(trade_id=2, sent_object_id=14)
+    db.trades_receiving.insert(trade_id=2, recv_object_id=6)
 
     response.flash = T("Truncated & re-inserted database.")
     return {}
