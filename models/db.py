@@ -182,6 +182,14 @@ db.collections.owner = Field.Lazy(
 
 db.collections.name.requires = IS_NOT_EMPTY()
 
+
+def move_items(s):
+    id = (s.as_dict()['query']).as_dict()['second']
+    print db(db.object_collection.collection_id == id).update(collection_id=get_unfiled_collection(auth.user_id))
+
+db.collections._before_delete.append(lambda s : move_items(s))
+
+
 db.define_table("object_collection",
                 Field("object_id", "reference objects",
                       required=True),
