@@ -39,7 +39,7 @@ def index():
         add_in_trade_field(item)
 
     count = db.object_collection.object_id.count()
-    collections = db((db.collections.id > 0) & (db.collections.id == db.object_collection.collection_id)).select(db.collections.ALL, count, orderby=~count, limitby=(0,3), groupby=db.collections.id)
+    collections = db((db.collections.private==False) & (db.collections.id == db.object_collection.collection_id)).select(db.collections.ALL, count, orderby=~count, limitby=(0,3), groupby=db.collections.id)
 
     return {"user_id": auth.user_id, "auth_logged_in": auth.is_logged_in(), "trades": trades,
             "newest_items": newest_items, "largest_collections": collections}
