@@ -185,7 +185,7 @@ db.collections.name.requires = IS_NOT_EMPTY()
 
 def move_items(s):
     id = (s.as_dict()['query']).as_dict()['second']
-    db(db.object_collection.collection_id == id).update(collection_id=get_unfiled_collection(auth.user_id))
+    db(db.object_collection.collection_id == id).update(collection_id=get_unfiled_collection(auth.user_id).id)
 
 db.collections._before_delete.append(lambda s : move_items(s))
 
