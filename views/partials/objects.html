@@ -92,6 +92,16 @@
 
                 <span class="glyphicon glyphicon-eye-open"></span>
             </a>
+            {{if owner.id == auth.user_id:}}
+            <a
+                class="btn btn-default"
+                href="{{=URL('items', 'edit', args=obj.id)}}"
+                data-toggle="tooltip"
+                title="Edit item">
+
+                <span class="glyphicon glyphicon-pencil"></span>
+            </a>
+            {{pass}}
             {{if not obj.status == 1 and not owner.id == auth.user_id:}}
             <a
                 class="btn btn-default"
