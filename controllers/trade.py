@@ -41,7 +41,8 @@ def view():
             return redirect(URL('trade', 'index'))
         else:
             trader_username = trader_username[0].username
-
+    if not trade.seen & (trade.receiver == auth.user_id):
+        db(db.trades.id==trade.id).update(seen=True)
     return {"user_is_receiver": auth.user_id == trade.receiver, "tradeid": trade_id, "trader_id": trader_id,
             "status": trade.status, "trader_username": trader_username,
             "editable": trade.status == 0,

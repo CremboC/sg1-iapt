@@ -1,7 +1,7 @@
 def index():
     trades = db((((db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)) | (
         (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender))) &
-                db.trades.status.belongs([1, 2, 3])).select(db.trades.id, db.trades.date_created, db.trades.sender,
+                db.trades.status.belongs([1, 2, 3]) & (db.trades.seen==False)).select(db.trades.id, db.trades.date_created, db.trades.sender,
                                                             db.trades.receiver, db.trades.status,
                                                             db.trades.superseded_by, db.auth_user.username,
                                                             orderby=~db.trades.date_created, limitby=(0, 5))
