@@ -35,12 +35,20 @@
     font-weight: bold;
 }
 
+.nav-collections {
+    color: #0c1 !important;
+}
+
 .nav-fortrade {
     color: #69c !important;
 }
 
 .nav-wishlist {
     color: #c90 !important;
+}
+
+.nav-trades {
+    color: #c33 !important;
 }
 
 .navbar-searchbar input.form-control {
