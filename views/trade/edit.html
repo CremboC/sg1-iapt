@@ -4,10 +4,12 @@
 
 <link rel="stylesheet" type="text/css" href="{{=URL('static','css/app.css')}}">
 <div id="errorcontainer" class="container">
-    <div class="panel panel-default text-center row">
-        <div class="panel-body">Trading with username: {{=trader_username}} </div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <p>Trade between you and
+            <a href="{{=URL('collections', 'index', args=trader_id)}}">{{=trader_username}}</a></p>
     </div>
-
+    <div class="col-md-4"></div>
     <form  id="tradeform" action="{{=URL('trade', 'createNew')}}">
         <input hidden name="prevtrade" value="{{=prevtrade}}"/>
         <input hidden name="receiver_username" value="{{=trader_username}}">

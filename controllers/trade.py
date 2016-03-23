@@ -410,8 +410,9 @@ def get_available_user_items(userid):
         db.objects.name,
         db.objects.currency_value,
         db.objects.image,
-        db.objects.summary)
-
+        db.objects.summary,
+        groupby=db.objects.id)
+    print available_objects
     for obj in available_objects:
         obj.string = format_string(obj)
     return available_objects

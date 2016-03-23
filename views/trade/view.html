@@ -7,7 +7,7 @@
         <div class="col-md-4"></div>
         <div class="col-md-4">
             <p>Trade between you and <a
-                    href="{{=URL('collections', 'show', vars={'user': trader_id})}}">{{=trader_username}}</a></p>
+                    href="{{=URL('collections', 'index', args=trader_id)}}">{{=trader_username}}</a></p>
         </div>
         <div class="col-md-4 text-right">
             <a class="btn btn-default" href="{{=URL('trade', 'index')}}">Back to all trades</a>
