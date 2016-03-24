@@ -36,7 +36,7 @@
 }
 
 .nav-collections {
-    color: #0c1 !important;
+    color: #28C335 !important;
 }
 
 .nav-fortrade {
@@ -50,6 +50,11 @@
 .nav-trades {
     color: #c33 !important;
 }
+
+.edit {
+    color: #d58512 !important;
+}
+
 
 .navbar-searchbar input.form-control {
     width: 100%;
@@ -238,3 +243,4 @@
     color: #740000;
 
 }
+

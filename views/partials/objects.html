@@ -85,48 +85,49 @@
         <div class="btn-group btn-group-xs" role="group" aria-label="Object Actions">
             <!-- TODO: Contextual Actions -->
             <a
-                class="btn btn-default"
+                class="btn btn-default nav-collections"
                 href="{{=URL('items', 'show', args=obj.id)}}"
                 data-toggle="tooltip"
-                title="View">
+                title="View item">
 
-                <span class="glyphicon glyphicon-eye-open"></span>
+                <span class="glyphicon glyphicon-eye-open"></span> View
             </a>
             {{if owner.id == auth.user_id:}}
             <a
-                class="btn btn-default"
+                class="btn btn-default edit"
                 href="{{=URL('items', 'edit', args=obj.id)}}"
                 data-toggle="tooltip"
                 title="Edit item">
 
-                <span class="glyphicon glyphicon-edit"></span>
+                <span class="glyphicon glyphicon-edit"></span> Edit
             </a>
-            <a onclick="return confirm('Are you sure you want to delete this item? \n This cannot be undone!')"
-                class="btn btn-default"
+            <a
+                class="btn btn-default nav-trades"
                 href="{{=URL('items', 'delete', args=obj.id)}}"
                 data-toggle="tooltip"
-                title="Delete item">
-                <span class="glyphicon glyphicon-trash"></span>
+                title="Delete item"
+                onclick="return confirm('Are you sure you want to delete this item? \n This cannot be undone!')">
+                <span class="glyphicon glyphicon-trash"></span> Delete
             </a>
             {{pass}}
             {{if not obj.status == 1 and not owner.id == auth.user_id:}}
             <a
-                class="btn btn-default"
+                class="btn btn-default nav-wishlist"
                 href="{{=URL('items', 'wish', args=obj.id)}}"
                 data-toggle="tooltip"
                 title="Add to wishlist">
 
-                <span class="glyphicon glyphicon-heart"></span>
+                <span class="glyphicon glyphicon-heart"></span> Add to wishlist
             </a>
             {{pass}}
             {{if (owner.id != auth.user_id) & (obj.status == 2) & (not obj.in_trade):}}
             <a
-                class="btn btn-default"
+                class="btn btn-default nav-trades"
                 href="{{=URL('trade', 'new', vars={'item_id': obj.id})}}"
                 data-toggle="tooltip"
                 title="Trade">
 
-                <span class="glyphicon glyphicon-tags"></span>
+                <span class="glyphicon glyphicon-tags"></span> Trade this item
             </a>
             {{pass}}
         </div>
