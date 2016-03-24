@@ -247,3 +247,7 @@
 .table td, th {
     text-align: center;
 }
+
+#top_section > div {
+    margin-bottom: 90px;
+}
