@@ -6,21 +6,21 @@
         <div class="pull-left">
             <h2>
                 {{ if is_owner: }}
-                {{ if collection.private: }}
-                    <span
-                            class="glyphicon glyphicon-lock"
-                            data-toggle="tooltip"
-                            title="This collection is private.
-Only you will be able to see it."
-                    ></span>
-                {{ else: }}
-                    <span
-                            class="glyphicon glyphicon-eye-open"
-                            data-toggle="tooltip"
-                            title="This collection is public.
-This collection is visible to everyone."
-                    ></span>
-                {{ pass }}
+                    {{ if collection.private: }}
+                        <span
+                                class="glyphicon glyphicon-lock"
+                                data-toggle="tooltip"
+                                title="This collection is private.
+    Only you will be able to see it."
+                        ></span>
+                    {{ else: }}
+                        <span
+                                class="glyphicon glyphicon-globe"
+                                data-toggle="tooltip"
+                                title="This collection is public.
+    This collection is visible to everyone."
+                        ></span>
+                    {{ pass }}
                 {{ pass }}
                 {{=collection.name}}
                 <small>
