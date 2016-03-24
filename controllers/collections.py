@@ -90,8 +90,6 @@ def edit():
 
             for object_id in objects_to_remove:
                 num_cols = len(db(db.object_collection.object_id==object_id).select())
-                print 'COL'
-                print num_cols
                 if num_cols == 0:
                     owner_id = get_owner_id(object_id)
                     unfiled_col_id = get_unfiled_collection(owner_id)
