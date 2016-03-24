@@ -88,6 +88,17 @@ def edit():
             query = db.object_collection.object_id.belongs(objects_to_remove)
             db(query).delete()
 
+            for object_id in objects_to_remove:
+                num_cols = len(db(db.object_collection.object_id==object_id).select())
+                print 'COL'
+                print num_cols
+                if num_cols == 0:
+                    owner_id = get_owner_id(object_id)
+                    unfiled_col_id = get_unfiled_collection(owner_id)
+                    link_object_collections(object_id, unfiled_col_id)
+
+
+
         if not is_unfiled and form.vars.delete_this_record:
             # cleanup linking table
             query = db.object_collection.collection_id == form.vars.id
@@ -104,8 +115,8 @@ def edit():
         session.flash = dict(status='success', message='Successfully updated collection.')
         return redirect(URL('collections', 'show', args=form.vars.id))
 
-    for object in objects_in_collection:
-        add_in_trade_field(object)
+    for object_id in objects_in_collection:
+        add_in_trade_field(object_id)
 
     return dict(collection=collection, form=form,
                 objects_in_collection=objects_in_collection, is_unfiled=is_unfiled)

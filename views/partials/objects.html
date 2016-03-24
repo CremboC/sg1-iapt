@@ -132,7 +132,12 @@
             {{pass}}
         </div>
         {{if make_removable:}}
-            <a href="#remove" class="remove pull-right" data-id="{{=object.id}}">
+            <a
+               href="#remove"
+               class="remove pull-right"
+               data-toggle="tooltip"
+               title="Remove item from this collection"
+               data-id="{{=object.id}}">
                 <span class="glyphicon glyphicon-remove middle" data-toggle></span>
             </a>
 
