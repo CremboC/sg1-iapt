@@ -21,10 +21,31 @@ def create():
 
     return dict(form=form, types=types, collections=collections, selected_collection=int(selected_collection))
 
+@auth.requires_login()
+def delete():
+    if request.args is None:
+        session.flash = {"status": "danger", "message": "Error: no item selected for deletion"}
+        redirect(URL('items', 'index'))
+    object_id = request.args[0]
+
+    obj = db(db.objects.id == object_id).select().first()
+
+    if obj.owner_id != auth.user_id:
+        session.flash = {"status": "danger", "message": "Error: you cannot edit an item that doesn't belong to you"}
+        return redirect(URL('default', 'index'))
+
+    if obj.status == -1:
+        session.flash = {"status": "danger", "message": "Error: this item was already deleted"}
+        return redirect(URL('default', 'index'))
+
+    return delete_item(object_id)
+
+
 
 @auth.requires_login()
 def edit():
     if request.args is None:
+        session.flash = {"status": "danger", "message": "Error: no item selected for editing"}
         redirect(URL('items', 'index'))
 
     object_id = request.args[0]
@@ -46,11 +67,7 @@ def edit():
 
     if form.process().accepted:
         if request.vars.delete == 'yes':
-            db(db.objects.id == object_id).update(status=-1)
-            db(db.object_collection.object_id == object_id).delete()
-
-            session.flash = {"status": "success", "message": "Item successfully deleted."}
-            return redirect(URL('collections', 'index'))
+            return delete_item(object_id)
 
         if request.vars.collections:
             chosen_cols = maybe_list(request.vars.collections)

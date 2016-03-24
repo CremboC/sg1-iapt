@@ -21,6 +21,13 @@ def chunks(l, n):
         yield l[i:i + n]
 
 
+def delete_item(object_id):
+    db(db.objects.id == object_id).update(status=-1)
+    db(db.object_collection.object_id == object_id).delete()
+    session.flash = {"status": "success", "message": "Item successfully deleted."}
+    return redirect(URL('collections', 'index'))
+
+
 def translate_sortby(query):
     if query == 'date-new':
         return ~db.objects.created_on
