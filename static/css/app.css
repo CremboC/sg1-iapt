@@ -36,7 +36,7 @@
 }
 
 .nav-collections {
-    color: #28C335 !important;
+    color: #008000 !important;
 }
 
 .nav-fortrade {
@@ -241,6 +241,8 @@
 
 .remove:hover{
     color: #740000;
-
 }
 
+.table td, th {
+    text-align: center;
+}
