@@ -1,4 +1,4 @@
-{{def print_object(obj, show_owner = True):}}
+{{def print_object(obj, show_owner = True, make_removable = False):}}
 {{owner = obj.owner()}}
 {{type = obj.type()}}
 <div class="panel panel-default">
@@ -123,6 +123,12 @@
             </a>
             {{pass}}
         </div>
+        {{if make_removable:}}
+            <a href="#remove" class="remove pull-right" data-id="{{=object.id}}">
+                <span class="glyphicon glyphicon-remove middle" data-toggle="tooltip" title data-original-title="Click to remove item from collection (this can be undone)."></span>
+            </a>
+
+        {{pass}}
     </div>
 </div>
 <!-- <div class="panel panel-default object">

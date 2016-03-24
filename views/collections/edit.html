@@ -54,12 +54,7 @@
             <div class="row">
             {{for object in chunk:}}
                 <div class="col-xs-4" id="object-{{=object.id}}">
-                    <div class="clearfix">
-                        <a href="#remove" class="remove pull-right" data-id="{{=object.id}}">
-                            <span class="glyphicon glyphicon-remove middle"></span>
-                        </a>
-                    </div>
-                {{print_object(object, False)}}
+                    {{print_object(object, False, True)}}
                 </div>
             {{pass}}
             </div>
