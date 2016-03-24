@@ -228,3 +228,13 @@
 .imgPreview {
     background-size:100% 100%;
 }
+
+.remove {
+    color: #F00;
+    font-size:16pt;
+}
+
+.remove:hover{
+    color: #740000;
+
+}
