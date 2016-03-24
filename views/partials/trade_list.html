@@ -3,13 +3,13 @@
         <thead>
         <tr>
             <th class="col-md-1">Status</th>
-            <th class="col-md-1">Username</th>
+            <th class="col-md-1">With user</th>
             <th class="col-md-2">Date</th>
             <th class="col-md-1">Items given</th>
             <th class="col-md-1">Items received</th>
             <th class="col-md-1">Total value</th>
             <th class="col-md-1">Replaced by</th> <!-- Link -->
-            <th class="col-md-4">Actions</th>
+            <th class="col-md-4"></th>
         </tr>
         </thead>
 
@@ -48,8 +48,12 @@
                         title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} proposed a modified trade."></span>
                 {{pass}}
                 </td>
-                    <td>{{=trade.trades.otheruser}}</td>
-                    <td>{{=trade.trades.date_created.date()}}</td>
+                    <td>
+                        <a href="{{=URL('collections', 'index', args=(trade.trades.sender if trade.trades.receiver==current_user_id else trade.trades.receiver))}}">
+                            {{=trade.trades.otheruser}}
+                        </a>
+                    </td>
+                    <td>{{=trade.trades.date_created}}</td>
                     <td>{{=trade.sentItems}}</td>
                     <td>{{=trade.receivedItems}}</td>
                     <td>£ {{=trade.value}}</td>

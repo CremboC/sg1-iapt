@@ -257,13 +257,13 @@ def createNew():
             db.trades_receiving.insert(trade_id=new_trade_id, recv_object_id=itemId)
 
     receiver_username = db(db.auth_user.id == receiver_id).select(db.auth_user.username).column()[0]
-    session.flash = T('Successfully created trade with ' + receiver_username)
 
     db(db.auth_user.id == receiver_id).update(notifications=True)
 
     if request.vars.prevtrade is not None:
         db(db.trades.id == int(request.vars.prevtrade)).update(status=4, superseded_by=new_trade_id)
 
+    session.flash = {"status": "success", "message": "Successfully created trade with " + receiver_username}
     redirect(URL('trade', 'index'), client_side=True)
 
 
@@ -307,7 +307,7 @@ def accept():
 
     # Mark as Accepted
     db(db.trades.id == tradeid).update(status=3)
-    session.flash = T("Trade was accepted")
+    session.flash = {"status": "success", "message": "Trade was successfully accepted"}
     return redirect(URL('trade', 'index'), client_side=True)
 
 
@@ -329,10 +329,11 @@ def delete():
 
     # Mark as rejected or cancelled
     if auth.user_id == trade.sender:
-        session.flash = T("Trade was cancelled")
+        session.flash = {"status": "success", "message": "Trade was cancelled."}
+
         db(db.trades.id == trade_id).update(status=1)
     else:
-        session.flash = T("Trade was deleted")
+        session.flash = {"status": "success", "message": "Trade was rejected."}
         db(db.trades.id == trade_id).update(status=2)
 
     redirect(URL('trade', 'index'), client_side=True)
