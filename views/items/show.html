@@ -1,105 +1,116 @@
 {{extend 'layout.html'}}
 {{owner = item.owner()}}
 <div class="container">
-    <div class="clearfix">
-        <h2 class="pull-left">{{=item.name}}</h2>
-
-        <div class="pull-right">
-        {{if not is_owner:}}
-            <a href="{{=URL('items', 'wish', args=item.id)}}" class="btn btn-warning">
-                <span class="glyphicon glyphicon-heart middle" aria-hidden="true"></span>
-                Add to My Wish List
-            </a>
-        {{pass}}
-        {{if is_owner:}}
-            <a href="{{=URL('items', 'edit', args=item.id)}}" class="btn btn-success">
-                <span class="glyphicon glyphicon-edit middle" aria-hidden="true"></span>
-                Edit
-            </a>
-        {{pass}}
-        {{if (not is_owner) & (item.status == 2) & (not item.in_trade):}}
-            <a href="{{=URL('trade', 'new', vars={"item_id": item.id})}}" class="btn btn-default for-trade">
-                <span class="glyphicon glyphicon-tags"></span>
-                Trade for this item
-            </a>
-        {{pass}}
+    <div class="row">
+        <div class="col-xs-4">
+        </div>
+        <div class="col-xs-4 text-center">
+            <h2 class="pull-left">{{=item.name}}</h2>
+        </div>
+        <div class="col-xs-4">
+            <div class="pull-right">
+            {{if not is_owner:}}
+                <a href="{{=URL('items', 'wish', args=item.id)}}" class="btn btn-warning">
+                    <span class="glyphicon glyphicon-heart middle" aria-hidden="true"></span>
+                    Add to My Wish List
+                </a>
+            {{pass}}
+            {{if is_owner:}}
+                <a href="{{=URL('items', 'edit', args=item.id)}}" class="btn btn-success">
+                    <span class="glyphicon glyphicon-edit middle" aria-hidden="true"></span>
+                    Edit
+                </a>
+            {{pass}}
+            {{if (not is_owner) & (item.status == 2) & (not item.in_trade):}}
+                <a href="{{=URL('trade', 'new', vars={"item_id": item.id})}}" class="btn btn-default for-trade">
+                    <span class="glyphicon glyphicon-tags"></span>
+                    Trade for this item
+                </a>
+            {{pass}}
+            </div>
         </div>
     </div>
-
-    <h4>Short summary:</h4>
-
-    <p>
-    {{=item.summary}}
-    </p>
-
-{{if item.image:}}
-    <img src="{{=URL('default', 'download', args=item.image)}}" height="400"/>
-{{else:}}
-    <img src="http://cumbrianrun.co.uk/wp-content/uploads/2014/02/default-placeholder.png" height="400"/>
-{{pass}}
-
-    <ul class="list-unstyled">
-        <li><strong>Type:</strong> {{=item.type().name}}</li>
-        <li><strong>Value:</strong> &pound;{{="{:0,.2f}".format(item.currency_value)}}</li>
-    {{if not is_owner:}}
-        <li>
-            <strong>Owner:</strong> <a href="{{=URL('collections', 'index', args=user.id)}}">{{=user.username}}</a>
-        </li>
-    {{pass}}
-        <li>
-            <strong>Collections:</strong>
-        {{if not item.collections():}}
-            None assigned
+    <row>
+        <div class="col-xs-5">
+        {{if item.image:}}
+            <img src="{{=URL('default', 'download', args=item.image)}}" height="400"/>
+        {{else:}}
+            <img src="http://cumbrianrun.co.uk/wp-content/uploads/2014/02/default-placeholder.png" height="400"/>
         {{pass}}
-        {{for col in item.collections():}}
-            <a href="{{=URL('collections', 'show', args=col.id)}}">{{=col.name}}</a>&nbsp;
-        {{pass}}
-        </li>
-        <li> <strong> Status:  </strong>
-            <div style="display: inline; padding-left: 4px">
-                {{ if item.status == 0: }}
-                    <span
-                        class="object-status not-for-trade"
-                        data-toggle="tooltip"
-                        title="This item is in {{= 'your' if owner.id == auth.user_id else owner.username + '\'s'}} collection, but is not for trade!">
-                        <span
-                            class="glyphicon glyphicon-tag"></span>
-                    </span>
-                {{ elif item.status == 1: }}
-                    <span
-                        class="object-status on-wishlist"
-                        data-toggle="tooltip"
-                        title="This item is on {{= 'your' if owner.id == auth.user_id else owner.username + '\'s'}} wishlist!">
-                        <span
-                            class="glyphicon glyphicon-heart"></span>
-                    </span>
-                {{ elif item.status == 2: }}
-                    {{ if item.in_trade:}}
-                        <span
-                            class="object-status in-trade"
-                            data-toggle="tooltip"
-                            title="This item is currently in a trade, but you can add it to your wishlist for when it becomes available!">
+        </div>
+        <div class="col-xs-7">
+            <strong>Summary</strong>
+            <p>
+            {{=item.summary}}
+            </p>
+            <ul class="list-unstyled">
+                <li><strong>Type:</strong> {{=item.type().name}}</li>
+                <li><strong>Value:</strong> &pound;{{="{:0,.2f}".format(item.currency_value)}}</li>
+            {{if not is_owner:}}
+                <li>
+                    <strong>Owner:</strong> <a href="{{=URL('collections', 'index', args=user.id)}}">{{=user.username}}</a>
+                </li>
+            {{pass}}
+                <li>
+                    <strong>Collections:</strong>
+                {{if not item.collections():}}
+                    None assigned
+                {{pass}}
+                {{for col in item.collections():}}
+                    <a href="{{=URL('collections', 'show', args=col.id)}}">{{=col.name}}</a>&nbsp;
+                {{pass}}
+                </li>
+                <li> <strong> Status:  </strong>
+                    <div style="display: inline; padding-left: 4px">
+                        {{ if item.status == 0: }}
                             <span
-                                class="glyphicon glyphicon-tag"></span>
-                        </span>
-                    {{else:}}
-                        <span
-                            class="object-status for-trade"
-                            data-toggle="tooltip"
-                            title="This item is up for trade!">
+                                class="object-status not-for-trade"
+                                data-toggle="tooltip"
+                                title="This item is in {{= 'your' if owner.id == auth.user_id else owner.username + '\'s'}} collection, but is not for trade!">
+                                <span
+                                    class="glyphicon glyphicon-tag"></span>
+                            </span>
+                        {{ elif item.status == 1: }}
                             <span
-                                class="glyphicon glyphicon-tag"></span>
-                        </span>
-                    {{ pass }}
-                {{ pass }}
-            </div>
-        </li>
-    </ul>
+                                class="object-status on-wishlist"
+                                data-toggle="tooltip"
+                                title="This item is on {{= 'your' if owner.id == auth.user_id else owner.username + '\'s'}} wishlist!">
+                                <span
+                                    class="glyphicon glyphicon-heart"></span>
+                            </span>
+                        {{ elif item.status == 2: }}
+                            {{ if item.in_trade:}}
+                                <span
+                                    class="object-status in-trade"
+                                    data-toggle="tooltip"
+                                    title="This item is currently in a trade, but you can add it to your wishlist for when it becomes available!">
+                                    <span
+                                        class="glyphicon glyphicon-tag"></span>
+                                </span>
+                            {{else:}}
+                                <span
+                                    class="object-status for-trade"
+                                    data-toggle="tooltip"
+                                    title="This item is up for trade!">
+                                    <span
+                                        class="glyphicon glyphicon-tag"></span>
+                                </span>
+                            {{ pass }}
+                        {{ pass }}
+                    </div>
+                </li>
+                <li>
+                    <strong>Owner: <a href="{{=URL('collections', 'index', args=owner.id)}}">{{=owner.username}}</a></strong>
+                </li>
+            </ul>
 
-    <h3>Description:</h3>
+            <strong>Description:</strong>
 
-    <p>
-    {{=item.description}}
-    </p>
+            <p>
+            {{=item.description}}
+            </p>
+        </div>
+    </row>
+
 
 </div>
