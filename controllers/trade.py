@@ -263,7 +263,7 @@ def createNew():
     if request.vars.prevtrade is not None:
         db(db.trades.id == int(request.vars.prevtrade)).update(status=4, superseded_by=new_trade_id)
 
-    session.flash = {"status": "success", "message": "Successfully created trade with " + receiver_username}
+    session.flash = {"status": "success", "message": "Sent a trade proposal to " + receiver_username}
     redirect(URL('trade', 'index'), client_side=True)
 
 
@@ -369,13 +369,11 @@ def index():
         trade.receivedItems = received_items
         trade.trades.status = int(trade.trades.status)
 
-        if trade.trades.superseded_by is not None:
-            completed.append(trade)
-        elif (trade.trades.status == 1) | (trade.trades.status == 2) | (trade.trades.status == 3):
+        if (trade.trades.status == 1) | (trade.trades.status == 2) | (trade.trades.status == 3):
             completed.append(trade)
         elif trade.trades.sender == auth.user_id:
             sent.append(trade)
-        else:
+        elif (trade.trades.receiver == auth.user_id) & (trade.trades.seen==False):
             incoming.append(trade)
 
         if trade.trades.sender == auth.user_id:
@@ -427,7 +425,7 @@ def format_string(object):
 
 
 @auth.requires_login()
-def history():
+def log():
     num_per_page = 20
     if request.vars.index is None:
         min_index = 0
@@ -436,7 +434,6 @@ def history():
 
     trades_query = (db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)
     trades_query |= (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender)
-    trades_query &= db.trades.status.belongs([1, 2, 3])
 
     trades = db(trades_query).select(db.trades.ALL, db.auth_user.username,
                                      limitby=(min_index, min_index + num_per_page))

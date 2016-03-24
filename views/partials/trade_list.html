@@ -67,10 +67,10 @@
                     {{if (trade.trades.status==0) & (trade.trades.receiver==user_id):}}
                         <a class="btn btn-default btn-success" href="{{=URL('trade', 'accept', vars=dict(tradeid=trade.trades.id))}}" onclick="confirm('Are you sure you want to accept this trade?')">Accept</a>
                         <a class="btn btn-default btn-warning" href="{{=URL('trade', 'edit', vars=dict(tradeid=trade.trades.id))}}" >Counter-offer</a>
-                        <a class="btn btn-default btn-danger" href="{{=URL('trade', 'reject', vars=dict(tradeid=trade.trades.id))}}" onclick="confirm('Are you sure you want to reject this trade?')">Reject</a>
+                        <a class="btn btn-default btn-danger" href="{{=URL('trade', 'delete', vars=dict(tradeid=trade.trades.id))}}" onclick="confirm('Are you sure you want to reject this trade?')">Reject</a>
                     {{elif (trade.trades.status==0) & (trade.trades.sender==user_id):}}
                         <a class="btn btn-default btn-warning" href="{{=URL('trade', 'edit', vars=dict(tradeid=trade.trades.id))}}" >Modify</a>
-                        <a class="btn btn-default btn-danger" href="{{=URL('trade', 'reject', vars=dict(tradeid=trade.trades.id))}}" onclick="confirm('Are you sure you want to cancelt this trade?')">Cancel</a>
+                        <a class="btn btn-default btn-danger" href="{{=URL('trade', 'delete', vars=dict(tradeid=trade.trades.id))}}" onclick="confirm('Are you sure you want to cancelt this trade?')">Cancel</a>
                     {{pass}}
                     </td>
                 </tr>

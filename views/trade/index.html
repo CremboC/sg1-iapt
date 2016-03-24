@@ -6,7 +6,7 @@
                 <a href="{{=URL('trade', 'new')}}"><div class="btn btn-default for-trade">Propose new trade</div></a>
             </div>
             <div class="pull-left col-md-3" >
-                <a class="vcenter " href="{{=URL('trade', 'history')}}">View trade history</a>
+                <a class="vcenter " href="{{=URL('trade', 'log')}}">View trade log</a>
             </div>
         </div>
     </div>
@@ -30,7 +30,7 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h2 class="panel-title">Completed trades</h2>
+            <h2 class="panel-title">Concluded trades</h2>
         </div>
         <div class="panel-body">
             {{list_trades(completed, user_id)}}
