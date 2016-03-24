@@ -7,8 +7,7 @@
             <th class="col-md-2">Date</th>
             <th class="col-md-1">Items given</th>
             <th class="col-md-1">Items received</th>
-            <th class="col-md-1">Total value</th>
-            <th class="col-md-1">Replaced by</th> <!-- Link -->
+            <th class="col-md-2">Replaced by</th> <!-- Link -->
             <th class="col-md-4"></th>
         </tr>
         </thead>
@@ -48,32 +47,31 @@
                         title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} proposed a modified trade."></span>
                 {{pass}}
                 </td>
-                    <td>
-                        <a href="{{=URL('collections', 'index', args=(trade.trades.sender if trade.trades.receiver==current_user_id else trade.trades.receiver))}}">
-                            {{=trade.trades.otheruser}}
-                        </a>
-                    </td>
-                    <td>{{=trade.trades.date_created}}</td>
-                    <td>{{=trade.sentItems}}</td>
-                    <td>{{=trade.receivedItems}}</td>
-                    <td>£ {{=trade.value}}</td>
+                <td>
+                    <a href="{{=URL('collections', 'index', args=(trade.trades.sender if trade.trades.receiver==current_user_id else trade.trades.receiver))}}">
+                    {{=trade.trades.otheruser}}
+                    </a>
+                </td>
+                <td>{{=trade.trades.date_created}}</td>
+                <td>{{=trade.sentItems}}</td>
+                <td>{{=trade.receivedItems}}</td>
+                <td>
                {{if trade.trades.superseded_by is not None:}}
-                    <td>
-                        <a class="btn btn-default nav-collections" href="{{=URL('trade', 'view', vars=dict(tradeid=trade.trades.superseded_by))}}">View</a>
-                    </td>
+                   <a class="btn btn-default nav-collections" href="{{=URL('trade', 'view', vars=dict(tradeid=trade.trades.superseded_by))}}">View</a>
                 {{else:}}
-                    <td>N/A</td>
+                    N/A
                 {{pass}}
-                    <td>
-                        <a class="btn btn-default nav-collections" href="{{=URL('trade', 'view', vars=dict(tradeid=trade.trades.id))}}">View</a>
-                        {{if (trade.trades.status==0) & (trade.trades.receiver==user_id):}}
-                            <a class="btn btn-default btn-success" href="{{=URL('trade', 'accept', vars=dict(tradeid=trade.trades.id))}}" onclick="confirm('Are you sure you want to accept this trade?')">Accept</a>
-                            <a class="btn btn-default btn-warning" href="{{=URL('trade', 'edit', vars=dict(tradeid=trade.trades.id))}}" >Counter-offer</a>
-                            <a class="btn btn-default btn-danger" href="{{=URL('trade', 'reject', vars=dict(tradeid=trade.trades.id))}}" onclick="confirm('Are you sure you want to reject this trade?')">Reject</a>
-                        {{elif (trade.trades.status==0) & (trade.trades.sender==user_id):}}
-                            <a class="btn btn-default btn-warning" href="{{=URL('trade', 'edit', vars=dict(tradeid=trade.trades.id))}}" >Modify</a>
-                            <a class="btn btn-default btn-danger" href="{{=URL('trade', 'reject', vars=dict(tradeid=trade.trades.id))}}" onclick="confirm('Are you sure you want to cancelt this trade?')">Cancel</a>
-                        {{pass}}
+                </td>
+                <td>
+                    <a class="btn btn-default nav-collections" href="{{=URL('trade', 'view', vars=dict(tradeid=trade.trades.id))}}">View</a>
+                    {{if (trade.trades.status==0) & (trade.trades.receiver==user_id):}}
+                        <a class="btn btn-default btn-success" href="{{=URL('trade', 'accept', vars=dict(tradeid=trade.trades.id))}}" onclick="confirm('Are you sure you want to accept this trade?')">Accept</a>
+                        <a class="btn btn-default btn-warning" href="{{=URL('trade', 'edit', vars=dict(tradeid=trade.trades.id))}}" >Counter-offer</a>
+                        <a class="btn btn-default btn-danger" href="{{=URL('trade', 'reject', vars=dict(tradeid=trade.trades.id))}}" onclick="confirm('Are you sure you want to reject this trade?')">Reject</a>
+                    {{elif (trade.trades.status==0) & (trade.trades.sender==user_id):}}
+                        <a class="btn btn-default btn-warning" href="{{=URL('trade', 'edit', vars=dict(tradeid=trade.trades.id))}}" >Modify</a>
+                        <a class="btn btn-default btn-danger" href="{{=URL('trade', 'reject', vars=dict(tradeid=trade.trades.id))}}" onclick="confirm('Are you sure you want to cancelt this trade?')">Cancel</a>
+                    {{pass}}
                     </td>
                 </tr>
             {{pass}}
