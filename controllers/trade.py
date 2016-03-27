@@ -372,7 +372,7 @@ def index():
             completed.append(trade)
         elif trade.trades.sender == auth.user_id:
             sent.append(trade)
-        elif (trade.trades.receiver == auth.user_id) & (trade.trades.seen==False):
+        elif (trade.trades.receiver == auth.user_id) & (trade.trades.superseded_by is None):
             incoming.append(trade)
 
         if trade.trades.sender == auth.user_id:
