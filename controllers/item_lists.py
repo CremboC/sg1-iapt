@@ -12,8 +12,13 @@ def for_trade():
     else:
         user = user.username
 
-    objects = db((db.objects.owner_id == user_id) & (db.objects.status == 2)).select(
-        orderby=translate_sortby(request.vars.sort))
+    query = (db.objects.owner_id == user_id) & (db.objects.status == 2)
+    query &= (db.object_collection.object_id == db.objects.id)
+    query &= (db.object_collection.collection_id == db.collections.id) & (db.collections.private is False)
+    objects = db(query).select(
+        db.objects.ALL,
+        orderby=translate_sortby(request.vars.sort),
+        groupby=db.objects.id)
 
     response.view = "item_lists/view.html"
     for object in objects:
@@ -35,8 +40,13 @@ def wish_list():
     else:
         user = user.username
 
-    objects = db((db.objects.owner_id == user_id) & (db.objects.status == 1)).select(
-        orderby=translate_sortby(request.vars.sort))
+    query = (db.objects.owner_id == user_id) & (db.objects.status == 1)
+    query &= (db.object_collection.object_id == db.objects.id)
+    query &= (db.object_collection.collection_id == db.collections.id) & (db.collections.private is False)
+    objects = db(query).select(
+        db.objects.ALL,
+        orderby=translate_sortby(request.vars.sort),
+        groupby=db.objects.id)
 
     response.view = "item_lists/view.html"
 
