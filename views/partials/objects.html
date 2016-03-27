@@ -130,11 +130,22 @@
                 <span class="glyphicon glyphicon-tags middle"></span> Trade this item
             </a>
             {{pass}}
+            {{if obj.in_trade:}}
+                {{if (obj.trade_sender == auth.user_id) | (obj.trade_receiver == auth.user_id):}}
+                <a
+                    class="btn btn-default nav-trades"
+                    href="{{=URL('trade', 'view', vars={'tradeid':obj.trade_id})}}"
+                    data-toggle="tooltip"
+                    title="View trade">
+                    <span class="glyphicon glyphicon-flag middle"></span> View trade
+                </a>
+                {{pass}}
+            {{pass}}
         </div>
         {{if make_removable:}}
             <a
-               href="#remove"
                class="remove pull-right"
+               href="#remove"
                data-toggle="tooltip"
                title="Remove item from this collection"
                data-id="{{=object.id}}">

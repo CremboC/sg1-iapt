@@ -41,7 +41,6 @@ def delete():
     return delete_item(object_id)
 
 
-
 @auth.requires_login()
 def edit():
     if request.args is None:

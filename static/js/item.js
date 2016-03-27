@@ -65,7 +65,6 @@ function create_collection(){
                 closeError = $("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>");
                 error.append(closeError);
                 $("#errorcontainer").prepend(error);
-
                 $("#new_collection").modal('hide');
 
             }
