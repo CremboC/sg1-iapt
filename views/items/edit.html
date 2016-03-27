@@ -94,32 +94,6 @@
                 </p>
             </div>
 
-            <!--collections-->
-            {{if object.status != 1:}}
-            <div class="form-group">
-                <label for="objects_collection">Collections</label>
-                <br>
-                <select id="objects_collection" multiple="multiple" name="collections">
-                    {{for collection in collections:}}
-                    {{if collection.id in object_collections:}}
-                    <option value="{{=collection.id}}" selected="selected">{{=collection.name}}</option>
-                    {{else:}}
-                    <option value="{{=collection.id}}">{{=collection.name}}</option>
-                    {{pass}}
-                    {{pass}}
-                </select>
-                {{get_new_col_modal()}}
-            </div>
-            {{elif object.status == 1:}}
-                <div class="form-group">
-                    <label for="objects_collection">Collections</label>
-                    <br>
-                    <div class="alert alert-info">
-                    	Items which are in a wish list cannot be added to any collection.
-                    </div>
-                </div>
-            {{pass}}
-
             <!--status-->
             <div class="form-group">
                 <label for="objects_status">{{=form.custom.label.status}}</label>
@@ -157,6 +131,32 @@
                     </label>
                 </div>
             </div>
+
+            <!--collections-->
+            {{if object.status != 1:}}
+            <div class="form-group" id="collections">
+                <label for="objects_collection">Collections</label>
+                <br>
+                <select id="objects_collection" multiple="multiple" name="collections">
+                    {{for collection in collections:}}
+                    {{if collection.id in object_collections:}}
+                    <option value="{{=collection.id}}" selected="selected">{{=collection.name}}</option>
+                    {{else:}}
+                    <option value="{{=collection.id}}">{{=collection.name}}</option>
+                    {{pass}}
+                    {{pass}}
+                </select>
+                {{get_new_col_modal()}}
+            </div>
+            {{elif object.status == 1:}}
+                <div class="form-group">
+                    <label for="objects_collection">Collections</label>
+                    <br>
+                    <div class="alert alert-info">
+                    	Items which are in a wish list cannot be added to any collection.
+                    </div>
+                </div>
+            {{pass}}
 
             <!--image-->
             <div class="form-group">

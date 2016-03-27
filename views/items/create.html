@@ -81,22 +81,6 @@
                 </p>
             </div>
 
-            <!--collections-->
-            <div class="form-group">
-                <label for="objects_collection">Collections</label>
-                <br>
-                <select id="objects_collection" multiple="multiple" name="collections">
-                {{for collection in collections:}}
-                {{if collection.id == selected_collection:}}
-                    <option value="{{=collection.id}}" selected="selected">{{=collection.name}}</option>
-                {{else:}}
-                    <option value="{{=collection.id}}">{{=collection.name}}</option>
-                {{pass}}
-                {{pass}}
-                </select>
-                {{get_new_col_modal()}}
-            </div>
-
             <!--status-->
             <div class="form-group">
                 <label for="objects_status">{{=form.custom.label.status}}</label>
@@ -121,6 +105,22 @@
                         For Trade
                     </label>
                 </div>
+            </div>
+
+                        <!--collections-->
+            <div class="form-group" id="collections">
+                <label for="objects_collection">Collections</label>
+                <br>
+                <select id="objects_collection" multiple="multiple" name="collections">
+                {{for collection in collections:}}
+                {{if collection.id == selected_collection:}}
+                    <option value="{{=collection.id}}" selected="selected">{{=collection.name}}</option>
+                {{else:}}
+                    <option value="{{=collection.id}}">{{=collection.name}}</option>
+                {{pass}}
+                {{pass}}
+                </select>
+                {{get_new_col_modal()}}
             </div>
 
             <!--image-->

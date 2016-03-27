@@ -1,16 +1,17 @@
 @auth.requires_login()
 def create():
+    print request.vars
     form = SQLFORM(db.objects)
     types = db(db.types.id > 0).select()
     collections = db(db.collections.owner_id == auth.user_id).select()
-    selected_collection = request.vars.collection or -1
+    selected_collection = request.vars.collection or get_unfiled_collection()
 
     if form.process().accepted:
-        if request.vars.collections:
+        if (request.vars.collections is not None) & (request.vars.status!='1'):
             chosen_cols = maybe_list(request.vars.collections)
             for col in chosen_cols:
                 db.object_collection.insert(object_id=form.vars.id, collection_id=col)
-        else:
+        elif request.vars.status != '1':
             col = get_unfiled_collection()
             link_object_collections(form.vars.id, col.id)
 
