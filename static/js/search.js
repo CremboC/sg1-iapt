@@ -7,12 +7,6 @@ $(document).ready(function () {
 
         $("#filter_user").typeahead({
             source: users,
-            afterSelect: function (selectedUser) {
-                var u = $.grep(data.users, function (user, index) {
-                    return (user.username == selectedUser);
-                });
-                $hiddenUserId.val(u[0].id);
-            },
             autoSelect: true
         });
     });

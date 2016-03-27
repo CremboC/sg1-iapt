@@ -63,8 +63,12 @@ def _items(query_string, filtered):
             selected_types = maybe_list(request.vars.types)
             search_query &= db.objects.type_id.belongs(selected_types)
 
-        if request.vars.user_id:
-            search_query &= db.objects.owner_id == request.vars.user_id
+        if request.vars.user:
+            user = db(db.auth_user.username == request.vars.user).select(db.auth_user.ALL).first()
+            if user:
+                search_query &= db.objects.owner_id == user.id
+            else:
+                search_query &= db.objects.owner_id == -1
 
         if request.vars.min_value and request.vars.min_value != "0":
             search_query &= db.objects.currency_value >= request.vars.min_value
@@ -84,8 +88,12 @@ def _collections(query_string, filtered):
     search_query &= db.collections.private == False
 
     if filtered:
-        if request.vars.user_id != '':
-            search_query &= db.collections.owner_id == request.vars.user_id
+        if request.vars.user:
+            user = db(db.auth_user.username == request.vars.user).select(db.auth_user.ALL).first()
+            if user:
+                search_query &= db.collections.owner_id == user.id
+            else:
+                search_query &= db.collections.owner_id == -1
 
     return search_query
 

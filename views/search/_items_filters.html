@@ -73,11 +73,10 @@
                 User
                 <span class="caret"></span>
             </button>
-            <div id="filters-user" class="collapse {{if request.vars.user_id:}}in{{pass}}">
+            <div id="filters-user" class="collapse {{if request.vars.user:}}in{{pass}}">
                 <label for="filter_user">Username</label>
                 <input type="search" name="user" id="filter_user" class="form-control"
                        value="{{=request.vars.user or ''}}" autocomplete="off">
-                <input type="hidden" name="user_id" id="filter_user_id" value="{{=request.vars.user_id or ''}}">
             </div>
         </div>
 

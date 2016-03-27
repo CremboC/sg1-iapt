@@ -3,20 +3,6 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-3">
-            <div class="list-group">
-                <a href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'items'})}}"
-                   class="list-group-item {{if page == 'items':}}active{{pass}}">
-                    Items
-                </a>
-                <a href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'collections'})}}"
-                   class="list-group-item {{if page == 'collections':}}active{{pass}}">
-                    Collections
-                </a>
-                <a href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'users'})}}"
-                   class="list-group-item {{if page == 'users':}}active{{pass}}">
-                    Users
-                </a>
-            </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2 class="panel-title">Filter your search</h2>
@@ -31,7 +17,32 @@
             </div>
         </div>
         <div class="col-sm-9">
-
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="{{if page == 'items':}}active{{pass}}">
+                    <a
+                        href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'items'})}}"
+                        aria-controls="users"
+                        role="tab">
+                        Items
+                    </a>
+                </li>
+                <li role="presentation" class="{{if page == 'collections':}}active{{pass}}">
+                    <a
+                        href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'collections'})}}"
+                        aria-controls="collections"
+                        role="tab">
+                        Collections
+                    </a>
+                </li>
+                <li role="presentation" class="{{if page == 'users':}}active{{pass}}">
+                    <a
+                        href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'users'})}}"
+                        aria-controls="users"
+                        role="tab">
+                        Users
+                    </a>
+                </li>
+            </ul>
             <div class="clearfix">
                 <div class="pull-left">
                     <h3>
@@ -51,10 +62,9 @@
                 </div>
             </div>
 
-
             {{if page == 'items':}}
                 {{if len(results) == 0:}}
-                <strong>No results found.</strong>
+                <strong>No items found.</strong>
                 {{else:}}
                 {{for chunk in chunks(results, 2):}}
                 <div class="row">
@@ -68,13 +78,13 @@
             {{pass}}
             {{elif page == 'collections':}}
                 {{if len(results) == 0:}}
-                <strong>No results found.</strong>
+                <strong>No collections found.</strong>
                 {{else:}}
                 {{print_collections(results)}}
                 {{pass}}
             {{elif page == 'users':}}
                 {{if len(results) == 0:}}
-                <strong>No results found.</strong>
+                <strong>No users found.</strong>
                 {{else:}}
                 {{print_users(results)}}
                 {{pass}}

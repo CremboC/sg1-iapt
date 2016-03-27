@@ -1,7 +1,7 @@
 {{if not request.vars.query or request.vars.query == "": }}
-    Searching for <strong>everything</strong><!--
+    Searching for <strong>all items</strong><!--
 -->{{else:}}
-    Searching for <strong>{{=request.vars.query}}</strong>
+    Searching for items named <strong>{{=request.vars.query}}</strong>
 {{pass}}<!--
 -->{{if request.vars.types:}}
     <!-- TODO: Fix this godawful hack -->
