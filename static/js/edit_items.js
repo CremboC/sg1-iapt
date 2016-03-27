@@ -1,6 +1,5 @@
 function create_collection(){
     var data = $("#new_collection").find(":input").serialize();
-    console.log("ajax");
     $.ajax({
         url: new_col_url,
         type: "POST",
