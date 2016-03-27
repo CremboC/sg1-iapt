@@ -14,7 +14,20 @@ def index():
 
 
 @auth.requires_login()
+def quick_create():
+    if (request.vars.col_name is None) | (request.vars.col_name == ""):
+        return str(-1)
+    else:
+        if request.vars.col_private is None:
+            id = db.collections.insert(owner_id=auth.user_id, name=request.vars.col_name, private=False)
+        else:
+            id = db.collections.insert(owner_id=auth.user_id, name=request.vars.col_name, private=True)
+        return str(id)
+
+
+@auth.requires_login()
 def create():
+    #Additional sub-method to handle collection creation from create/edit items
     form = SQLFORM(db.collections)
 
     if form.process().accepted:

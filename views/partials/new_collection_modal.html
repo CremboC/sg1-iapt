@@ -1,0 +1,34 @@
+{{def get_new_col_modal():}}
+<a class="btn btn-default" data-toggle="modal" href="#new_collection">Create new Collection</a>
+<div class="modal fade" id="new_collection">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Create a new collection</h4>
+            </div>
+            <div class="modal-body">
+                <div id="modal_collection_name" class="form-group">
+                    <label for="collections_name" class="mandatory">Name</label>
+                    <input class="form-control string" id="collections_name" name="col_name" type="text" value="">
+                    <span style="display: none" class="help-block">Please enter a name</span>
+                </div>
+                <div class="form-group">
+                    <label for="collections_private" data-toggle="tooltip" data-placement="right" title=""
+                           data-original-title="Check this box to make the collection visible only to you.">
+                        <input class="boolean" id="collections_private" name="col_private" type="checkbox" value="on">
+                        Private
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" onclick="create_collection()" class="btn btn-primary">Create collection</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script> var new_col_url = "{{=URL('collections','quick_create')}}"; </script>
+<script src="{{=URL('static','js/edit.js')}}"></script>
+{{pass}}
