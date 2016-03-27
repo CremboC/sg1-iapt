@@ -241,7 +241,6 @@ def createNew():
         for row in receiver_objects:
             if int(row.owner_id) != receiver_id:
                 response.status = 400
-                print 'out2'
                 return 'Error 400: invalid item ID, please refresh page'
             if int(row.status) != 2:
                 response.status = 400
@@ -412,7 +411,6 @@ def get_available_user_items(userid):
         db.objects.image,
         db.objects.summary,
         groupby=db.objects.id)
-    print available_objects
     for obj in available_objects:
         obj.string = format_string(obj)
     return available_objects

@@ -2,7 +2,7 @@
 
 <div class="container">
     <div class="clearfix">
-        <div class="pull-left">
+        <div class="pull-left clearfix" style="clear:both">
             <h2>
             {{if is_want:}}
                 Wish List
@@ -17,26 +17,31 @@
                 </small>
             </h2>
         </div>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-body">
-        <div class="pull-left">
+        <div class="pull-left clearfix" style="clear:both">
             {{if is_want:}}
                 <em>These are your items that you would like to trade to other users.</em>
             {{else:}}
                 <em>These are items you would like to get from other users.</em>
             {{pass}}
         </div>
-        {{print_sortby()}}
-        {{for chunk in chunks(items, 3):}}
-            <div class="row">
-            {{for item in chunk:}}
-                <div class="col-xs-4 object-wrapper">
-                {{print_object(item, False)}}
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+        {{if len(items)==0:}}
+            <h2>No items {{=("in your wishlist" if is_want else "for trade")}}.</h2>
+        {{else:}}
+            {{print_sortby()}}
+            {{for chunk in chunks(items, 3):}}
+                <div class="row">
+                {{for item in chunk:}}
+                    <div class="col-xs-4 object-wrapper">
+                    {{print_object(item, False)}}
+                    </div>
+                {{pass}}
                 </div>
             {{pass}}
-            </div>
         {{pass}}
         </div>
     </div>
