@@ -1,7 +1,6 @@
 {{extend 'layout.html'}}
 
 <div class="container">
-
 {{if form.errors:}}
     <div class="alert alert-warning">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -113,15 +112,16 @@
                 <br>
                 <select id="objects_collection" multiple="multiple" name="collections">
                 {{for collection in collections:}}
-                {{if collection.id == selected_collection:}}
-                    <option value="{{=collection.id}}" selected="selected">{{=collection.name}}</option>
-                {{else:}}
-                    <option value="{{=collection.id}}">{{=collection.name}}</option>
-                {{pass}}
+                    {{if collection.id == selected_collection:}}
+                        <option value="{{=collection.id}}" selected="selected">{{=collection.name}}</option>
+                    {{else:}}
+                        <option value="{{=collection.id}}">{{=collection.name}}</option>
+                    {{pass}}
                 {{pass}}
                 </select>
                 {{get_new_col_modal()}}
             </div>
+            <div id="errorcontainer"></div>
 
             <!--image-->
             <div class="form-group">

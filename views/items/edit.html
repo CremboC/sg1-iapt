@@ -1,7 +1,6 @@
 {{extend 'layout.html'}}
 
 <div class="container">
-
     {{if form.errors:}}
     <div class="alert alert-warning">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -157,7 +156,7 @@
                     </div>
                 </div>
             {{pass}}
-
+            <div id="errorcontainer"></div>
             <!--image-->
             <div class="form-group">
                 <label for="objects_image">{{=form.custom.label.image}}</label>

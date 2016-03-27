@@ -48,6 +48,7 @@ function create_collection(){
         type: "POST",
         data: data,
         success: function (data, textStatus, errorThrown){
+            var error,closeError;
             if (data == "-1"){
                 // Flash error message in dialog
                 var formgroup = $("#modal_collection_name");
@@ -60,7 +61,13 @@ function create_collection(){
                 var multiselect = $("#objects_collection");
                 multiselect.append(option);
                 multiselect.multiselect('rebuild');
+                error = $("<div class='alert alert-success' role='alert'>Created new collection: " + col_name+".</div>");
+                closeError = $("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>");
+                error.append(closeError);
+                $("#errorcontainer").prepend(error);
+
                 $("#new_collection").modal('hide');
+
             }
         },
         error: function (jXHR, textStatus, errorThrown){
