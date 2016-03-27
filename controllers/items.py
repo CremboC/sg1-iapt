@@ -1,6 +1,5 @@
 @auth.requires_login()
 def create():
-    print request.vars
     form = SQLFORM(db.objects)
     types = db(db.types.id > 0).select()
     collections = db(db.collections.owner_id == auth.user_id).select()
@@ -70,29 +69,32 @@ def edit():
         if request.vars.delete == 'yes':
             return delete_item(object_id)
 
-        if request.vars.collections:
-            chosen_cols = maybe_list(request.vars.collections)
+        if request.vars.status!='1':
+            if request.vars.collections:
+                chosen_cols = maybe_list(request.vars.collections)
 
-            # remove from collections
-            removed_collections = list(set(object_collections) - set(chosen_cols))
-            for col in removed_collections:
-                db((db.object_collection.collection_id == col) & (
-                    db.object_collection.object_id == form.vars.id)).delete()
+                # remove from collections
+                removed_collections = list(set(object_collections) - set(chosen_cols))
+                for col in removed_collections:
+                    db((db.object_collection.collection_id == col) & (
+                        db.object_collection.object_id == form.vars.id)).delete()
 
-            new_collections = list(set(chosen_cols) - set(object_collections))
+                new_collections = list(set(chosen_cols) - set(object_collections))
 
-            # add to new collections
-            for col in new_collections:
-                link_object_collections(form.vars.id, col)
+                # add to new collections
+                for col in new_collections:
+                    link_object_collections(form.vars.id, col)
+            else:
+                # remove from all collections it was previously in
+                for col in object_collections:
+                    db((db.object_collection.collection_id == col) & (
+                        db.object_collection.object_id == form.vars.id)).delete()
+
+                # since the item must be in a collection, re-add to the unfiled for simplicity
+                col = get_unfiled_collection()
+                link_object_collections(form.vars.id, col.id)
         else:
-            # remove from all collections it was previously in
-            for col in object_collections:
-                db((db.object_collection.collection_id == col) & (
-                    db.object_collection.object_id == form.vars.id)).delete()
-
-            # since the item must be in a collection, re-add to the unfiled for simplicity
-            col = get_unfiled_collection()
-            link_object_collections(form.vars.id, col.id)
+            db(db.object_collection.object_id == form.vars.id).delete()
 
         session.flash = {"status": "success", "message": "Item successfully saved"}
         return redirect(URL('items', 'show', args=form.vars.id))

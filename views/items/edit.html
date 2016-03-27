@@ -132,8 +132,11 @@
             </div>
 
             <!--collections-->
-            {{if object.status != 1:}}
-            <div class="form-group" id="collections">
+            {{if object.status!=1:}}
+                <div class="form-group" id="collections">
+            {{else:}}
+                <div class="form-group" id="collections" style="display:none">
+            {{pass}}
                 <label for="objects_collection">Collections</label>
                 <br>
                 <select id="objects_collection" multiple="multiple" name="collections">
@@ -147,15 +150,6 @@
                 </select>
                 {{get_new_col_modal()}}
             </div>
-            {{elif object.status == 1:}}
-                <div class="form-group">
-                    <label for="objects_collection">Collections</label>
-                    <br>
-                    <div class="alert alert-info">
-                    	Items which are in a wish list cannot be added to any collection.
-                    </div>
-                </div>
-            {{pass}}
             <div id="errorcontainer"></div>
             <!--image-->
             <div class="form-group">
