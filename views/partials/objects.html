@@ -25,7 +25,7 @@
         {{ elif obj.status == 2: }}
             {{ if obj.in_trade:}}
                 <span
-                    class="pull-right object-status in-trade"
+                    class="pull-right object-status not-for-trade"
                     data-toggle="tooltip"
                     {{if owner.id == auth.user_id:}}
                         title="Your item is currently in a trade!"
