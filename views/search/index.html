@@ -3,18 +3,20 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">Filter your search</h2>
+            {{if page != 'users':}}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Filter your search</h2>
+                    </div>
+                    <div class="panel-body">
+                        {{if page == 'items':}}
+                        {{include 'search/_items_filters.html'}}
+                        {{elif page == 'collections':}}
+                        {{include 'search/_collections_filters.html'}}
+                        {{pass}}
+                    </div>
                 </div>
-                <div class="panel-body">
-                    {{if page == 'items':}}
-                    {{include 'search/_items_filters.html'}}
-                    {{elif page == 'collections':}}
-                    {{include 'search/_collections_filters.html'}}
-                    {{pass}}
-                </div>
-            </div>
+            {{pass}}
         </div>
         <div class="col-sm-9">
             <ul class="nav nav-tabs" role="tablist">
