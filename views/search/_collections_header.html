@@ -2,4 +2,7 @@
     Searching for <strong>all collections</strong><!--
 -->{{else:}}
     Searching for collections named <strong>{{=request.vars.query}}</strong>
-{{pass}}.
+{{pass}}<!--
+-->{{if request.vars.only_other:}}
+    which don't belong to me<!--
+-->{{pass}}

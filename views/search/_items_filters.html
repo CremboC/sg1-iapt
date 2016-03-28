@@ -17,29 +17,29 @@
 
             <div id="filters-types" class="collapse {{if request.vars.types:}}in{{pass}}">
                 <ul class="list-group">
-                    {{for type in types:}}
+                {{for type in types:}}
                     <li class="list-group-item">
-                        {{if type.id in selected_types:}}
+                    {{if type.id in selected_types:}}
                         <label for="{{=type.name}}-{{=type.id}}" class="full-width">
                             <input type="checkbox"
                                    name="types"
                                    id="{{=type.name}}-{{=type.id}}"
                                    value="{{=type.id}}"
                                    checked="checked">
-                            {{=type.name}}
+                        {{=type.name}}
                         </label>
-                        {{else:}}
+                    {{else:}}
                         <label for="{{=type.name}}-{{=type.id}}" class="full-width">
                             <input type="checkbox"
                                    name="types"
                                    id="{{=type.name}}-{{=type.id}}"
                                    value="{{=type.id}}">
-                            {{=type.name}}
+                        {{=type.name}}
                         </label>
-                        {{pass}}
+                    {{pass}}
 
                     </li>
-                    {{pass}}
+                {{pass}}
                 </ul>
             </div>
         </div>
@@ -54,16 +54,24 @@
             </button>
 
             <div id="filters-value" class="collapse {{if request.vars.min_value or request.vars.max_value:}}in{{pass}}">
-                <label for="min_value">Minimum value</label>
-                <div class="input-group">
-                    <span class="input-group-addon">&pound;</span>
-                    <input class="form-control" type="number" id="min_value" name="min_value" min="0" value="{{=(request.vars.min_value or 0)}}" step="0.01">
+                <div class="form-group">
+                    <label for="min_value">Minimum value</label>
+
+                    <div class="input-group">
+                        <span class="input-group-addon">&pound;</span>
+                        <input class="form-control" type="number" id="min_value" name="min_value" min="0"
+                               value="{{=(request.vars.min_value or 0)}}" step="0.01">
+                    </div>
                 </div>
 
-                <label for="max_value">Maximum value</label>
-                <div class="input-group">
-                    <span class="input-group-addon">&pound;</span>
-                    <input class="form-control" type="number" id="max_value" name="max_value" min="0" step="0.01" value="{{=(request.vars.max_value or 0)}}">
+                <div class="form-group">
+                    <label for="max_value">Maximum value</label>
+
+                    <div class="input-group">
+                        <span class="input-group-addon">&pound;</span>
+                        <input class="form-control" type="number" id="max_value" name="max_value" min="0" step="0.01"
+                               value="{{=(request.vars.max_value or 0)}}">
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,41 +82,55 @@
                 <span class="caret"></span>
             </button>
             <div id="filters-user" class="collapse {{if request.vars.user:}}in{{pass}}">
-                <label for="filter_user">Username</label>
-                <input type="search" name="user" id="filter_user" class="form-control"
-                       value="{{=request.vars.user or ''}}" autocomplete="off">
+                <div class="form-group">
+                    <label for="filter_user">Username</label>
+                    <input type="search" name="user" id="filter_user" class="form-control"
+                           value="{{=request.vars.user or ''}}" autocomplete="off" placeholder="Start typing a username...">
+                </div>
+
+            {{if auth.user_id is not None:}}
+                <div class="form-group">
+                    <label for="only_other" class="label-control">
+                        <input type="checkbox" name="only_other" id="only_other"
+                               {{if request.vars.only_other:}}checked="checked"{{pass}}>
+                        <span class="middle">Only display other people's items</span>
+                    </label>
+                </div>
+            {{pass}}
+
             </div>
         </div>
 
         <div class="filter status">
-            <button type="button" class="btn btn-default btn-block" data-toggle="collapse" data-target="#filters-status">
+            <button type="button" class="btn btn-default btn-block" data-toggle="collapse"
+                    data-target="#filters-status">
                 Item Status
                 <span class="caret"></span>
             </button>
             <div id="filters-status" class="collapse {{if filtered:}}in{{pass}}">
                 <ul class="list-group">
-                    {{for status in statuses:}}
+                {{for status in statuses:}}
                     <li class="list-group-item">
-                        {{if status.id in selected_statuses:}}
+                    {{if status.id in selected_statuses:}}
                         <label for="{{=status.id}}-{{=status.name}}" class="full-width">
                             <input type="checkbox"
                                    name="statuses"
                                    id="{{=status.id}}-{{=status.name}}"
                                    value="{{=status.id}}"
                                    checked="checked">
-                            {{=status.name}}
+                        {{=status.name}}
                         </label>
-                        {{else:}}
+                    {{else:}}
                         <label for="{{=status.id}}-{{=status.name}}" class="full-width">
                             <input type="checkbox"
                                    name="statuses"
                                    id="{{=status.id}}-{{=status.name}}"
                                    value="{{=status.id}}">
-                            {{=status.name}}
+                        {{=status.name}}
                         </label>
-                        {{pass}}
-                    </li>
                     {{pass}}
+                    </li>
+                {{pass}}
                 </ul>
             </div>
         </div>

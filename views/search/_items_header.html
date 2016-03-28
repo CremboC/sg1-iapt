@@ -10,6 +10,9 @@
 -->{{if request.vars.user:}}
     from user <strong>{{=request.vars.user}}</strong><!--
 -->{{pass}}<!--
+-->{{if request.vars.only_other:}}
+    which don't belong to me<!--
+-->{{pass}}<!--
 -->{{if request.vars.min_value and request.vars.max_value and request.vars.min_value != "0" and request.vars.max_value != "0":}}
     worth between
     <strong>&pound;{{=request.vars.min_value}}</strong>

@@ -15,11 +15,25 @@
                 User
                 <span class="caret"></span>
             </button>
+
             <div id="filters-user" class="collapse {{if request.vars.user:}}in{{pass}}">
-                <label for="filter_user">Username</label>
-                <input type="search" name="user" id="filter_user" class="form-control"
-                       value="{{=request.vars.user or ''}}" autocomplete="off">
+                <div class="form-group">
+                    <label for="filter_user">Username</label>
+                    <input type="search" name="user" id="filter_user" class="form-control"
+                           value="{{=request.vars.user or ''}}" autocomplete="off">
+                </div>
+
+            {{if auth.user_id is not None:}}
+                <div class="form-group">
+                    <label for="only_other" class="label-control">
+                        <input type="checkbox" name="only_other" id="only_other"
+                               {{if request.vars.only_other:}}checked="checked"{{pass}}>
+                        <span class="middle">Only display other people's items</span>
+                    </label>
+                </div>
+            {{pass}}
             </div>
+
         </div>
 
         <div class="controls filter">

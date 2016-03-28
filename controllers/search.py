@@ -80,6 +80,9 @@ def _items(query_string, filtered):
             selected_statuses = maybe_list(request.vars.statuses)
             search_query &= db.objects.status.belongs(selected_statuses)
 
+        if request.vars.only_other:
+            search_query &= ~(db.objects.owner_id == auth.user_id)
+
     return search_query, selected_statuses, selected_types, types, statuses
 
 
@@ -94,6 +97,9 @@ def _collections(query_string, filtered):
                 search_query &= db.collections.owner_id == user.id
             else:
                 search_query &= db.collections.owner_id == -1
+
+        if request.vars.only_other:
+            search_query &= ~(db.collections.owner_id == auth.user_id)
 
     return search_query
 

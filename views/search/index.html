@@ -67,6 +67,10 @@
             {{if page == 'items':}}
                 {{if len(results) == 0:}}
                 <strong>No items found.</strong>
+                <p>
+                    Try searching for <a href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'collections'})}}">collections</a> or <a href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'users'})}}">users</a> instead.
+                </p>
+
                 {{else:}}
                 {{for chunk in chunks(results, 2):}}
                 <div class="row">
@@ -81,12 +85,18 @@
             {{elif page == 'collections':}}
                 {{if len(results) == 0:}}
                 <strong>No collections found.</strong>
+                <p>
+                    Try searching for <a href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'items'})}}">items</a> or <a href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'users'})}}">users</a> instead.
+                </p>
                 {{else:}}
                 {{print_collections(results)}}
                 {{pass}}
             {{elif page == 'users':}}
                 {{if len(results) == 0:}}
                 <strong>No users found.</strong>
+                <p>
+                    Try searching for <a href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'items'})}}">items</a> or <a href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'collections'})}}">collections</a> instead.
+                </p>
                 {{else:}}
                 {{print_users(results)}}
                 {{pass}}
