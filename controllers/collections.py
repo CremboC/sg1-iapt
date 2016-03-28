@@ -8,7 +8,7 @@ def index():
     if not is_me:
         collection_query &= db.collections.private == False
 
-    collections = db(collection_query).select()
+    collections = db(collection_query).select(orderby=~db.collections.name)
 
     return dict(collections=collections, is_me=is_me, user=user)
 
@@ -62,7 +62,7 @@ def show():
 
     obj_query = db.objects.owner_id == auth.user_id
     obj_query &= ~db.objects.id.belongs([col.id for col in objects])
-    other_objects = db(obj_query).select()
+    other_objects = db(obj_query).select(orderby=db.objects.name)
 
     return dict(collection=collection, user=user, is_owner=is_owner, items=objects, other_objects=other_objects)
 

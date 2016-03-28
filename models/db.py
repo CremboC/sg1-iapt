@@ -149,7 +149,7 @@ db.objects.type = Field.Lazy(
 
 db.objects.collections = Field.Lazy(
     'collections',
-    lambda row: collections_and_objects(db.objects.id == row.objects.id).select(db.collections.ALL)
+    lambda row: collections_and_objects(db.objects.id == row.objects.id).select(db.collections.ALL, orderby=db.collections.name)
 )
 
 db.define_table("collections",
@@ -171,7 +171,7 @@ db.auth_user._after_insert.append(
 
 db.collections.objects = Field.Method(
     'objects',
-    lambda row, orderby=~db.objects.updated_on: collections_and_objects(
+    lambda row, orderby=db.objects.name: collections_and_objects(
         (db.collections.id == row.collections.id) & (db.objects.status != -1)).select(db.objects.ALL, orderby=orderby)
 )
 

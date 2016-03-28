@@ -58,7 +58,7 @@
         </div>
 
         <div id="navbar-ex1-collapse" class="collapse navbar-collapse">
-            {{ if auth.user_id: }}
+        {{ if auth.user_id: }}
 
             <ul class="nav navbar-nav">
                 <li>
@@ -94,18 +94,20 @@
                     </a>
                 </li>
             </ul>
-            {{ pass }}
+        {{ pass }}
             <ul class="nav navbar-nav navbar-right">
             {{ if auth.user_id: }}
             {{ if notifications(): }}
                 <li>
-                    <a href="{{=URL('trade', 'index')}}" data-toggle="tooltip" data-placement="bottom" title="You have notifications!">
+                    <a href="{{=URL('trade', 'index')}}" data-toggle="tooltip" data-placement="bottom"
+                       title="You have notifications!">
                         <span class="glyphicon glyphicon-bell notification-icon middle" aria-hidden="true"></span>
                     </a>
                 </li>
             {{ else: }}
                 <li>
-                    <a href="{{=URL('trade', 'index')}}" data-toggle="tooltip" data-placement="bottom" title="No Notifications">
+                    <a href="{{=URL('trade', 'index')}}" data-toggle="tooltip" data-placement="bottom"
+                       title="No Notifications">
                         <span class="glyphicon glyphicon-bell middle" aria-hidden="true"></span>
                     </a>
                 </li>
@@ -146,7 +148,7 @@
                     </a>
                 </li>
             {{else:}}
-                {{='auth' in globals() and auth.navbar('Welcome', mode='dropdown') or ''}}
+            {{='auth' in globals() and auth.navbar('Welcome', mode='dropdown') or ''}}
             {{pass}}
             </ul>
 
@@ -157,16 +159,16 @@
             <input type="hidden" name="page" value="{{=request.vars.page or 'items'}}">
 
             <div class="row">
-                <div class="col-sm-6 col-sm-offset-2">
-                    <label for="search_query" class="sr-only">Search Query</label>
-                    <input type="text" name="query" id="search_query" class="form-control"
-                           value="{{if request.vars.query:}}{{=request.vars.query}}{{pass}}"
-                           placeholder="Search for items, collections and users...">
-                </div>
-                <div class="col-sm-2">
-                    <button type="submit" class="btn btn-default">
-                        Search!
-                    </button>
+                <div class="">
+                    <div class="input-group col-sm-10 col-sm-offset-2">
+                        <label for="search_query" class="sr-only">Search Query</label>
+                        <input type="text" name="query" id="search_query" class="form-control"
+                               value="{{if request.vars.query:}}{{=request.vars.query}}{{pass}}"
+                               placeholder="Search for items, collections and users...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Search</button>
+                        </span>
+                    </div><!-- /input-group -->
                 </div>
             </div>
         </form>

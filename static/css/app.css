@@ -55,9 +55,17 @@
     color: #d58512 !important;
 }
 
+.navbar-default .navbar-brand:hover {
+    background: #E4E3E3;
+}
 
 .navbar-searchbar input.form-control {
     width: 100%;
+    border-color: #939393;
+}
+
+.navbar-searchbar .input-group .input-group-btn button {
+    border-color: #939393;
 }
 
 .filters .filter {
