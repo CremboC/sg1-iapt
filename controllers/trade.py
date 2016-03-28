@@ -56,7 +56,7 @@ def new():
     receiver_id = request.vars.receiver_id
     item_id = request.vars.item_id
     if (receiver_username is None) & (receiver_id is not None):
-        receiver_username = db(db.auth_user.id == receiver_id).select(db.auth_user.username)
+        receiver_username = db(db.auth_user.id == receiver_id).select(db.auth_user.username).column()
         if len(receiver_username) == 0:
             session.flash = {"status": "danger", "message": "Error: invalid user id"}
             return redirect(URL('trade', 'index'))
@@ -461,7 +461,7 @@ def log():
         else:
             trade.trades.otheruser = trade.trades.sender
         trade.trades.otheruser = db(db.auth_user.id == trade.trades.otheruser).select(db.auth_user.username).column()[0]
-    return {"trades": trades, "user_id": auth.user_id, "hasPrevPage": min_index > 0,
+    return {"trades": trades, "user_name": db(db.auth_user.id==auth.user_id).select(db.auth_user.username).first().username, "user_id": auth.user_id, "hasPrevPage": min_index > 0,
             "hasNextPage": trade_count > min_index + num_per_page, "minIndex": min_index, "numPerPage": num_per_page}
 
 
