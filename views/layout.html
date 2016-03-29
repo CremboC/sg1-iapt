@@ -180,8 +180,8 @@
     <div class="container">
         <ol class="breadcrumb">
         {{ for index, tup in enumerate( breadcrumbs ): }}
-        {{ if index + 1 == len( breadcrumbs ): }}
-            <li class="active">{{=tup[1] or tup[0]}}</li>
+        {{if len(tup)==1:}}
+            <li class="active">{{=tup[0]}}</li>
         {{ else: }}
             <li><a href="{{=tup[0]}}">{{=tup[1]}}</a></li>
         {{ pass }}

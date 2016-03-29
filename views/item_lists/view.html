@@ -1,3 +1,9 @@
+{{if is_want:}}
+        {{breadcrumbs = [[URL('default', 'index'), 'Home'], ['My wish list']]}}
+{{else:}}
+        {{breadcrumbs = [[URL('default', 'index'), 'Home'], ['My items for trade']]}}
+{{pass}}
+
 {{extend 'layout.html'}}
 
 <div class="container">

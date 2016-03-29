@@ -1,3 +1,9 @@
+{{if is_me:}}
+    {{breadcrumbs = [[URL('default', 'index'), 'Home'], ['My collections']]}}
+{{else:}}
+    {{breadcrumbs = [[URL('default', 'index'), 'Home'], [user.username + '\'s collections']]}}
+{{pass}}
+
 {{extend 'layout.html'}}
 
 <div class="container">

@@ -1,5 +1,35 @@
-{{extend 'layout.html'}}
 {{owner = item.owner()}}
+{{if item.status==1:}}
+        {{if is_owner:}}
+            {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('item_lists', 'wish_list'), 'My wishlist'], ['View item']]}}
+        {{else:}}
+            {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('item_lists', 'wish_list', vars=dict(user_id=owner.id)), owner.username + '\'s wishlist'], ['View item']]}}
+        {{pass}}
+{{else:}}
+    {{if not item.collections:}}
+        {{if is_owner:}}
+            {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), 'My collections'],['View item']]}}
+        {{else:}}
+            {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), owner.username + '\'s collections'], ['View item']]}}
+        {{pass}}
+    {{else:}}
+        {{if len(item.collections())==1:}}
+            {{col = item.collections()[0]}}
+            {{if is_owner:}}
+                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), 'My collections'], [URL('collections', 'show', args=col.id), col.name], ['View item']]}}
+            {{else:}}
+                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), owner.username + '\'s collections'],['View item']]}}
+            {{pass}}
+        {{else:}}
+            {{if is_owner:}}
+                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), 'My collections'], [URL('#'), 'Multiple collections'], ['View item']]}}
+            {{else:}}
+                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), owner.username + '\'s collections'], [URL('#'), 'Multiple collections'], ['View item']]}}
+            {{pass}}
+        {{pass}}
+    {{pass}}
+{{pass}}
+{{extend 'layout.html'}}
 <div class="container">
     <div class="row">
         <div class="col-xs-4">

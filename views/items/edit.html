@@ -1,3 +1,11 @@
+{{if object.status==0:}}
+{{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), 'My collections'], ['Edit item']]}}
+{{elif object.status==1:}}
+{{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('item_lists', 'wish_list'), 'My wish list'], ['Edit item']]}}
+{{elif object.status==2:}}
+{{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('item_lists', 'for_trade'), 'My items for trade'], ['Edit item']]}}
+{{pass}}
+
 {{extend 'layout.html'}}
 
 <div class="container">
@@ -199,4 +207,4 @@
 <script>
     var __collections_url__ = "{{=URL('collections', 'get.json')}}";
 </script>
-<script src="{{=URL('static','js/item.js')}}"></script>
+<script src="{{=URL('static','js/object.js')}}"></script>
