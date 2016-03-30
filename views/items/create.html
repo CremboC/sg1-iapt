@@ -85,25 +85,45 @@
             <!--status-->
             <div class="form-group">
                 <label for="objects_status">{{=form.custom.label.status}}</label>
+                <br />
+                <div
+                    class="btn-group btn-group-justified btn-group-lg"
+                    role="group"
+                    aria-label="Item Status"
+                    data-toggle="buttons">
 
-                <div class="radio">
-                    <label data-toggle="tooltip" title="Select this to make the item you own non-tradable.">
-                        <input type="radio" name="status" value="0" checked="checked">
-                        In a Collection
+                    <label class="btn btn-primary active wrapping" role="button">
+                        <input type="radio" name="status" autocomplete="off" value="2" checked>
+                        <strong>
+                            <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+
+                            Tradable
+                        </strong>
+                        <br />
+                        <small>Tradable items can be traded for other items.</small>
+                        </label>
                     </label>
-                </div>
+                    <label class="btn btn-success wrapping" role="button">
+                        <input type="radio" name="status" autocomplete="off" value="0">
+                        <strong>
+                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
 
-                <div class="radio">
-                    <label data-toggle="tooltip" title="Select this to create a request for an item (i.e: you don't own this particular item)">
-                        <input type="radio" name="status" value="1">
-                        Wish List
+                            Non-Tradable
+                        </strong>
+                        <br />
+                        <small>Non-Tradable items cannot be in trades and cannot be asked for in a trade.</small>
+                        </label>
                     </label>
-                </div>
+                    <label class="btn btn-warning wrapping" role="button">
+                        <input type="radio" name="status" autocomplete="off" value="1">
+                        <strong>
+                            <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
 
-                <div class="radio">
-                    <label data-toggle="tooltip" title="Select this to make the item you own tradable.">
-                        <input type="radio" name="status" value="2">
-                        For Trade
+                            On Wishlist
+                        </strong>
+                        <br />
+                        <small>Wishlist items are items you do not own but would like to trade for.</small>
+                        </label>
                     </label>
                 </div>
             </div>

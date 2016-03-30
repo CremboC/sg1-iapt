@@ -104,37 +104,61 @@
             <!--status-->
             <div class="form-group">
                 <label for="objects_status">{{=form.custom.label.status}}</label>
+                <br />
+                <div
+                    class="btn-group btn-group-justified btn-group-lg"
+                    role="group"
+                    aria-label="Item Status"
+                    data-toggle="buttons">
 
-                <div class="radio">
-                    <label data-toggle="tooltip" title="Select this to make the item you own non-tradable.">
-                        {{if object.status == 0:}}
-                        <input type="radio" name="status" value="0" checked="checked">
-                        {{else:}}
-                        <input type="radio" name="status" value="0">
-                        {{pass}}
-                        In a Collection
+
+                    {{ if object.status == 2: }}
+                    <label class="btn btn-primary active wrapping" role="button">
+                        <input type="radio" name="status" autocomplete="off" value="2" checked>
+                    {{ else: }}
+                    <label class="btn btn-primary wrapping" role="button">
+                        <input type="radio" name="status" autocomplete="off" value="2">
+                    {{ pass }}
+                        <strong>
+                            <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+
+                            Tradable
+                        </strong>
+                        <br />
+                        <small>Tradable items can be traded for other items.</small>
+                        </label>
                     </label>
-                </div>
+                    {{ if object.status == 0: }}
+                    <label class="btn btn-success active wrapping" role="button">
+                        <input type="radio" name="status" autocomplete="off" value="0" checked>
+                    {{ else: }}
+                    <label class="btn btn-success wrapping" role="button">
+                        <input type="radio" name="status" autocomplete="off" value="0">
+                    {{ pass }}
+                        <strong>
+                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
 
-                <div class="radio">
-                    <label data-toggle="tooltip" title="Select this to create a request for an item (i.e: you don't own this particular item)">
-                        {{if object.status == 1:}}
-                        <input type="radio" name="status" value="1" checked="checked">
-                        {{else:}}
-                        <input type="radio" name="status" value="1">
-                        {{pass}}
-                        Wish List
+                            Non-Tradable
+                        </strong>
+                        <br />
+                        <small>Non-Tradable items cannot be in trades and cannot be asked for in a trade.</small>
+                        </label>
                     </label>
-                </div>
+                    {{ if object.status == 1: }}
+                    <label class="btn btn-warning active wrapping" role="button">
+                        <input type="radio" name="status" autocomplete="off" value="1" checked>
+                    {{ else: }}
+                    <label class="btn btn-warning wrapping" role="button">
+                        <input type="radio" name="status" autocomplete="off" value="1">
+                    {{ pass }}
+                        <strong>
+                            <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
 
-                <div class="radio">
-                    <label data-toggle="tooltip" title="Select this to make the item you own tradable.">
-                        {{if object.status == 2:}}
-                        <input type="radio" name="status" value="2" checked="checked">
-                        {{else:}}
-                        <input type="radio" name="status" value="2">
-                        {{pass}}
-                        For Trade
+                            On Wishlist
+                        </strong>
+                        <br />
+                        <small>Wishlist items are items you do not own but would like to trade for.</small>
+                        </label>
                     </label>
                 </div>
             </div>
