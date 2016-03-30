@@ -97,16 +97,14 @@
                                 class="object-status not-for-trade"
                                 data-toggle="tooltip"
                                 title="This item is in {{= 'your' if owner.id == auth.user_id else owner.username + '\'s'}} collection, but is not for trade!">
-                                <span
-                                    class="glyphicon glyphicon-tag"></span>
+                                <span class="glyphicon glyphicon-tag" aria-hidden="true"></span> Non-Tradable
                             </span>
                         {{ elif item.status == 1: }}
                             <span
                                 class="object-status on-wishlist"
                                 data-toggle="tooltip"
                                 title="This item is on {{= 'your' if owner.id == auth.user_id else owner.username + '\'s'}} wishlist!">
-                                <span
-                                    class="glyphicon glyphicon-heart"></span>
+                                <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> Wishlist Item
                             </span>
                         {{ elif item.status == 2: }}
                             {{ if item.in_trade:}}
@@ -114,16 +112,14 @@
                                     class="object-status in-trade"
                                     data-toggle="tooltip"
                                     title="This item is currently in a trade, but you can add it to your wishlist for when it becomes available!">
-                                    <span
-                                        class="glyphicon glyphicon-tag"></span>
+                                    <span class="glyphicon glyphicon-tag" aria-hidden="true"></span> Currently In Trade
                                 </span>
                             {{else:}}
                                 <span
                                     class="object-status for-trade"
                                     data-toggle="tooltip"
                                     title="This item is up for trade!">
-                                    <span
-                                        class="glyphicon glyphicon-tag"></span>
+                                    <span class="glyphicon glyphicon-tag" aria-hidden="true"></span> Tradable
                                 </span>
                             {{ pass }}
                         {{ pass }}
