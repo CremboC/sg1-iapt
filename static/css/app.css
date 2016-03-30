@@ -2,6 +2,10 @@
     margin-top: 75px;
 }
 
+.wrapping {
+    white-space: normal!important;
+}
+
 .full-width {
     width: 100%;
 }

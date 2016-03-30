@@ -22,29 +22,57 @@
             <tr>
                 <td>
                 {{if (trade.trades.status==0) & (trade.trades.sender==user_id):}}
-                    <span class="glyphicon glyphicon-send"
+                    <span
                         data-toggle="tooltip"
-                        title="This trade has been sent and is awaiting a response."></span>
+                        title="This trade has been sent and is awaiting a response">
+
+                        <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+                        Sent
+                    </span>
                 {{elif (trade.trades.status==0) & (trade.trades.receiver==user_id):}}
-                    <span class="glyphicon glyphicon-arrow-right"
+                    <span
                         data-toggle="tooltip"
-                        title="Someone has sent you a trade request! View the trade to accept or reject it."></span>
+                        title="Someone has sent you a trade request! View the trade to accept or reject it.">
+
+                        <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                        New
+                    </span>
                 {{elif trade.trades.status==1:}}
-                    <span class="glyphicon glyphicon glyphicon-remove" style="color:red"
+                    <span
+                        class="text-danger"
                         data-toggle="tooltip"
-                        title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} cancelled this trade."></span>
+                        title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} cancelled this trade.">
+
+                        <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        Cancelled
+                    </span>
                 {{elif trade.trades.status==2:}}
-                    <span class="glyphicon glyphicon-thumbs-down" style="color:red"
+                    <span
+                        class="text-danger"
                         data-toggle="tooltip"
-                        title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} rejected your trade."></span>
+                        title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} rejected this trade.">
+
+                        <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                        Rejected
+                    </span>
                 {{elif trade.trades.status==3:}}
-                    <span class="glyphicon glyphicon-thumbs-up" style="color:green"
+                    <span
+                        class="text-success"
                         data-toggle="tooltip"
-                        title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} accepted your trade."></span>
+                        title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} accepted this trade.">
+
+                        <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                        Accepted
+                    </span>
                 {{elif trade.trades.status==4:}}
-                    <span class="glyphicon glyphicon-refresh" style="color:darkorange"
+                    <span
+                        class="text-warning"
                         data-toggle="tooltip"
-                        title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} proposed a modified trade."></span>
+                        title="{{=("You" if trade.trades.receiver==user_id else trade.trades.otheruser)}} proposed a modified trade.">
+
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                        Replaced
+                    </span>
                 {{pass}}
                 </td>
                 <td>
