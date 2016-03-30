@@ -20,32 +20,6 @@ function moveObject(object){
 
 
 
-function transferOptionsToTrade(select1, itemPreviewDiv, enableRemove) {
-    var itemIds = select1.val();
-    addItemToTrade(itemIds, itemPreviewDiv, select1, enableRemove);
-}
-
-function createOption(id, name, currency_value) {
-    return $("<option value='" + id + "' data-currency_value="+currency_value+">" + name + "</option>")
-}
-
-function addItemToTrade(ids, displayDiv, availableSelect, enableRemove) {
-    var joined_ids;
-    if (ids instanceof Array) {
-        joined_ids = ids.join();
-    } else {
-        joined_ids = [ids].join();
-    }
-    $.getJSON('getobjectdata?ids=' + joined_ids, function (data) {
-        for (var x = 0; x < data.length; x++) {
-            var object = data[x];
-            displayDiv.append(makeObjectDisplay(object, availableSelect, enableRemove));
-            availableSelect.children("option[value='" + object.id + "']").remove();
-        }
-        updateTradeValue($("#yourItemDisplay"), $("#hisItemDisplay"))
-    });
-}
-
 $(document).ready(updateTradeValue());
 
 
@@ -69,31 +43,6 @@ function updateTradeValue(){
     $("#hisVal").text(hisVal);
 }
 
-
-function makeObjectDisplay(object, availableSelect, enableRemove) {
-
-    var div = $("<div  data-currency_value="+object.currency_value+" itemid=" + object.id + " class='item-preview' style='background-image: url(" + object.image + ");'> </div>");
-    var hovertext = $("<div class='hovertext'></div>");
-    var name = $("<div style='clear:both'>"+object.name+"</div>");
-    var value = $("<div style='clear:both'><span class='glyphicon glyphicon-gbp object-icon'></span>"+object['currency_value']+"</div>");
-    hovertext.append(name);
-    hovertext.append(value);
-
-    if (enableRemove) {
-        var removeBtn = $("<div class='rmvItemPreview'><span class='glyphicon glyphicon glyphicon-remove' style='color:red'></span></div>");
-        removeBtn.click(function () {
-            $(this).parent().remove();
-            availableSelect.append(createOption(object.id, object.name, object.currency_value));
-            updateTradeValue($("#yourItemDisplay"), $("#hisItemDisplay"))
-        });
-        div.append(removeBtn).append(hovertext);
-    } else {
-        div.append(hovertext);
-    }
-    $("#hisItemDisplay").append(div);
-    return div
-}
-
 $.urlParam = function (name) {
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
     if (results == null) {
@@ -105,12 +54,12 @@ $.urlParam = function (name) {
 
 function generateFormFields() {
     var yourItemIds = [];
-    $("#yourItemDisplay").children('div').each(function () {
+    $(">div.item-preview", $("#yourOffering")).each(function () {
         yourItemIds.push($(this).attr('itemid'));
     });
 
     var hisItemIds = [];
-    $("#hisItemDisplay").children('div').each(function () {
+    $(">div.item-preview", $("#theirOffering")).each(function () {
         hisItemIds.push($(this).attr('itemid'));
     });
     var yourItems = $('<input style="display:none" name="youritems" value="' + yourItemIds + '">');
