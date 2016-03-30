@@ -10,7 +10,7 @@
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
-                        <h2 class="panel-title">You have</h2>
+                        <h2 class="panel-title">Your items</h2>
                     </div>
 
                     <div class="panel-body">
@@ -21,7 +21,6 @@
                                 <input type="text" class="form-control" id="searchOwnItems"
                                        placeholder="Search your items"
                                        autocomplete="off">
-                                <button type="button" class="btn btn-default">Submit</button>
                             </div>
                         </div>
 
@@ -37,7 +36,7 @@
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
-                        <h2 class="panel-title">{{="You give"}}</h2>
+                        <h2 class="panel-title">Your offerings</h2>
                     </div>
 
                     <div class="panel-body" id="yourOffering">
@@ -49,7 +48,7 @@
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
-                        <h2 class="panel-title">They have</h2>
+                        <h2 class="panel-title">{{=trader_username}}'s items</h2>
                     </div>
 
                     <div class="panel-body">
@@ -58,7 +57,6 @@
                             <div id="searchItems" class="form-inline">
                                 <input type="text" class="form-control" id="searchTheirItems"
                                        placeholder="Search their items" autocomplete="off">
-                                <button type="button" class="btn btn-default">Submit</button>
                             </div>
                         </div>
 
@@ -69,7 +67,12 @@
                             {{if len(available_objects)>1:}}
                                 {{for row in available_objects[1]:}}
                                     {{obj = row.objects}}
-                                    {{if obj.id != wanted_object.objects.id:}}
+                                    {{if wanted_object is not None:}}
+                                        {{if obj.id != wanted_object.objects.id:}}
+                                            <div onclick="moveObject(this);" data-toggle="tooltip" title="{{=obj.tooltip}}" data-currency_value="{{=obj.currency_value}}" itemid="{{=obj.id}}" class='item-preview' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.image, host=True)}}");'>
+                                            </div>
+                                        {{pass}}
+                                    {{else:}}
                                         <div onclick="moveObject(this);" data-toggle="tooltip" title="{{=obj.tooltip}}" data-currency_value="{{=obj.currency_value}}" itemid="{{=obj.id}}" class='item-preview' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.image, host=True)}}");'>
                                         </div>
                                     {{pass}}
@@ -81,7 +84,7 @@
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h2 class="panel-title">{{="They give"}}</h2>
+                        <h2 class="panel-title">{{=trader_username}}'s offerings</h2>
                     </div>
 
                     <div class="panel-body" id="theirOffering">

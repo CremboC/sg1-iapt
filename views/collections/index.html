@@ -33,6 +33,10 @@
                 <span class="glyphicon glyphicon-heart middle"></span>
                 {{=user.username}}'s Wish List
             </a>
+            <a href="{{=URL('trade', 'new', vars=dict(receiver_id=user.id))}}" class="btn btn-default nav-trades">
+                <span class="glyphicon glyphicon-retweet middle"></span>
+                Trade with {{=user.username}}
+            </a>
         </div>
     </div>
 {{pass}}
