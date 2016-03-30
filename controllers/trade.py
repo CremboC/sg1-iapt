@@ -51,19 +51,22 @@ def view():
 
 @auth.requires_login()
 def new():
-    # Method can accept a user or an item id, the item_id will take precedence over the user if both are specified
-    receiver_username = request.vars.receiver_username
+    # Method can accept a user or an item id, the receiver_id will take precedence over the user if both are specified
     receiver_id = request.vars.receiver_id
     item_id = request.vars.item_id
-    if (receiver_username is None) & (receiver_id is not None):
+
+    if (receiver_id is None) & (item_id is None):
+        session.flash = {"status": "danger", "message": "Error: no specified receiver_id or item_id"}
+        return redirect(URL('trade', 'index'))
+
+    obj = None
+    if receiver_id is not None:
         receiver_username = db(db.auth_user.id == receiver_id).select(db.auth_user.username).column()
         if len(receiver_username) == 0:
             session.flash = {"status": "danger", "message": "Error: invalid user id"}
             return redirect(URL('trade', 'index'))
         receiver_username = receiver_username[0]
-
-    obj = None
-    if item_id is not None:
+    else:
         obj = db((db.objects.id == item_id) & (db.types.id == db.objects.type_id)).select(db.objects.ALL, db.types.name)
         if len(obj) == 0:
             session.flash = {"status": "danger", "message": "Error: invalid item id"}
@@ -71,7 +74,7 @@ def new():
 
         obj = obj[0]
         add_in_trade_field(obj.objects)
-
+        add_object_tooltip(obj)
         if obj.objects.in_trade:
             session.flash = {"status": "danger",
                              "message": "Error: item cannot be traded as it is currently in another trade"}
@@ -81,14 +84,7 @@ def new():
         receiver_username = db(db.auth_user.id == obj.objects.owner_id).select(
             db.auth_user.username).column()[0]
 
-    if len(get_available_user_items(auth.user_id)) == 0:
-        response.flash = {'status': 'warning',
-                         'message': 'You do not have any items to trade. If you wish to trade anything, you must first add items to your For Trade list.'}
-
-    if receiver_username is None:
-        return {"user_id": auth.user_id, "trader_id": "", "trader_username": None,
-                "available_objects": [get_available_user_items(auth.user_id)], "wanted_object": obj}
-    elif receiver_username == db(db.auth_user.id == auth.user_id).select(db.auth_user.username).column()[0]:
+    if receiver_username == db(db.auth_user.id == auth.user_id).select(db.auth_user.username).column()[0]:
         session.flash = {"status": "danger", "message": "Error: you can't trade with yourself!"}
         return redirect(URL('trade', 'new'))
     else:
@@ -383,37 +379,6 @@ def index():
     completed.sort(key=lambda x: x.trades.date_created, reverse=True)
 
     return {"incoming": incoming, "sent": sent, "completed": completed[:5], "user_id": auth.user_id}
-
-
-# Get items that are not currently in any trade
-def get_available_user_items(userid):
-    excludedobjects1 = map(int, db(
-        (db.objects.owner_id == userid) &
-        (db.trades_receiving.recv_object_id == db.objects.id) &
-        (db.trades_receiving.trade_id == db.trades.id) &
-        (db.trades.status == 0)).select(
-        db.objects.id).column())
-    excludedobjects2 = map(int, db(
-        (db.objects.owner_id == userid) &
-        (db.trades_sending.sent_object_id == db.objects.id) &
-        (db.trades_sending.trade_id == db.trades.id) &
-        (db.trades.status == 0)).select(
-        db.objects.id).column())
-    available_objects = db((db.objects.owner_id == userid) & (db.objects.status == 2) & ~db.objects.id.belongs(
-        excludedobjects1) & ~db.objects.id.belongs(
-        excludedobjects2) & (db.types.id == db.objects.type_id) & (db.objects.id == db.object_collection.object_id) & (
-                           db.object_collection.collection_id == db.collections.id) & (
-                           db.collections.private == 'F')).select(
-        db.objects.id,
-        db.types.name,
-        db.objects.name,
-        db.objects.currency_value,
-        db.objects.image,
-        db.objects.summary,
-        groupby=db.objects.id)
-    for obj in available_objects:
-        obj.string = format_string(obj)
-    return available_objects
 
 
 def format_string(object):

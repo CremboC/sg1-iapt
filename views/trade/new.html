@@ -1,26 +1,9 @@
-{{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('trade', 'index'), 'My trades'], ['New trade']]}}
+{{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('trade', 'index'), 'My trades'], ['New trade with ' + trader_username]]}}
 {{extend 'layout.html'}}
 
 <div  id="errorcontainer" class="container">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <form class="form-inline" action="{{=URL('trade', 'new')}}">
-                <label for="receiver_username">Select User: &nbsp;</label>
-                <input class="form-control"
-                       style='width:80%'
-                       name="receiver_username"
-                       id="receiver_username"
-                       type="search"
-                       autocomplete="off"
-                       value="{{=(trader_username if trader_username is not None else '')}}">
-                <input type='submit' value='Submit'>
-            </form>
-        </div>
-    </div>
 
-    <!-- TODO: create search features for multi-selects -->
     <form id="tradeform" action="{{=URL('trade', 'createNew')}}">
-
         <input hidden name="receiver_username" value="{{=(trader_username if trader_username is not None else '')}}">
         <div class="row">
             <div class="col-md-6 tradeborder">
@@ -42,26 +25,13 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="ownAvailableObjects" class="sr-only">Your own items you can trade</label>
-                            <select id="ownAvailableObjects" multiple size="5" class="form-control">
+                        <div class="form-group" id="yourItems">
                             {{for row in available_objects[0]:}}
-                                    <option value="{{=row.objects.id}}" data-currency_value="{{=row.objects.currency_value}}">{{=row.string}}</option>
+                                {{obj = row.objects}}
+                                <div onclick="moveObject(this);" data-toggle="tooltip" title="{{=obj.tooltip}}" data-currency_value="{{=obj.currency_value}}" itemid="{{=obj.id}}" class='item-preview' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.image, host=True)}}");'>
+                                </div>
                             {{pass}}
-                            </select>
                         </div>
-                        <div class="row">
-                            <div class="col-md-8">
-                                *Items which are currently in other trades or are not set as 'for trade' will not be available to trade
-                            </div>
-                            <div class="col-md-4">
-                            <button type="button" class="btn btn-default pull-right"
-                                    onclick="transferOptionsToTrade($('#ownAvailableObjects'), $('#yourItemDisplay'), true)">
-                                Add item
-                            </button>
-                           </div>
-                        </div>
-
                     </div>
                 </div>
                 <div class="panel panel-default">
@@ -70,7 +40,7 @@
                         <h2 class="panel-title">{{="You give"}}</h2>
                     </div>
 
-                    <div class="panel-body" id="yourItemDisplay">
+                    <div class="panel-body" id="yourOffering">
                     </div>
                 </div>
             </div>
@@ -92,41 +62,33 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" id="theirItems">
                             <label for="theirAvailableObjects" class="sr-only">
                                 Their available items
                             </label>
-                            <select id="theirAvailableObjects" multiple size="5" class="form-control">
                             {{if len(available_objects)>1:}}
                                 {{for row in available_objects[1]:}}
-                                    <option value="{{=row.objects.id}}" data-currency_value="{{=row.objects.currency_value}}">{{=row.string}}</option>
+                                    {{obj = row.objects}}
+                                    {{if obj.id != wanted_object.objects.id:}}
+                                        <div onclick="moveObject(this);" data-toggle="tooltip" title="{{=obj.tooltip}}" data-currency_value="{{=obj.currency_value}}" itemid="{{=obj.id}}" class='item-preview' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.image, host=True)}}");'>
+                                        </div>
+                                    {{pass}}
                                 {{pass}}
                             {{pass}}
-                            </select>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-8">
-                                *Items which are currently in other trades or are not set as 'for trade' will not be available to trade
-                            </div>
-                            <div class="col-md-4">
-                            <button type="button" class="btn btn-default"
-                                    onclick="transferOptionsToTrade($('#theirAvailableObjects'), $('#hisItemDisplay'), true)">
-                                Add item
-                            </button>
-                           </div>
-                        </div>
                     </div>
                 </div>
                 <div class="panel panel-default">
-
                     <div class="panel-heading">
                         <h2 class="panel-title">{{="They give"}}</h2>
                     </div>
 
-                    <div class="panel-body" id="hisItemDisplay">
+                    <div class="panel-body" id="theirOffering">
                         {{if wanted_object is not None:}}
-                            <script> $(document).ready(function(){addItemToTrade("{{=wanted_object.objects.id}}", $('#hisItemDisplay'), $('#theirAvailableObjects'), true)});</script>
+                            {{obj = wanted_object.objects}}
+                            <div onclick="moveObject(this);" data-toggle="tooltip" title="{{=obj.tooltip}}" data-currency_value="{{=obj.currency_value}}" itemid="{{=obj.id}}" class='item-preview' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.image, host=True)}}");'>
+                            </div>
                         {{pass}}
                     </div>
                 </div>
@@ -135,13 +97,13 @@
 
         <div class="row">
             <div class="col-md-4 text-center">
-                <h2>Your items = &pound; <span id="yourVal">0</span> </h2>
+                <h3>Your items = &pound; <span id="yourVal">0</span> </h3>
             </div>
             <div class="col-md-4 text-center">
-                <h2>Difference = &pound; <span id="tradevalue">0</span> </h2>
+                <h3>Difference = &pound; <span id="tradevalue">0</span> </h3>
             </div>
             <div class="col-md-4 text-center">
-                <h2>His items = &pound; <span id="hisVal">0</span> </h2>
+                <h3>His items = &pound; <span id="hisVal">0</span> </h3>
             </div>
         </div>
         <div class="row">

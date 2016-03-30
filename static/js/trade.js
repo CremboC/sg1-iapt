@@ -1,3 +1,25 @@
+function moveObject(object){
+    var parentName = $(object).parent().attr('id');
+    switch (parentName){
+        case "yourItems":
+            $("#yourOffering").append(object);
+            break;
+        case "theirItems":
+            $("#theirOffering").append(object);
+            break;
+        case "yourOffering":
+            $("#yourItems").append(object);
+            break;
+        case "theirOffering":
+            $("#theirItems").append(object);
+            break;
+    }
+    updateTradeValue();
+}
+
+
+
+
 function transferOptionsToTrade(select1, itemPreviewDiv, enableRemove) {
     var itemIds = select1.val();
     addItemToTrade(itemIds, itemPreviewDiv, select1, enableRemove);
@@ -24,22 +46,24 @@ function addItemToTrade(ids, displayDiv, availableSelect, enableRemove) {
     });
 }
 
-function updateTradeValue(yourItems, hisItems){
+$(document).ready(updateTradeValue());
 
+
+function updateTradeValue(){
     var hisVal = 0;
     var yourVal = 0;
-    $(">div", yourItems).each(function(){
+    $(">div.item-preview", $("#yourOffering")).each(function(){
+        console.log($(this));
         yourVal+=parseFloat($(this).attr('data-currency_value'));
     });
-    $(">div", hisItems).each(function(){
+    $(">div.item-preview", $("#theirOffering")).each(function(){
         hisVal+=parseFloat($(this).attr('data-currency_value'));
     });
     var totalVal = hisVal - yourVal;
-    if (isNaN(totalVal)){
-        totalVal = 0;
-    } else {
-        totalVal.toFixed(2);
-    }
+    totalVal = isNaN(totalVal) ? 0 : totalVal.toFixed(2);
+    yourVal = isNaN(yourVal) ? 0 : yourVal.toFixed(2);
+    hisVal = isNaN(hisVal) ? 0 : hisVal.toFixed(2);
+
     $("#tradevalue").text(totalVal);
     $("#yourVal").text(yourVal);
     $("#hisVal").text(hisVal);
