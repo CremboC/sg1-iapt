@@ -14,7 +14,10 @@
             <h2 style="margin-top:0">My Collections</h2>
         </div>
         <div class="pull-right">
-            <a class="btn btn-default" href="{{=URL('collections', 'create')}}">Create a new collection</a>
+            <a class="btn btn-success" href="{{=URL('collections', 'create')}}">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                Create a new collection
+            </a>
         </div>
     </div>
 {{else:}}
@@ -22,7 +25,7 @@
         <div class="pull-left">
             <h2 style="margin-top:0">{{=user.username}}'s Collections</h2>
         </div>
-        
+
         <div class="pull-right">
 
             <a href="{{=URL('item_lists', 'for_trade', vars=dict(user_id=user.id))}}" class="btn btn-primary">
