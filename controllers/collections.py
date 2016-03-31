@@ -8,7 +8,7 @@ def index():
     if not is_me:
         collection_query &= db.collections.private == False
 
-    collections = db(collection_query).select(orderby=~db.collections.name)
+    collections = db(collection_query).select(orderby=translate_sortby(request.vars.sort, db.collections))
 
     return dict(collections=collections, is_me=is_me, user=user)
 
@@ -53,7 +53,7 @@ def show():
         return redirect(URL('collections', 'index'))
 
     if request.vars.sort:
-        objects = collection.objects(translate_sortby(request.vars.sort))
+        objects = collection.objects(translate_sortby(request.vars.sort, db.objects))
     else:
         objects = collection.objects()
 
@@ -82,7 +82,7 @@ def edit():
         return redirect(URL('collections', 'index'))
 
     if request.vars.sort:
-        objects_in_collection = collection.objects(translate_sortby(request.vars.sort))
+        objects_in_collection = collection.objects(translate_sortby(request.vars.sort, db.objects))
     else:
         objects_in_collection = collection.objects()
 

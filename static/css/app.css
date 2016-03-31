@@ -246,6 +246,15 @@
     z-index: 2;
 }
 
+.clearfix .pull-left h2,
+.clearfix .pull-left h3 {
+    margin-top: 0;
+}
+
+.pull-right .sortby {
+    margin-top: 15px;
+}
+
 .vcenter {
     height: 3em;
     vertical-align: middle;
@@ -263,10 +272,6 @@
 
 .remove:hover{
     color: #740000;
-}
-
-.table td, th {
-    text-align: center;
 }
 
 #top_section > div {

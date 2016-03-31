@@ -32,21 +32,25 @@ def delete_item(object_id):
     return redirect(URL('collections', 'index'))
 
 
-def translate_sortby(query):
+def translate_sortby(query, subject):
     if query == 'date-new':
-        return ~db.objects.created_on
+        return ~subject.created_on
     elif query == 'date-old':
-        return db.objects.created_on
+        return subject.created_on
     elif query == 'a-z':
-        return db.objects.name
+        return subject.name
     elif query == 'z-a':
-        return ~db.objects.name
+        return ~subject.name
     elif query == 'value-high':
-        return ~db.objects.currency_value
+        return ~subject.currency_value
     elif query == 'value-low':
-        return db.objects.currency_value
+        return subject.currency_value
+    elif query == 'user-a-z':
+        return db.auth_user.username
+    elif query == 'user-z-a':
+        return ~db.auth_user.username
     else:  # default
-        return ~db.objects.updated_on
+        return ~subject.updated_on
 
 
 def maybe_list(var):

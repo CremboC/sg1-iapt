@@ -12,14 +12,16 @@
         <th>Owner</th>
     {{pass}}
     <th>Items in Collection</th>
-    <th>Actions</th>
+    <th>
+
+    </th>
     </tr>
     </thead>
     <tbody>
     {{for collection in collections:}}
     <tr>
     {{if show_privacy:}}
-        <td>
+        <td class="text-center">
         {{if collection.private:}}
             <span
                 class="glyphicon glyphicon-lock"

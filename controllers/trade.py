@@ -409,7 +409,8 @@ def log():
     trades_query |= (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender)
 
     trades = db(trades_query).select(db.trades.ALL, db.auth_user.username,
-                                     limitby=(min_index, min_index + num_per_page))
+                                     limitby=(min_index, min_index + num_per_page),
+                                     orderby=translate_sortby(request.vars.sort, db.trades))
 
     trade_count = db(trades_query).count()
 

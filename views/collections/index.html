@@ -1,7 +1,7 @@
 {{if is_me:}}
-    {{breadcrumbs = [[URL('default', 'index'), 'Home'], ['My collections']]}}
+{{breadcrumbs = [[URL('default', 'index'), 'Home'], ['My collections']]}}
 {{else:}}
-    {{breadcrumbs = [[URL('default', 'index'), 'Home'], [user.username + '\'s collections']]}}
+{{breadcrumbs = [[URL('default', 'index'), 'Home'], [user.username + '\'s collections']]}}
 {{pass}}
 
 {{extend 'layout.html'}}
@@ -9,29 +9,32 @@
 <div class="container">
 
 {{if is_me:}}
-    <div class="row">
+    <div class="clearfix">
         <div class="pull-left">
-            <h2 style="margin-top:0">My Collections</h2>
+            <h2>My Collections</h2>
         </div>
         <div class="pull-right">
-            <a class="btn btn-default" href="{{=URL('collections', 'create')}}">Create a new collection</a>
+            <a class="btn btn-success" href="{{=URL('collections', 'create')}}">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                Create Collection
+            </a>
         </div>
     </div>
 {{else:}}
     <div class="clearfix">
         <div class="pull-left">
-            <h2 style="margin-top:0">{{=user.username}}'s Collections</h2>
+            <h2>{{=user.username}}'s Collections</h2>
         </div>
-        
+
         <div class="pull-right">
 
             <a href="{{=URL('item_lists', 'for_trade', vars=dict(user_id=user.id))}}" class="btn btn-primary">
                 <span class="glyphicon glyphicon-tags middle"></span>
-                {{=user.username}}'s For Trade
+            {{=user.username}}'s For Trade
             </a>
             <a href="{{=URL('item_lists', 'wish_list', vars=dict(user_id=user.id))}}" class="btn btn-warning">
                 <span class="glyphicon glyphicon-heart middle"></span>
-                {{=user.username}}'s Wish List
+            {{=user.username}}'s Wish List
             </a>
             <a href="{{=URL('trade', 'new', vars=dict(receiver_id=user.id))}}" class="btn btn-default nav-trades">
                 <span class="glyphicon glyphicon-retweet middle"></span>
@@ -41,6 +44,12 @@
     </div>
 {{pass}}
 
-{{print_collections(collections, is_me, False, is_me)}}
+    <div class="panel panel-default">
+        <div class="panel-body">
+        {{print_collections_sortby()}}
+        </div>
+    {{print_collections(collections, is_me, False, is_me)}}
+    </div>
+
 
 </div>

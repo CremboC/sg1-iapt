@@ -20,7 +20,7 @@
             {{pass}}
         </div>
         <div class="col-sm-9">
-            <ul class="nav nav-tabs" role="tablist">
+            <ul class="nav nav-tabs row-bottom-margin" role="tablist">
                 <li role="presentation" class="{{if page == 'items':}}active{{pass}}">
                     <a
                         href="{{=URL('search', 'index', vars={'query': request.vars.query, 'page': 'items'})}}"
@@ -68,6 +68,8 @@
                 <div class="pull-right">
                     {{if page == 'items':}}
                     {{print_sortby()}}
+                    {{elif page == 'collections':}}
+                    {{print_collections_sortby()}}
                     {{pass}}
                 </div>
             </div>

@@ -1,36 +1,33 @@
 {{if is_want:}}
-        {{breadcrumbs = [[URL('default', 'index'), 'Home'], ['My wish list']]}}
+{{breadcrumbs = [[URL('default', 'index'), 'Home'], ['My wish list']]}}
 {{else:}}
-        {{breadcrumbs = [[URL('default', 'index'), 'Home'], ['My items for trade']]}}
+{{breadcrumbs = [[URL('default', 'index'), 'Home'], ['My items for trade']]}}
 {{pass}}
 
 {{extend 'layout.html'}}
 
 <div class="container">
-    <div class="clearfix">
-        <div class="pull-left clearfix" style="clear:both">
-            <h2>
-            {{if is_want:}}
-                Wish List
-            {{else:}}
-                For Trade
-            {{pass}}
-                <small>
-                    by
-                    <a href="{{=URL('collections', 'index', args=user_id)}}">
-                    {{=username}}
-                    </a>
-                </small>
-            </h2>
-        </div>
-        <div class="pull-left clearfix" style="clear:both">
-            {{if is_want:}}
-                <em>These are your items that you would like to trade to other users.</em>
-            {{else:}}
-                <em>These are items you would like to get from other users.</em>
-            {{pass}}
-        </div>
-    </div>
+    <h2>
+    {{if is_want:}}
+        Wish List
+    {{else:}}
+        For Trade
+    {{pass}}
+        <small>
+            by
+            <a href="{{=URL('collections', 'index', args=user_id)}}">
+            {{=username}}
+            </a>
+        </small>
+    </h2>
+
+    <p>
+    {{if is_want:}}
+        <em>These are your items that you would like to trade to other users.</em>
+    {{else:}}
+        <em>These are items you would like to get from other users.</em>
+    {{pass}}
+    </p>
 
     <div class="panel panel-default">
         <div class="panel-body">
@@ -38,16 +35,16 @@
         {{if len(items)==0:}}
             <h2>No items {{=("in your wishlist" if is_want else "for trade")}}.</h2>
         {{else:}}
-            {{print_sortby()}}
-            {{for chunk in chunks(items, 3):}}
-                <div class="row">
-                {{for item in chunk:}}
-                    <div class="col-xs-4 object-wrapper">
-                    {{print_object(item, False)}}
-                    </div>
-                {{pass}}
+        {{print_sortby()}}
+        {{for chunk in chunks(items, 3):}}
+            <div class="row">
+            {{for item in chunk:}}
+                <div class="col-xs-4 object-wrapper">
+                {{print_object(item, False)}}
                 </div>
             {{pass}}
+            </div>
+        {{pass}}
         {{pass}}
         </div>
     </div>
