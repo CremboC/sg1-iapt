@@ -20,7 +20,7 @@ def for_trade():
 
     objects = db(query).select(
         db.objects.ALL,
-        orderby=translate_sortby(request.vars.sort),
+        orderby=translate_sortby(request.vars.sort, db.objects),
         groupby=db.objects.id)
 
     response.view = "item_lists/view.html"
@@ -47,7 +47,7 @@ def wish_list():
     query = (db.objects.owner_id == user_id) & (db.objects.status == 1)
     objects = db(query).select(
         db.objects.ALL,
-        orderby=translate_sortby(request.vars.sort),
+        orderby=translate_sortby(request.vars.sort, db.objects),
         groupby=db.objects.id)
 
     response.view = "item_lists/view.html"

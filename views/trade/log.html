@@ -7,17 +7,20 @@
             <h2 class="panel-title">{{=user_name}}'s trade log</h2>
         </div>
         <div class="panel-body">
-        {{list_trades(trades, user_id)}}
+            {{print_table_sortby()}}
         </div>
+    {{list_trades(trades, user_id)}}
     </div>
     <nav>
-      <ul class="pager">
+        <ul class="pager">
         {{if hasPrevPage:}}
-            <li class="previous"><a href={{=URL('trade', 'history', vars={"index": minIndex-numPerPage})}}><span aria-hidden="true">&larr;</span> Older</a></li>
+            <li class="previous"><a href={{=URL('trade', 'history', vars={"index": minIndex-numPerPage})}}><span
+                    aria-hidden="true">&larr;</span> Older</a></li>
         {{pass}}
         {{if hasNextPage:}}
-            <li class="next"><a href={{=URL('trade', 'history', vars={"index": minIndex+numPerPage})}}>Newer <span aria-hidden="true">&rarr;</span></a></li>
+            <li class="next"><a href={{=URL('trade', 'history', vars={"index": minIndex+numPerPage})}}>Newer <span
+                    aria-hidden="true">&rarr;</span></a></li>
         {{pass}}
-      </ul>
+        </ul>
     </nav>
 </div>

@@ -10,7 +10,7 @@ def index():
 
     if page == 'items':
         (search_query, selected_statuses, selected_types, types, statuses) = _items(query_string, filtered)
-        results = db(search_query).select(orderby=translate_sortby(request.vars.sort))
+        results = db(search_query).select(orderby=translate_sortby(request.vars.sort, db.objects))
 
         # check if item is not private
         results = [result for result in results
@@ -26,7 +26,7 @@ def index():
 
     elif page == 'collections':
         (search_query) = _collections(query_string, filtered)
-        results = db(search_query).select()
+        results = db(search_query).select(orderby=translate_sortby(request.vars.sort, db.collections))
 
         returns = dict(results=results)
 
