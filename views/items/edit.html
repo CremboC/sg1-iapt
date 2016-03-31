@@ -164,11 +164,7 @@
             </div>
 
             <!--collections-->
-            {{if object.status!=1:}}
-                <div class="form-group" id="collections">
-            {{else:}}
-                <div class="form-group" id="collections" style="display:none">
-            {{pass}}
+                <div class="form-group" id="collections" {{if object.status==1:}}style="display:none {{pass}}">
                 <label for="objects_collection">Collections</label>
                 <br>
                 <select id="objects_collection" multiple="multiple" name="collections">
@@ -231,4 +227,6 @@
 <script>
     var __collections_url__ = "{{=URL('collections', 'get.json')}}";
 </script>
-<script src="{{=URL('static','js/object.js')}}"></script>
+<script src="{{=URL('static','js/item.js')}}">
+
+</script>
