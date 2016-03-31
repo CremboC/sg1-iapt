@@ -80,7 +80,6 @@ def new():
                              "message": "Error: item cannot be traded as it is currently in another trade"}
             return redirect(URL('trade', 'index'))
 
-        obj.string = format_string(obj)
         receiver_username = db(db.auth_user.id == obj.objects.owner_id).select(
             db.auth_user.username).column()[0]
 
@@ -93,7 +92,7 @@ def new():
             session.flash = {"status": "danger", "message": "Error: username does not exist"}
             return redirect(URL('trade', 'new'))
         receiver_id = receiver_id[0].id
-        available_items = [get_available_user_items(auth.user_id), get_available_user_items(receiver_id)]
+        available_items = [get_user_items(auth.user_id), get_user_items(receiver_id)]
         return {"user_id": auth.user_id, "trader_id": receiver_id, "trader_username": receiver_username,
                 "available_objects": available_items, "wanted_object": obj}
 
@@ -158,31 +157,23 @@ def edit():
             return redirect(URL('trade', 'index'))
         trader_username = trader_username[0].username
 
-    available_objects = [get_available_user_items(auth.user_id), get_available_user_items(trader_id)]
+    available_objects = [get_user_items(auth.user_id), get_user_items(trader_id)]
 
     trade_profit = 0
-    for object in trade_objects[0]:
-        trade_profit -= object.objects.currency_value
+    for obj in trade_objects[0]:
+        obj.tradable = True
+        add_object_tooltip(obj, True)
+        trade_profit -= obj.objects.currency_value
 
-    for object in trade_objects[1]:
-        trade_profit += object.objects.currency_value
+    for obj in trade_objects[1]:
+        obj.tradable = True
+        add_object_tooltip(obj, True)
+        trade_profit += obj.objects.currency_value
 
     return {"prevtrade": trade_id, "user_id": auth.user_id, "trader_id": trader_id, "status": trade.status,
             "trader_username": trader_username, "trade_profit": trade_profit,
             "trade_objects": trade_objects, "available_objects": available_objects
             }
-
-
-def getobjectdata():
-    object_ids = request.vars.ids.split(",")
-    object_ids = map(int, object_ids)
-    objects = db(db.objects.id.belongs(object_ids)).select(db.objects.ALL)
-    for row in objects:
-        if row.image is not None:
-            row.image = URL('download', args=row.image)
-        else:
-            row.image = URL('static', 'images/missing-image.png')
-    return objects.json()
 
 
 @auth.requires_login()

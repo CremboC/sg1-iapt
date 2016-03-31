@@ -20,7 +20,7 @@
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
-                        <h2 class="panel-title">You have</h2>
+                        <h2 class="panel-title">Your items</h2>
                     </div>
 
                     <div class="panel-body">
@@ -30,30 +30,22 @@
                             <button type="button" class="btn btn-default">Submit</button>
                         </div>
 
-                        <select id="yourAvailableObjects" multiple size="5" class="form-control">
-                        {{for row in available_objects[0]:}}
-                            <option value="{{=row.objects.id}}" data-currency_value="{{=row.objects.currency_value}}">{{=row.string}}</option>
-                        {{pass}}
-                        </select>
-                        <div class="row">
-                            <div class="col-md-8">
-                                *Items which are currently in other trades or are not set as 'for trade' will not be available to trade
-                            </div>
-                            <div class="col-md-4">
-                                 <button type="button" class="btn btn-default pull-right" onclick="transferOptionsToTrade($('#yourAvailableObjects'), $('#yourItemDisplay'), true)">Add item</button>
-                            </div>
+                        <div class="form-group" id="yourItems">
+                            {{for obj in available_objects[0]:}}
+                                {{print_trade_obj(obj)}}
+                            {{pass}}
                         </div>
                     </div>
                 </div>
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h2 class="panel-title">{{="You give"}}</h2>
+                        <h2 class="panel-title">Your offering</h2>
                     </div>
 
-                    <div class="panel-body" id="yourItemDisplay">
-                        {{for row in trade_objects[0]:}}
-                            <script> addItemToTrade("{{=row.objects.id}}", $('#yourItemDisplay'), $('#yourAvailableObjects'), true)</script>
+                    <div class="panel-body" id="yourOffering">
+                        {{for obj in trade_objects[0]:}}
+                            {{print_trade_obj(obj)}}
                         {{pass}}
                     </div>
                 </div>
@@ -63,40 +55,38 @@
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
-                        <h2 class="panel-title">The have</h2>
+                        <h2 class="panel-title">{{=trader_username}}'s items</h2>
                     </div>
 
                     <div class="panel-body">
 
-                        <div id="searchItems" class="form-inline">
-                            <input type="text" class="form-control" id="searchTheirItems" placeholder="Search their items">
-                            <button type="button" class="btn btn-default">Submit</button>
+                        <div class="form-group">
+                            <div id="searchItems" class="form-inline">
+                                <input type="text" class="form-control" id="searchTheirItems"
+                                       placeholder="Search their items" autocomplete="off">
+                            </div>
                         </div>
 
-                        <select id="theirAvailableObjects" multiple size="5" class="form-control">
-                        {{for row in available_objects[1]:}}
-                            <option value="{{=row.objects.id}}" data-currency_value="{{=row.objects.currency_value}}">{{=row.string}}</option>
-                        {{pass}}
-                        </select>
-                        <div class="row">
-                            <div class="col-md-8">
-                                *Items which are currently in other trades or are not set as 'for trade' will not be available to trade
-                            </div>
-                            <div class="col-md-4">
-                                <button type="button" class="btn btn-default pull-right" onclick="transferOptionsToTrade($('#theirAvailableObjects'), $('#hisItemDisplay'), true)">Add item</button>
-                            </div>
+                        <div class="form-group" id="theirItems">
+                            <label for="theirAvailableObjects" class="sr-only">
+                                Their available items
+                            </label>
+                            {{for obj in available_objects[1]:}}
+                                {{print_trade_obj(obj)}}
+                            {{pass}}
                         </div>
+
                     </div>
                 </div>
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
-                        <h2 class="panel-title">{{="They give"}}</h2>
+                        <h2 class="panel-title">{{=trader_username}}'s offerings</h2>
                     </div>
 
-                    <div class="panel-body" id="hisItemDisplay">
-                        {{for row in trade_objects[1]:}}
-                            <script> addItemToTrade("{{=row.objects.id}}", $('#hisItemDisplay'), $('#theirAvailableObjects'),  true)</script>
+                    <div class="panel-body" id="theirOffering">
+                        {{for obj in trade_objects[1]:}}
+                            {{print_trade_obj(obj)}}
                         {{pass}}
                     </div>
                 </div>

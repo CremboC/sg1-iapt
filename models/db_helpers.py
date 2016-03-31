@@ -71,38 +71,66 @@ def add_in_trade_field(object):
     return object
 
 
-def add_object_tooltip(object):
-    objects = object.objects
-    txt = "{0} \n £ {1} \n Type: {2} \n Summary: {3} \n".format(objects.name, objects.currency_value, object.types.name, objects.summary)
-    object.objects.tooltip = txt
+def add_object_tooltip(row, tradable=True):
+    objects = row.objects
+    if tradable:
+        txt = "{0} \n £ {1} \n Type: {2} \n Summary: {3} \n".format(objects.name, objects.currency_value, row.types.name, objects.summary)
+    else:
+        txt = "{0} \n £ {1} \n This item is not tradable due it's status or use in another trade. \n".format(objects.name, objects.currency_value)
+    row.objects.tooltip = txt
 
 
 # Get items that are not currently in any trade
-def get_available_user_items(userid):
-    excludedobjects1 = map(int, db(
+def get_user_items(userid):
+    objs_in_trade_recv = db(
         (db.objects.owner_id == userid) &
+        (db.types.id == db.objects.type_id) &
         (db.trades_receiving.recv_object_id == db.objects.id) &
         (db.trades_receiving.trade_id == db.trades.id) &
+        (db.objects.id == db.object_collection.object_id) &
+        (db.object_collection.collection_id == db.collections.id) &
+        (db.collections.private == 'F') &
         (db.trades.status == 0)).select(
-        db.objects.id).column())
-    excludedobjects2 = map(int, db(
+        db.types.name,
+        db.objects.ALL,
+        groupby=db.objects.id)
+    objs_in_trade_sent = db(
         (db.objects.owner_id == userid) &
         (db.trades_sending.sent_object_id == db.objects.id) &
         (db.trades_sending.trade_id == db.trades.id) &
+        (db.objects.id == db.object_collection.object_id) &
+        (db.object_collection.collection_id == db.collections.id) &
+        (db.collections.private == 'F') &
         (db.trades.status == 0)).select(
-        db.objects.id).column())
+        db.types.name,
+        db.objects.ALL,
+        groupby=db.objects.id)
+
+    in_trade_ids = []
+    for obj in objs_in_trade_recv:
+        obj.tradable = False
+        add_object_tooltip(obj, False)
+        in_trade_ids.append(obj.objects.id)
+
+    for obj in objs_in_trade_sent:
+        obj.tradable = False
+        add_object_tooltip(obj, False)
+        in_trade_ids.append(obj.objects.id)
+
+    in_trade_ids = map(int, in_trade_ids)
     available_objects = db((db.objects.owner_id == userid) & (db.objects.status == 2) & ~db.objects.id.belongs(
-        excludedobjects1) & ~db.objects.id.belongs(
-        excludedobjects2) & (db.types.id == db.objects.type_id) & (db.objects.id == db.object_collection.object_id) & (
+        in_trade_ids) & (db.types.id == db.objects.type_id) & (db.objects.id == db.object_collection.object_id) & (
                            db.object_collection.collection_id == db.collections.id) & (
                            db.collections.private == 'F')).select(
-        db.objects.id,
         db.types.name,
-        db.objects.name,
-        db.objects.currency_value,
-        db.objects.image,
-        db.objects.summary,
+        db.objects.ALL,
         groupby=db.objects.id)
+
     for obj in available_objects:
+        obj.tradable = True
         add_object_tooltip(obj)
-    return available_objects
+    objects = []
+    objects.extend(objs_in_trade_recv)
+    objects.extend(objs_in_trade_sent)
+    objects.extend(available_objects)
+    return objects

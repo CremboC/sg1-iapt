@@ -1,0 +1,9 @@
+{{def print_trade_obj(obj):}}
+    {{if obj.tradable:}}
+        <div onclick="moveObject(this);" data-toggle="tooltip" title="{{=obj.objects.tooltip}}" data-currency_value="{{=obj.objects.currency_value}}" itemid="{{=obj.objects.id}}" class='item-preview' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.objects.image, host=True)}}");'>
+        </div>
+    {{else:}}
+        <div data-toggle="tooltip" title="{{=obj.objects.tooltip}}" data-currency_value="{{=obj.objects.currency_value}}" itemid="{{=obj.objects.id}}" class='item-preview disabled' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.objects.image, host=True)}}");'>
+        </div>
+    {{pass}}
+{{pass}}

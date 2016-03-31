@@ -30,7 +30,6 @@ $('input:radio[name="status"]').change(function(){
         //Enable collection select, if none selected select
         multiselect.multiselect('enable');
         div.find("> option").each(function() {
-            console.log($(this).innerHTML);
             if ($(this).innerHTML == "Unfiled") {
                 $(this).prop("selected", true);
             }

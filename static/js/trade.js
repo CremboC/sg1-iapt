@@ -27,7 +27,6 @@ function updateTradeValue(){
     var hisVal = 0;
     var yourVal = 0;
     $(">div.item-preview", $("#yourOffering")).each(function(){
-        console.log($(this));
         yourVal+=parseFloat($(this).attr('data-currency_value'));
     });
     $(">div.item-preview", $("#theirOffering")).each(function(){

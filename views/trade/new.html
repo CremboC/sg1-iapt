@@ -25,10 +25,8 @@
                         </div>
 
                         <div class="form-group" id="yourItems">
-                            {{for row in available_objects[0]:}}
-                                {{obj = row.objects}}
-                                <div onclick="moveObject(this);" data-toggle="tooltip" title="{{=obj.tooltip}}" data-currency_value="{{=obj.currency_value}}" itemid="{{=obj.id}}" class='item-preview' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.image, host=True)}}");'>
-                                </div>
+                            {{for obj in available_objects[0]:}}
+                                {{print_trade_obj(obj)}}
                             {{pass}}
                         </div>
                     </div>
@@ -64,17 +62,14 @@
                             <label for="theirAvailableObjects" class="sr-only">
                                 Their available items
                             </label>
-                            {{if len(available_objects)>1:}}
+                            {{if len(available_objects)>0:}}
                                 {{for row in available_objects[1]:}}
-                                    {{obj = row.objects}}
                                     {{if wanted_object is not None:}}
-                                        {{if obj.id != wanted_object.objects.id:}}
-                                            <div onclick="moveObject(this);" data-toggle="tooltip" title="{{=obj.tooltip}}" data-currency_value="{{=obj.currency_value}}" itemid="{{=obj.id}}" class='item-preview' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.image, host=True)}}");'>
-                                            </div>
+                                        {{if row.objects.id != wanted_object.objects.id:}}
+                                            {{print_trade_obj(row)}}
                                         {{pass}}
                                     {{else:}}
-                                        <div onclick="moveObject(this);" data-toggle="tooltip" title="{{=obj.tooltip}}" data-currency_value="{{=obj.currency_value}}" itemid="{{=obj.id}}" class='item-preview' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.image, host=True)}}");'>
-                                        </div>
+                                        {{print_trade_obj(row)}}
                                     {{pass}}
                                 {{pass}}
                             {{pass}}
@@ -89,9 +84,7 @@
 
                     <div class="panel-body" id="theirOffering">
                         {{if wanted_object is not None:}}
-                            {{obj = wanted_object.objects}}
-                            <div onclick="moveObject(this);" data-toggle="tooltip" title="{{=obj.tooltip}}" data-currency_value="{{=obj.currency_value}}" itemid="{{=obj.id}}" class='item-preview' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.image, host=True)}}");'>
-                            </div>
+                            {{print_trade_obj(wanted_object.objects)}}
                         {{pass}}
                     </div>
                 </div>
