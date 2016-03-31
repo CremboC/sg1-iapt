@@ -1,5 +1,5 @@
 {{def print_sortby():}}
-<div class="panel-sortby clearfix">
+<div class="panel-sortby clearfix sortby">
     <div class="dropdown pull-right">
         <button class="btn btn-default dropdown-toggle" type="button" id="sortby-menu"
                 data-toggle="dropdown">
@@ -68,30 +68,34 @@
 {{return}}
 
 {{def print_collections_sortby():}}
-<div class="dropdown">
-    <button class="btn btn-default btn-sm dropdown-toggle"
-            type="button"
-            id="sortby-menu"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false">
-        Sort By
-        <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="sortby-menu">
-        <li role="presentation">
-            <a role="menuitem" tabindex="-1" href="#" class="sort-by" data-sort="a-z">Name (A-Z)</a>
-        </li>
-        <li role="presentation">
-            <a role="menuitem" tabindex="-1" href="#" class="sort-by" data-sort="z-a">Name (Z-A)</a>
-        </li>
-        <li role="presentation">
-            <a role="menuitem" tabindex="-1" href="#" class="sort-by" data-sort="date-new">Date Added (Newest First)</a>
-        </li>
-        <li role="presentation">
-            <a role="menuitem" tabindex="-1" href="#" class="sort-by" data-sort="date-old">Date Added (Oldest First)</a>
-        </li>
-    </ul>
+<div class="clearfix sortby">
+    <div class="dropdown pull-right">
+        <button class="btn btn-default dropdown-toggle"
+                type="button"
+                id="sortby-menu"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+            Sort By
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="sortby-menu">
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#" class="sort-by" data-sort="a-z">Name (A-Z)</a>
+            </li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#" class="sort-by" data-sort="z-a">Name (Z-A)</a>
+            </li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#" class="sort-by" data-sort="date-new">Date Added (Newest
+                    First)</a>
+            </li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#" class="sort-by" data-sort="date-old">Date Added (Oldest
+                    First)</a>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <script>

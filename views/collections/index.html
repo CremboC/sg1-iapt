@@ -11,19 +11,19 @@
 {{if is_me:}}
     <div class="clearfix">
         <div class="pull-left">
-            <h2 style="margin-top:0">My Collections</h2>
+            <h2>My Collections</h2>
         </div>
         <div class="pull-right">
             <a class="btn btn-success" href="{{=URL('collections', 'create')}}">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                Create a new collection
+                Create Collection
             </a>
         </div>
     </div>
 {{else:}}
     <div class="clearfix">
         <div class="pull-left">
-            <h2 style="margin-top:0">{{=user.username}}'s Collections</h2>
+            <h2>{{=user.username}}'s Collections</h2>
         </div>
 
         <div class="pull-right">
@@ -41,16 +41,9 @@
 {{pass}}
 
     <div class="panel panel-default">
-        <!-- Default panel contents -->
         <div class="panel-body">
-            <div class="clearfix">
-                <div class="pull-right">
-
-                </div>
-            </div>
+        {{print_collections_sortby()}}
         </div>
-
-        <!-- Table -->
     {{print_collections(collections, is_me, False, is_me)}}
     </div>
 
