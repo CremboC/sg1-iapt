@@ -24,12 +24,20 @@
                     </div>
 
                     <div class="panel-body">
-
-                        <div id="searchItems" class="form-inline">
-                            <input type="text" class="form-control" id="searchOwnItems" placeholder="Search your items">
-                            <button type="button" class="btn btn-default">Submit</button>
+                        <div class="row" style="padding-bottom:5px">
+                            <div class="col-md-6">
+                                <div id="searchItems" class="form-inline">
+                                    <input type="text" class="form-control" id="searchOwnItems"
+                                           placeholder="Search your items"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>
+                                    View non-tradable items: <input id="your-item-checkbox" type="checkbox" checked onchange="hideNonTradables('yourItems','your-item-checkbox');">
+                                </label>
+                            </div>
                         </div>
-
                         <div class="form-group" id="yourItems">
                             {{for obj in available_objects[0]:}}
                                 {{print_trade_obj(obj)}}
@@ -60,10 +68,18 @@
 
                     <div class="panel-body">
 
-                        <div class="form-group">
-                            <div id="searchItems" class="form-inline">
-                                <input type="text" class="form-control" id="searchTheirItems"
-                                       placeholder="Search their items" autocomplete="off">
+                        <div class="row" style="padding-bottom:5px">
+                            <div class="col-md-6">
+                                <div id="searchItems" class="form-inline">
+                                    <input type="text" class="form-control" id="searchTheirItems"
+                                           placeholder="Search their items"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>
+                                    View non-tradable items: <input id="their-item-checkbox" type="checkbox" checked onchange="hideNonTradables('theirItems','their-item-checkbox')">
+                                </label>
                             </div>
                         </div>
 

@@ -80,29 +80,43 @@ def add_object_tooltip(row, tradable=True):
 
 
 # Get items that are not currently in any trade
-def get_user_items(userid):
-    objs_in_trade_recv = db(
-        (db.objects.owner_id == userid) &
-        (db.types.id == db.objects.type_id) &
-        (db.trades_receiving.recv_object_id == db.objects.id) &
-        (db.trades_receiving.trade_id == db.trades.id) &
-        (db.objects.id == db.object_collection.object_id) &
-        (db.object_collection.collection_id == db.collections.id) &
-        (db.collections.private == 'F') &
-        (db.trades.status == 0)).select(
+# TODO rewrite to correctly display available items
+def get_user_items(userid, tradeid=None):
+    print userid
+    # Get items in public collections
+    gen_query = (db.objects.owner_id == userid) & \
+                (db.types.id == db.objects.type_id) & \
+                (db.objects.id == db.object_collection.object_id) & \
+                (db.object_collection.collection_id == db.collections.id) & \
+                (db.collections.private == 'F')
+
+    if tradeid is not None:
+        items_in_trade = []
+        items_in_trade.extend(db(db.trades_receiving.trade_id == tradeid).select(db.trades_receiving.recv_object_id).column())
+        items_in_trade.extend(db(db.trades_sending.trade_id == tradeid).select(db.trades_sending.sent_object_id).column())
+
+        items_in_trade = map(int, items_in_trade)
+    # Get items in public collections
+    recv_query = gen_query & \
+                 (db.trades_receiving.recv_object_id == db.objects.id) & \
+                 (db.trades_receiving.trade_id == db.trades.id) & \
+                 (db.trades.status == 0)
+
+    sent_query = gen_query & \
+                  (db.trades_sending.sent_object_id == db.objects.id) & \
+                  (db.trades_sending.trade_id == db.trades.id) & \
+                  (db.trades.status == 0)
+
+    objs_in_trade_recv = db(recv_query).select(
         db.types.name,
         db.objects.ALL,
+        db.trades.ALL,
         groupby=db.objects.id)
-    objs_in_trade_sent = db(
-        (db.objects.owner_id == userid) &
-        (db.trades_sending.sent_object_id == db.objects.id) &
-        (db.trades_sending.trade_id == db.trades.id) &
-        (db.objects.id == db.object_collection.object_id) &
-        (db.object_collection.collection_id == db.collections.id) &
-        (db.collections.private == 'F') &
-        (db.trades.status == 0)).select(
+
+    objs_in_trade_sent = db(sent_query).select(
         db.types.name,
         db.objects.ALL,
+        db.trades.ALL,
         groupby=db.objects.id)
 
     in_trade_ids = []
@@ -115,6 +129,18 @@ def get_user_items(userid):
         obj.tradable = False
         add_object_tooltip(obj, False)
         in_trade_ids.append(obj.objects.id)
+    print 'in_Trades'
+    print in_trade_ids
+
+    items_not_for_trade = db((db.objects.owner_id == userid) & (db.objects.status == 0) & ~db.objects.id.belongs(
+        in_trade_ids) & (db.types.id == db.objects.type_id)).select(
+        db.types.name,
+        db.objects.ALL,
+        groupby=db.objects.id)
+
+    for obj in items_not_for_trade:
+        obj.tradable = False
+        add_object_tooltip(obj, False)
 
     in_trade_ids = map(int, in_trade_ids)
     available_objects = db((db.objects.owner_id == userid) & (db.objects.status == 2) & ~db.objects.id.belongs(
@@ -129,7 +155,12 @@ def get_user_items(userid):
         obj.tradable = True
         add_object_tooltip(obj)
     objects = []
+    print 'not for trade'
+    print items_not_for_trade
+    print 'available'
+    print available_objects
     objects.extend(objs_in_trade_recv)
     objects.extend(objs_in_trade_sent)
     objects.extend(available_objects)
+    objects.extend(items_not_for_trade)
     return objects

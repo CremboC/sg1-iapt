@@ -1,15 +1,15 @@
 {{def print_trade_obj(obj, view_only=False):}}
     {{if obj.tradable:}}
-        <div onclick="moveObject(this);" data-toggle="tooltip" title="{{=obj.objects.tooltip}}" data-currency_value="{{=obj.objects.currency_value}}" itemid="{{=obj.objects.id}}" class='item-preview' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.objects.image, host=True)}}");'>
+        <div onclick="moveObject(this);" data-toggle="tooltip" title="{{=obj.objects.tooltip}}" data-currency_value="{{=obj.objects.currency_value}}" data-itemid="{{=obj.objects.id}}" class='item-preview' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.objects.image, host=True)}}");'>
         </div>
     {{else:}}
         {{if view_only:}}
             <a href="{{=URL('items', 'show', args=obj.objects.id)}}">
-                <div data-toggle="tooltip" title="{{=obj.objects.tooltip}}" data-currency_value="{{=obj.objects.currency_value}}" itemid="{{=obj.objects.id}}" class='item-preview view' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.objects.image, host=True)}}");'>
+                <div data-toggle="tooltip" title="{{=obj.objects.tooltip}}" data-currency_value="{{=obj.objects.currency_value}}" data-itemid="{{=obj.objects.id}}" class='item-preview view' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.objects.image, host=True)}}");'>
                 </div>
             </a>
         {{else:}}
-            <div data-toggle="tooltip" title="{{=obj.objects.tooltip}}" data-currency_value="{{=obj.objects.currency_value}}" itemid="{{=obj.objects.id}}" class='item-preview disabled' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.objects.image, host=True)}}");'>
+            <div data-toggle="tooltip" title="{{=obj.objects.tooltip}}" data-currency_value="{{=obj.objects.currency_value}}" data-itemid="{{=obj.objects.id}}" class='item-preview disabled' style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.objects.image, host=True)}}");'>
             </div>
         {{pass}}
     {{pass}}

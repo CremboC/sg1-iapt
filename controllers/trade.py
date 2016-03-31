@@ -176,7 +176,7 @@ def edit():
             return redirect(URL('trade', 'index'))
         trader_username = trader_username[0].username
 
-    available_objects = [get_user_items(auth.user_id), get_user_items(trader_id)]
+    available_objects = [get_user_items(auth.user_id, trade_id), get_user_items(trader_id, trade_id)]
 
     trade_profit = 0
     for obj in trade_objects[0]:

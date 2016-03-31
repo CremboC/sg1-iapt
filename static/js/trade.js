@@ -17,7 +17,14 @@ function moveObject(object){
     updateTradeValue();
 }
 
-
+function hideNonTradables(divId, checkboxId){
+    var hide = $('#'+checkboxId).is(':checked');
+    if (hide) {
+        $('#' + divId).children('.item-preview').show();
+    } else {
+        $('#' + divId).children('.disabled').hide();
+    }
+}
 
 
 $(document).ready(updateTradeValue());
@@ -54,12 +61,12 @@ $.urlParam = function (name) {
 function generateFormFields() {
     var yourItemIds = [];
     $(">div.item-preview", $("#yourOffering")).each(function () {
-        yourItemIds.push($(this).attr('itemid'));
+        yourItemIds.push($(this).attr('data-itemid'));
     });
 
     var hisItemIds = [];
     $(">div.item-preview", $("#theirOffering")).each(function () {
-        hisItemIds.push($(this).attr('itemid'));
+        hisItemIds.push($(this).attr('data-itemid'));
     });
     var yourItems = $('<input style="display:none" name="youritems" value="' + yourItemIds + '">');
     var hisItems = $("<input style='display:none' name='theiritems' value=" + hisItemIds + ">");
@@ -72,6 +79,7 @@ function deleteHiddenFormFields(){
     $("input[name=theiritems]").remove();
 }
 
+//TODO: write search for items
 $(function () {
     var opts = $('#ownAvailableObjects').find('option').map(function () {
         return [[this.value, $(this).text()]];
