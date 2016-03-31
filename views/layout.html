@@ -7,6 +7,7 @@
 {{include 'partials/users.html'}}
 {{include 'partials/new_collection_modal.html'}}
 {{include 'partials/trade_object.html'}}
+{{include 'partials/user_select_modal.html'}}
 
 <!DOCTYPE html>
 <!--[if (gt IE 9)|!(IE)]><!-->
@@ -130,7 +131,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{=URL('trade', 'new')}}">
+                            <a data-toggle="modal" href="#new_trade" >
                                 New Trade
                             </a>
                         </li>
@@ -176,7 +177,7 @@
         </form>
     </div>
 </nav>
-
+{{get_user_select_modal()}}
 <div class="wrapper content">
 {{ if "breadcrumbs" in vars(): }}
     <div class="container">

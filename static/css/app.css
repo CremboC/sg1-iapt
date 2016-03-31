@@ -209,6 +209,8 @@
     opacity:0.5;
 }
 
+.item-preview.view {
+}
 .item-preview.deleted{
     text-align:center;
     border:1px black solid;

@@ -21,18 +21,12 @@
             <div class="panel panel-default">
 
                 <div class="panel-heading">
-                    <h2 class="panel-title">{{="You give"}}</h2>
+                    <h2 class="panel-title">You offered</h2>
                 </div>
 
                 <div class="panel-body" id="yourItemDisplay">
-                {{for row in trade_objects[0]:}}
-                    {{if row.status == -1:}}
-                    <div class="item-preview deleted">
-                        Item was deleted.
-                    </div>
-                    {{else:}}
-                    <script> addItemToTrade("{{=row.id}}", $('#yourItemDisplay'), $('#yourAvailableObjects'), false)</script>
-                    {{pass}}
+                {{for obj in trade_objects[0]:}}
+                    {{print_trade_obj(obj, True)}}
                 {{pass}}
                 </div>
             </div>
@@ -41,17 +35,17 @@
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h2 class="panel-title">{{="They give"}}</h2>
+                    <h2 class="panel-title">{{="They offered"}}</h2>
                 </div>
 
                 <div class="panel-body" id="hisItemDisplay">
-                {{for row in trade_objects[1]:}}
-                    {{if row.status == -1:}}
+                {{for obj in trade_objects[1]:}}
+                    {{if obj.objects.status == -1:}}
                     <div class="item-preview deleted">
                         Item was deleted.
                     </div>
                     {{else:}}
-                    <script> addItemToTrade("{{=row.id}}", $('#hisItemDisplay'), $('#theirAvailableObjects'), false)</script>
+                    {{print_trade_obj(obj, True)}}
                     {{pass}}
                 {{pass}}
                 </div>

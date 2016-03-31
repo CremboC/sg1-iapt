@@ -12,8 +12,7 @@ def link_object_collections(object_id, collection_id):
 
 
 def get_owner_id(object_id):
-    return db(db.objects.id==object_id).select(db.objects.owner_id).first().owner_id
-
+    return db(db.objects.id == object_id).select(db.objects.owner_id).first().owner_id
 
 
 def get_unfiled_collection(user_id=auth.user_id):

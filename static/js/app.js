@@ -1,3 +1,26 @@
+function redirectToTrade(URL){
+    var username = $('#trade_modal_username').val();
+    URL += "?receiver_username="+username;
+    window.location.replace(URL);
+}
+
+$(document).ready(function () {
+    $.getJSON(__users_url__, function (data) {
+        var $hiddenUserId = $('#trade_modal_username');
+        var users = $.map(data.users, function (u) {
+            return u.username;
+        });
+
+        $hiddenUserId.typeahead({
+            source: users,
+            autoSelect: true
+        });
+    });
+});
+
+
+
+
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
 });

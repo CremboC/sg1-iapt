@@ -18,13 +18,24 @@ def view():
 
     # Get objects currently in trade from sender
     trade_objects_from_sender = db(
-        (db.trades_sending.trade_id == trade_id) & (db.trades_sending.sent_object_id == db.objects.id)).select(
-        db.objects.ALL)
+        (db.trades_sending.trade_id == trade_id) & (db.types.id == db.objects.type_id) & (db.trades_sending.sent_object_id == db.objects.id)).select(
+        db.objects.ALL, db.types.name)
 
     # Get objects currently in trade from receiver
     trade_objects_from_receiver = db(
-        (db.trades_receiving.trade_id == trade_id) & (db.trades_receiving.recv_object_id == db.objects.id)).select(
-        db.objects.ALL)
+        (db.trades_receiving.trade_id == trade_id) & (db.types.id == db.objects.type_id) & (db.trades_receiving.recv_object_id == db.objects.id)).select(
+        db.objects.ALL, db.types.name)
+
+    for obj in trade_objects_from_receiver:
+        obj.tradable = False
+        add_in_trade_field(obj.objects)
+        add_object_tooltip(obj)
+
+    for obj in trade_objects_from_sender:
+        obj.tradable = False
+        add_in_trade_field(obj.objects)
+        add_object_tooltip(obj)
+
 
     # Get other user's username
     if trade.sender == auth.user_id:
@@ -54,6 +65,14 @@ def new():
     # Method can accept a user or an item id, the receiver_id will take precedence over the user if both are specified
     receiver_id = request.vars.receiver_id
     item_id = request.vars.item_id
+
+    if (request.vars.receiver_id is None) & (request.vars.item_id is None) & (request.vars.receiver_username is not None):
+        receiver = db(db.auth_user.username == request.vars.receiver_username).select().first()
+        if receiver is None:
+            session.flash = {"status": "danger", "message": "Error: username does not exist"}
+            return redirect(URL('trade', 'index'))
+        else:
+            receiver_id = receiver.id
 
     if (receiver_id is None) & (item_id is None):
         session.flash = {"status": "danger", "message": "Error: no specified receiver_id or item_id"}
