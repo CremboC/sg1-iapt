@@ -49,6 +49,10 @@ def translate_sortby(query, subject):
         return db.auth_user.username
     elif query == 'user-z-a':
         return ~db.auth_user.username
+    elif query == 'private-no-yes':
+        return db.collections.private
+    elif query == 'private-yes-no':
+        return ~db.collections.private
     else:  # default
         return ~subject.updated_on
 
