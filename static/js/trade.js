@@ -84,9 +84,7 @@ function hideNonTradables(divId, checkboxId, searchBox){
 
 
 
-//TODO: write search for items
 $(function () {
-
     $('#searchOwnItems').keyup(function () {
         var opts = $('#yourItems').find('.item-preview').map(function () {
             return [[$(this).attr('data-itemid'), $(this).attr('data-original-title')]];
@@ -134,9 +132,6 @@ $(function () {
         var rxp = $('#searchTheirItems').val().toLowerCase();
         opts.each(function () {
             var text = this[1].toLowerCase();
-            console.log(text);
-            console.log(rxp);
-            console.log(text.indexOf(rxp));
             var div = $('div[data-itemid='+this[0]+"]");
             if (text.indexOf(rxp)!=-1) {
                 if (div.hasClass("disabled")){
