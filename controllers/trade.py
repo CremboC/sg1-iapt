@@ -93,8 +93,6 @@ def new():
 
         obj = obj[0]
         add_in_trade_field(obj.objects)
-        add_object_tooltip(obj)
-        obj.tradable = True
         if obj.objects.in_trade:
             session.flash = {"status": "danger",
                              "message": "Error: item cannot be traded as it is currently in another trade"}
@@ -102,6 +100,7 @@ def new():
 
         receiver_username = db(db.auth_user.id == obj.objects.owner_id).select(
             db.auth_user.username).column()[0]
+        obj = obj.objects.id
 
     if receiver_username == db(db.auth_user.id == auth.user_id).select(db.auth_user.username).column()[0]:
         session.flash = {"status": "danger", "message": "Error: you can't trade with yourself!"}

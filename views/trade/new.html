@@ -78,7 +78,7 @@
                             {{if len(available_objects)>0:}}
                                 {{for row in available_objects[1]:}}
                                     {{if wanted_object is not None:}}
-                                        {{if row.objects.id != wanted_object.objects.id:}}
+                                        {{if row.objects.id != wanted_object:}}
                                             {{print_trade_obj(row)}}
                                         {{pass}}
                                     {{else:}}
@@ -97,7 +97,11 @@
 
                     <div class="panel-body" id="theirOffering">
                         {{if wanted_object is not None:}}
-                            {{print_trade_obj(wanted_object.objects)}}
+                            {{for obj in available_objects[1]:}}
+                                {{if obj.objects.id==wanted_object:}}
+                                   {{print_trade_obj(obj)}}
+                                {{pass}}
+                            {{pass}}
                         {{pass}}
                     </div>
                 </div>
