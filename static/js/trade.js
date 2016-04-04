@@ -81,17 +81,18 @@ function deleteHiddenFormFields(){
 
 //TODO: write search for items
 $(function () {
-    var opts = $('#ownAvailableObjects').find('option').map(function () {
-        return [[this.value, $(this).text()]];
+    var opts = $('#yourItems').find('.item-preview').map(function () {
+        console.log($(this).attr('class'));
+        return [[$(this).data('itemid'), $(this).data('original-title')()]];
     });
-
-
-    $('#searchOwnItems').keyup(function () {
-        var rxp = new RegExp($('#searchOwnItems').val(), 'i');
-        var optlist = $('#ownAvailableObjects').empty();
+    console.log(opts);
+    $('#searchItems').keyup(function () {
+        var rxp = $('#searchItems').val();
+        console.log(rxp);
+        var optlist = $('#yourItemDisplay').children('item-preview').hide();
         opts.each(function () {
-            if (rxp.test(this[1])) {
-                optlist.append($('<option/>').attr('value', this[0]).text(this[1]));
+            if (rxp.search(this[1])!=-1) {
+                $('div[data-itemid='+this[0]+"]'").show();
             }
         });
 

@@ -84,9 +84,7 @@ def add_object_tooltip(row, tradable=True):
 
 
 # Get items that are not currently in any trade
-# TODO rewrite to correctly display available items
 def get_user_items(userid, tradeid=None):
-    print userid
     # Get items in public collections
     gen_query = (db.objects.owner_id == userid) & \
                 (db.types.id == db.objects.type_id) & \
