@@ -25,16 +25,22 @@
 
                     <div class="panel-body">
                         <div class="row" style="padding-bottom:5px">
-                            <div class="col-md-6">
-                                <div id="searchItems" class="form-inline">
-                                    <input type="text" class="form-control" id="searchOwnItems"
+                            <div class="col-md-7">
+                                <div id="searchItems" class="input-group trade-item-search">
+                                    <input id="searchOwnItems" type="text" class="form-control"
                                            placeholder="Search your items"
                                            autocomplete="off">
+                                    <select id="selectOwnCol" class="selectpicker form-control" title="Filter items by collection" onchange="filterTradeItems(true);">
+                                        <option value="all">All collections</option>
+                                        {{for col in collections[0]:}}
+                                            <option value="{{=col}}">{{=col}}</option>
+                                        {{pass}}
+                                    </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <label>
-                                    View non-tradable items: <input id="your-item-checkbox" type="checkbox" checked onchange="hideNonTradables('yourItems','your-item-checkbox', 'searchYourItems');">
+                                    View non-tradable items: <input id="your-item-checkbox" type="checkbox" checked onchange="filterTradeItems(true);">
                                 </label>
                             </div>
                         </div>
@@ -69,16 +75,22 @@
                     <div class="panel-body">
 
                         <div class="row" style="padding-bottom:5px">
-                            <div class="col-md-6">
-                                <div id="searchItems" class="form-inline">
-                                    <input type="text" class="form-control" id="searchTheirItems"
-                                           placeholder="Search their items"
+                             <div class="col-md-7">
+                                <div class="input-group trade-item-search">
+                                    <input id="searchTheirItems" type="text" class="form-control"
+                                           placeholder="Search your items"
                                            autocomplete="off">
+                                    <select id="selectTheirCol" class="selectpicker form-control" title="Filter items by collection" onchange="filterTradeItems(false);">
+                                        <option value="all">All collections</option>
+                                        {{for col in collections[1]:}}
+                                            <option value="{{=col}}">{{=col}}</option>
+                                        {{pass}}
+                                    </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <label>
-                                    View non-tradable items: <input id="their-item-checkbox" type="checkbox" checked onchange="hideNonTradables('theirItems','their-item-checkbox', 'searchTheirItems')">
+                                    View non-tradable items: <input id="their-item-checkbox" type="checkbox" checked onchange="filterTradeItems(false);">
                                 </label>
                             </div>
                         </div>

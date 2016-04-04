@@ -3,19 +3,21 @@ function moveObject(object){
     switch (parentName){
         case "yourItems":
             $("#yourOffering").append(object);
+            filterTradeItems(true);
             break;
         case "theirItems":
             $("#theirOffering").append(object);
+            filterTradeItems(false);
             break;
         case "yourOffering":
             $("#yourItems").append(object);
+            filterTradeItems(true);
             break;
         case "theirOffering":
             $("#theirItems").append(object);
+            filterTradeItems(false);
             break;
     }
-    hideNonTradables('theirItems','their-item-checkbox', 'searchTheirItems');
-    hideNonTradables('yourItems','your-item-checkbox', 'searchOwnItems');
     updateTradeValue();
 }
 
@@ -71,44 +73,77 @@ function deleteHiddenFormFields(){
     $("input[name=theiritems]").remove();
 }
 
-function hideNonTradables(divId, checkboxId, searchBox){
-    var hide = $('#'+checkboxId).is(':checked');
-    if (hide) {
-        $('#' + divId).children('.item-preview').show();
+
+function filterTradeItems(yours){
+    console.log("FIlter");
+    var divId, checkboxId, searchBoxId, selectId;
+    if (yours){
+        divId = '#yourItems';
+        checkboxId = '#your-item-checkbox';
+        searchBoxId = '#searchOwnItems';
+        selectId = '#selectOwnCol';
     } else {
-        $('#' + divId).children('.disabled').hide();
+        divId = '#theirItems';
+        checkboxId = '#their-item-checkbox';
+        searchBoxId = '#searchTheirItems';
+        selectId = '#selectTheirCol';
     }
-    $('#'+searchBox).keyup();
+    $(divId).children('.item-preview').show();
+    hideNonTradables(divId, checkboxId);
+    filterByCollections(divId, selectId);
+    filterByTerm(divId, searchBoxId);
 }
 
+function hideNonTradables(divId, checkboxId){
+    var hide = $(checkboxId).is(':checked');
+    if (hide) {
+        $(divId).children('.item-preview:visible').show();
+    } else {
+        $(divId).children('.disabled:visible').hide();
+    }
+}
 
-
-
-$(function () {
-    $('#searchOwnItems').keyup(function () {
-        var opts = $('#yourItems').find('.item-preview').map(function () {
-            return [[$(this).attr('data-itemid'), $(this).attr('data-original-title')]];
-        });
-        var rxp = $('#searchOwnItems').val().toLowerCase();
-        opts.each(function () {
-            var text = this[1].toLowerCase();
-            var div = $('div[data-itemid='+this[0]+"]");
-            if (text.indexOf(rxp)!=-1) {
-                if (div.hasClass("disabled")){
-                    if ($("#your-item-checkbox").is(':checked')){
-                        div.show();
-                    } else {
-                        div.hide();
-                    }
-                } else {
-                    div.show();
-                }
-            } else {
-                div.hide();
+function filterByCollections(divId, selectId) {
+    var collection = $(selectId).val();
+    console.log(collection);
+    if (collection != "all") {
+        $(divId).children('.item-preview:visible').each(function(){
+            var collections = $(this).attr('data-collections');
+            if (collections.indexOf(collection)==-1){
+                $(this).hide();
             }
         });
-    });
+    }
+}
 
+function filterByTerm(divId, searchId){
+    var opts = $(divId).find('.item-preview:visible').map(function () {
+        return [[$(this).attr('data-itemid'), $(this).attr('data-original-title')]];
+    });
+    var rxp = $(searchId).val();
+    if (rxp != null) {
+        rxp = rxp.toLowerCase();
+    }
+    opts.each(function () {
+        var text = this[1].toLowerCase();
+        var div = $('div[data-itemid=' + this[0] + "]");
+        if (div.is(":visible")) {
+            if (text.indexOf(rxp) == -1) {
+                div.hide();
+            }
+        }
+    });
+}
+
+$('#searchOwnItems').keyup(function(){
+    filterTradeItems(true);
+});
+
+$('#searchTheirItems').keyup(function(){
+    filterTradeItems(false);
+});
+
+$(function () {
     $.getJSON(__users_url__, function (data) {
         var users = $.map(data.users, function (u) {
             return u.username;
@@ -122,32 +157,6 @@ $(function () {
         });
     });
 
-});
-
-$(function () {
-    $('#searchTheirItems').keyup(function () {
-        var opts = $('#theirItems').find('.item-preview').map(function () {
-            return [[$(this).attr('data-itemid'), $(this).attr('data-original-title')]];
-        });
-        var rxp = $('#searchTheirItems').val().toLowerCase();
-        opts.each(function () {
-            var text = this[1].toLowerCase();
-            var div = $('div[data-itemid='+this[0]+"]");
-            if (text.indexOf(rxp)!=-1) {
-                if (div.hasClass("disabled")){
-                    if ($("#their-item-checkbox").is(':checked')){
-                        div.show();
-                    } else {
-                        div.hide();
-                    }
-                } else {
-                    div.show();
-                }
-            } else {
-                div.hide();
-            }
-        });
-    });
 });
 
 function submitForm(){

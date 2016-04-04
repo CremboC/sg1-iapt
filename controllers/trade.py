@@ -112,12 +112,17 @@ def new():
             return redirect(URL('trade', 'new'))
         receiver_id = receiver_id[0].id
         available_items = [get_user_items(auth.user_id), get_user_items(receiver_id)]
+        collections = [get_user_collections_no_unfiled(auth.user_id), get_user_collections_no_unfiled(receiver_id)]
         return {"user_id": auth.user_id, "trader_id": receiver_id, "trader_username": receiver_username,
-                "available_objects": available_items, "wanted_object": obj}
+                "available_objects": available_items, "wanted_object": obj, "collections": collections}
 
 
 @auth.requires_login()
 def edit():
+
+    coll_query = (db.objects.id == db.object_collection.object_id) & \
+                 (db.object_collection.collection_id == db.collections.id)
+
     trade_id = request.vars.tradeid
     trader_username = request.vars.trader_username
 
@@ -141,7 +146,7 @@ def edit():
     trade_query_sender &= db.objects.type_id == db.types.id
 
     # Get objects currently in trade from sender
-    trade_objects2 = db(trade_query_sender).select(db.objects.ALL, db.types.name)
+    trade_objects2 = db(trade_query_sender & coll_query).select(db.objects.ALL, db.collections.ALL, db.types.name)
 
     for obj in trade_objects2:
         obj.string = format_string(obj)
@@ -151,17 +156,17 @@ def edit():
     trade_query_receiver &= db.objects.type_id == db.types.id
 
     # Get objects currently in trade from receiver
-    trade_objects1 = db(trade_query_receiver).select(db.objects.ALL, db.types.name)
+    trade_objects1 = db(trade_query_receiver & coll_query).select(db.objects.ALL, db.collections.ALL, db.types.name)
 
     for obj in trade_objects1:
         obj.string = format_string(obj)
 
     # Get other user's username
     if trade.sender == auth.user_id:
-        trader_id = trade.receiver
+        receiver_id = trade.receiver
         trade_objects = [trade_objects2, trade_objects1]
     else:
-        trader_id = trade.sender
+        receiver_id = trade.sender
         trade_objects = [trade_objects1, trade_objects2]
 
     if trade.status != 0:
@@ -170,13 +175,16 @@ def edit():
         return redirect(URL('trade', 'index'))
 
     if trader_username is None:
-        trader_username = db(db.auth_user.id == trader_id).select(db.auth_user.username)
+        trader_username = db(db.auth_user.id == receiver_id).select(db.auth_user.username)
         if len(trader_username) == 0:
             session.flash = {"status": "danger", "message": "Error: invalid user id"}
             return redirect(URL('trade', 'index'))
         trader_username = trader_username[0].username
 
-    available_objects = [get_user_items(auth.user_id, trade_id), get_user_items(trader_id, trade_id)]
+    available_objects = [get_user_items(auth.user_id, trade_id), get_user_items(receiver_id, trade_id)]
+
+    trade_objects[0] = compact_collection_names(trade_objects[0])
+    trade_objects[1] = compact_collection_names(trade_objects[1])
 
     trade_profit = 0
     for obj in trade_objects[0]:
@@ -188,11 +196,10 @@ def edit():
         obj.tradable = True
         add_object_tooltip(obj, True)
         trade_profit += obj.objects.currency_value
-
-    return {"prevtrade": trade_id, "user_id": auth.user_id, "trader_id": trader_id, "status": trade.status,
+    collections = [get_user_collections_no_unfiled(auth.user_id), get_user_collections_no_unfiled(receiver_id)]
+    return {"prevtrade": trade_id, "user_id": auth.user_id, "trader_id": receiver_id, "status": trade.status,
             "trader_username": trader_username, "trade_profit": trade_profit,
-            "trade_objects": trade_objects, "available_objects": available_objects
-            }
+            "trade_objects": trade_objects, "available_objects": available_objects, "collections": collections}
 
 
 @auth.requires_login()

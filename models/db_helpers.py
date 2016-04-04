@@ -95,6 +95,10 @@ def get_user_items(userid, tradeid=None):
                 (db.objects.id == db.object_collection.object_id) & \
                 (db.object_collection.collection_id == db.collections.id) & \
                 (db.collections.private == 'F')
+
+    coll_query = (db.objects.id == db.object_collection.object_id) & \
+                 (db.object_collection.collection_id == db.collections.id)
+
     items_in_trade = []
     # Get items in public collections
     recv_query = gen_query & \
@@ -117,15 +121,17 @@ def get_user_items(userid, tradeid=None):
         recv_query &= (db.trades.id != tradeid)
         sent_query &= (db.trades.id != tradeid)
 
-    objs_in_trade_recv = db(recv_query).select(
+    objs_in_trade_recv = db(recv_query & coll_query).select(
         db.types.name,
         db.objects.ALL,
+        db.collections.ALL,
         db.trades.ALL,
         groupby=db.objects.id)
 
-    objs_in_trade_sent = db(sent_query).select(
+    objs_in_trade_sent = db(sent_query & coll_query).select(
         db.types.name,
         db.objects.ALL,
+        db.collections.ALL,
         db.trades.ALL,
         groupby=db.objects.id)
 
@@ -141,8 +147,9 @@ def get_user_items(userid, tradeid=None):
         in_trade_ids.append(obj.objects.id)
 
     items_not_for_trade = db((db.objects.owner_id == userid) & (db.objects.status == 0) & ~db.objects.id.belongs(
-        in_trade_ids) & (db.types.id == db.objects.type_id)).select(
+        in_trade_ids) & coll_query & (db.types.id == db.objects.type_id)).select(
         db.types.name,
+        db.collections.ALL,
         db.objects.ALL,
         groupby=db.objects.id)
 
@@ -151,21 +158,48 @@ def get_user_items(userid, tradeid=None):
         add_object_tooltip(obj, False)
 
     in_trade_ids = map(int, in_trade_ids)
-    available_objects = db((db.objects.owner_id == userid) & (db.objects.status == 2) & ~db.objects.id.belongs(
-        in_trade_ids) & ~(db.objects.id.belongs(items_in_trade)) & (db.types.id == db.objects.type_id) & (db.objects.id == db.object_collection.object_id) & (
-                           db.object_collection.collection_id == db.collections.id) & (
-                           db.collections.private == 'F')).select(
+    duplicate_objects = db((db.objects.owner_id == userid) & (db.objects.status == 2) & ~db.objects.id.belongs(
+        in_trade_ids) & ~(db.objects.id.belongs(items_in_trade)) & (db.types.id == db.objects.type_id) & coll_query &
+                           (db.collections.private == 'F')).select(
         db.types.name,
-        db.objects.ALL,
-        groupby=db.objects.id)
+        db.collections.ALL,
+        db.objects.ALL)
+
+    available_objects = compact_collection_names(duplicate_objects)
 
     for obj in available_objects:
         obj.tradable = True
         add_object_tooltip(obj)
 
     objects = []
-    objects.extend(objs_in_trade_recv)
-    objects.extend(objs_in_trade_sent)
+    objects.extend(compact_collection_names(objs_in_trade_recv))
+    objects.extend(compact_collection_names(objs_in_trade_sent))
     objects.extend(available_objects)
-    objects.extend(items_not_for_trade)
+    objects.extend(compact_collection_names(items_not_for_trade))
     return objects
+
+
+def compact_collection_names(all_objects):
+    available_objects = []
+    ids = []
+    for obj in all_objects:
+        if not (int(obj.objects.id) in ids):
+            ids.append(int(obj.objects.id))
+            collections = set()
+            for obj2 in all_objects:
+                if obj.objects.id == obj2.objects.id:
+                    collections.add(obj2.collections.name)
+            compacted_obj = obj
+            compacted_obj.collection_names = ' '.join(collections)
+            available_objects.append(compacted_obj)
+    return available_objects
+
+
+def get_user_collections(user_id):
+    return db(db.collections.owner_id == user_id).select(db.collections.name).column()
+
+
+def get_user_collections_no_unfiled(user_id):
+    collections = get_user_collections(user_id)
+    collections.remove('Unfiled')
+    return collections

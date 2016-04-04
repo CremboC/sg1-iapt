@@ -277,3 +277,11 @@
 #top_section > div {
     margin-bottom: 90px;
 }
+
+.search-trade-items {
+    width: 100% !important;
+}
+
+.trade-item-search .form-control{
+    width: 50%;
+}
