@@ -3,18 +3,22 @@ function moveObject(object){
     switch (parentName){
         case "yourItems":
             $("#yourOffering").append(object);
+            $(object).addClass( "item-preview-in-trade" );
             filterTradeItems(true);
             break;
         case "theirItems":
             $("#theirOffering").append(object);
+            $(object).addClass( "item-preview-in-trade" );
             filterTradeItems(false);
             break;
         case "yourOffering":
             $("#yourItems").append(object);
+            $(object).removeClass( "item-preview-in-trade" );
             filterTradeItems(true);
             break;
         case "theirOffering":
             $("#theirItems").append(object);
+            $(object).removeClass( "item-preview-in-trade" );
             filterTradeItems(false);
             break;
     }

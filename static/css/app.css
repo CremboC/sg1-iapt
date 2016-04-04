@@ -193,6 +193,13 @@
 }
 
 .item-preview {
+    margin: 10px;
+    border-radius: .5px;
+    box-shadow:
+        0 0 0 2px #fff,
+        0 0 0 3px #ddd,
+        4px 4px 8px rgba( 0, 0, 0, 0.5 );
+
     cursor: pointer;
     position: relative;
     background-size: cover;
@@ -202,11 +209,25 @@
     opacity: 1;
     transition: opacity 0.3s;
 }
+.item-preview:not(.view):not(.disabled):hover {
+    box-shadow:
+        0 0 0 2px #0f0,
+        0 0 0 3px #ddd,
+        4px 4px 8px rgba( 0, 0, 0, 0.5 );
+}
+.item-preview.item-preview-in-trade:not(.view):not(.disabled):hover {
+    box-shadow:
+        0 0 0 2px #f00,
+        0 0 0 3px #ddd,
+        4px 4px 8px rgba( 0, 0, 0, 0.5 );
+}
 
 .item-preview.disabled {
     cursor: default;
-    box-shadow: inset 0 0 0 1000px rgba(0,0,0,.2);
-    opacity:0.5;
+    opacity:0.25;
+    box-shadow:
+        0 0 0 2px #fff,
+        0 0 0 3px #ddd;
 }
 
 .item-preview.view {
