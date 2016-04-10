@@ -193,12 +193,19 @@
 }
 
 .collection-preview{
-    margin: 0px 10px;
+    margin: 0 10px;
+}
+
+.item-status {
+    display: inline;
+    padding-left: 4px;
+    position: relative;
+    top: -5px;
 }
 
 .item-preview {
     margin: 10px;
-    border-radius: .5px;
+    border-radius: 1px;
     box-shadow:
         0 0 0 2px #fff,
         0 0 0 3px #ddd,
