@@ -24,11 +24,11 @@
                     <h2 class="panel-title">You offered</h2>
                 </header>
 
-                <main class="panel-body" id="yourItemDisplay">
+                <div class="panel-body" id="yourItemDisplay">
                 {{for obj in trade_objects[0]:}}
                     {{print_trade_obj(obj, True)}}
                 {{pass}}
-            </main>
+            </div>
             </div>
         </div>
 
@@ -38,7 +38,7 @@
                     <h2 class="panel-title">{{="They offered"}}</h2>
                 </header>
 
-                <main class="panel-body" id="hisItemDisplay">
+                <div class="panel-body" id="hisItemDisplay">
                 {{for obj in trade_objects[1]:}}
                     {{if obj.objects.status == -1:}}
                     <div class="item-preview deleted">
@@ -48,7 +48,7 @@
                     {{print_trade_obj(obj, True)}}
                     {{pass}}
                 {{pass}}
-                </main>
+                </div>
             </div>
         </div>
         <div class="row">

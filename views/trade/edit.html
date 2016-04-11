@@ -23,7 +23,7 @@
                         <h2 class="panel-title">Your items</h2>
                     </header>
 
-                    <main class="panel-body">
+                    <div class="panel-body">
                         <div class="row" style="padding-bottom:5px">
                             <div class="col-md-10">
                                 <div id="searchItems" class="input-group trade-item-search">
@@ -65,7 +65,7 @@
                                 {{print_trade_obj(obj)}}
                             {{pass}}
                         </div>
-                    </main>
+                    </div>
                 </div>
 
                 <div class="panel panel-default">
@@ -73,11 +73,11 @@
                         <h2 class="panel-title">Your offering</h2>
                     </header>
 
-                    <main class="panel-body" id="yourOffering">
+                    <div class="panel-body" id="yourOffering">
                         {{for obj in trade_objects[0]:}}
                             {{print_trade_obj(obj)}}
                         {{pass}}
-                    </main>
+                    </div>
                 </div>
             </div>
 
@@ -88,7 +88,7 @@
                         <h2 class="panel-title">{{=trader_username}}'s items</h2>
                     </header>
 
-                    <main class="panel-body">
+                    <div class="panel-body">
 
                         <div class="row" style="padding-bottom:5px">
                              <div class="col-md-10">
@@ -136,7 +136,7 @@
                             {{pass}}
                         </div>
 
-                    </main>
+                    </div>
                 </div>
                 <div class="panel panel-default">
 
@@ -144,11 +144,11 @@
                         <h2 class="panel-title">{{=trader_username}}'s offerings</h2>
                     </header>
 
-                    <main class="panel-body" id="theirOffering">
+                    <div class="panel-body" id="theirOffering">
                         {{for obj in trade_objects[1]:}}
                             {{print_trade_obj(obj)}}
                         {{pass}}
-                    </main>
+                    </div>
                 </div>
             </div>
         </div>
