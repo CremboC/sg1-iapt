@@ -38,12 +38,6 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <!-- <a role="button" class="btn btn-default" title="Hide non-tradable items"
-                                data-toggle="tooltip">
-                                    <span
-                                        class="glyphicon glyphicon-eye-close"
-                                        aria-hidden="true"></span>
-                                </a> -->
                                 <div class="btn-group pull-right" data-toggle="buttons">
                                     <label
                                         class="btn btn-default active"
@@ -53,7 +47,6 @@
                                         <input
                                             id="your-item-checkbox"
                                             type="checkbox"
-                                            autocomplete="off"
                                             onchange="filterTradeItems(true);"
                                             checked>
                                         <span
@@ -62,12 +55,12 @@
                                         <span class="sr-only">View non-tradable items</span>
                                     </label>
                                 </div>
-                                <!-- <label>
-                                    View non-tradable items: <input id="your-item-checkbox" type="checkbox" checked onchange="filterTradeItems(true);">
-                                </label> -->
                             </div>
                         </div>
                         <div class="form-group" id="yourItems">
+                            <label class="sr-only">
+                                Your available items
+                            </label>
                             {{for obj in available_objects[0]:}}
                                 {{print_trade_obj(obj)}}
                             {{pass}}
@@ -121,7 +114,6 @@
                                         <input
                                             id="their-item-checkbox"
                                             type="checkbox"
-                                            autocomplete="off"
                                             onchange="filterTradeItems(false);"
                                             checked>
                                         <span
@@ -134,7 +126,7 @@
                         </div>
 
                         <div class="form-group" id="theirItems">
-                            <label for="theirAvailableObjects" class="sr-only">
+                            <label class="sr-only">
                                 Their available items
                             </label>
                             {{if len(available_objects)>0:}}
