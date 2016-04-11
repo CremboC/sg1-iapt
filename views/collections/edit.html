@@ -48,7 +48,7 @@
     </em>
 
     <div class="form-group">
-        <label for="collections_name" class="mandatory">{{=form.custom.label.name}}</label>
+        <label {{if collection.name!="Unfiled":}} for="collections_name" {{pass}}class="mandatory">{{=form.custom.label.name}}</label>
     {{=form.custom.widget.name}}
     </div>
 

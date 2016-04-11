@@ -67,26 +67,26 @@
     <div class="row row-bottom-margin">
         <div class="col-md-4">
         {{if user_is_receiver:}}
-            <a type="submit" class="btn btn-default btn-danger" role="button"
+            <a class="btn btn-default btn-danger" role="button"
                href="{{=URL('trade', 'delete', vars={'tradeid':tradeid})}}">Reject trade</a>
         {{else:}}
-            <a type="submit" class="btn btn-default btn-danger" role="button"
+            <a class="btn btn-default btn-danger" role="button"
                href="{{=URL('trade', 'delete', vars={'tradeid':tradeid})}}">Cancel proposal</a>
         {{pass}}
         </div>
 
         <div class="col-md-4 text-center">
         {{if user_is_receiver:}}
-            <a type="submit" class="btn btn-default btn-warning" role="button"
+            <a class="btn btn-default btn-warning" role="button"
                href="{{=URL('trade', 'edit', vars={'tradeid':tradeid})}}">Counter-offer</a>
         {{else:}}
-            <a type="submit" class="btn btn-default btn-warning" role="button"
+            <a class="btn btn-default btn-warning" role="button"
                href="{{=URL('trade', 'edit', vars={'tradeid':tradeid})}}">Edit proposal</a>
         {{pass}}
         </div>
         <div class="col-md-4 pull-right text-right">
         {{if user_is_receiver:}}
-            <a type="submit" class="btn btn-default pull-right btn-success" role="button"
+            <a class="btn btn-default pull-right btn-success" role="button"
                href="{{=URL('trade', 'accept', vars={'tradeid':tradeid})}}">Accept trade</a>
         {{pass}}
         </div>
