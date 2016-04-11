@@ -22,9 +22,9 @@
             {{pass}}
         {{else:}}
             {{if is_owner:}}
-                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), 'My collections'], [URL('#'), 'Multiple collections'], ['View item']]}}
+                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), 'My collections'], ['Multiple collections'], ['View item']]}}
             {{else:}}
-                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), owner.username + '\'s collections'], [URL('#'), 'Multiple collections'], ['View item']]}}
+                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), owner.username + '\'s collections'], ['Multiple collections'], ['View item']]}}
             {{pass}}
         {{pass}}
     {{pass}}
@@ -96,9 +96,9 @@
     <row>
         <div class="col-xs-5">
         {{if item.image:}}
-            <img src="{{=URL('default', 'download', args=item.image)}}" height="400"/>
+            <img alt="{{=item.name}}" src="{{=URL('default', 'download', args=item.image)}}" height="400"/>
         {{else:}}
-            <img src="http://cumbrianrun.co.uk/wp-content/uploads/2014/02/default-placeholder.png" height="400"/>
+            <img alt="{{=item.name}}" src="http://cumbrianrun.co.uk/wp-content/uploads/2014/02/default-placeholder.png" height="400"/>
         {{pass}}
         </div>
         <div class="col-xs-7">
