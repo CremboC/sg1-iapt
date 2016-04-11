@@ -4,19 +4,20 @@ function createInput(id) {
 
 $(document).ready(function () {
 
-    var $form = $('.content').find('form');
+    var $form = $('#collection_form');
+    var $submit = $('#submit_button');
     var $undo = $('.undo');
     var $undoText = $("#undo-name-display");
     var objects = [];
 
     $undo.hide();
+    $submit.hide();
 
     $('.remove').on('click', function (e) {
         e.preventDefault();
 
         var objectId = $(this).data('id');
         $form.append(createInput(objectId));
-
 
         objects.push(objectId);
 
@@ -26,8 +27,10 @@ $(document).ready(function () {
         );
         $('#object-' + objectId).hide();
         $('body').css({
-            'margin-bottom': '60px'
-        })
+            'margin-bottom': '80px'
+        });
+
+        $submit.show();
     });
 
     $undo.find('a').on('click', function (e) {
@@ -41,7 +44,10 @@ $(document).ready(function () {
 
         objects.pop();
 
-        if (objects.length == 0) $undo.hide();
+        if (objects.length == 0) {
+            $undo.hide();
+            $submit.hide();
+        }
     });
 
     $('#new_objects').multiselect({

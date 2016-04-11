@@ -1,4 +1,3 @@
-
 def index():
     user_id = next(iter(request.args), auth.user_id)
     is_me = user_id == auth.user_id
@@ -27,7 +26,7 @@ def quick_create():
 
 @auth.requires_login()
 def create():
-    #Additional sub-method to handle collection creation from create/edit items
+    # Additional sub-method to handle collection creation from create/edit items
     form = SQLFORM(db.collections)
 
     if form.process().accepted:
@@ -95,21 +94,6 @@ def edit():
     form = SQLFORM(db.collections, record=collection, showid=False, deletable=True, submit_button='Update')
 
     if form.process().accepted:
-        if request.vars.objects_to_remove:
-            objects_to_remove = maybe_list(request.vars.objects_to_remove)
-
-            query = db.object_collection.object_id.belongs(objects_to_remove)
-            db(query).delete()
-
-            for object_id in objects_to_remove:
-                num_cols = len(db(db.object_collection.object_id==object_id).select())
-                if num_cols == 0:
-                    owner_id = get_owner_id(object_id)
-                    unfiled_col_id = get_unfiled_collection(owner_id)
-                    link_object_collections(object_id, unfiled_col_id)
-
-
-
         if not is_unfiled and form.vars.delete_this_record:
             # cleanup linking table
             query = db.object_collection.collection_id == form.vars.id
@@ -145,5 +129,29 @@ def add_items():
             link_object_collections(obj_id, collection_id)
 
         session.flash = dict(status='success', message='Successfully updated collection with new items.')
+
+    return redirect(URL('collections', 'show', args=collection_id))
+
+
+@auth.requires_login()
+def remove_items():
+    if not request.vars.id:
+        return redirect(URL("collections", "index"))
+
+    collection_id = int(request.vars.id)
+
+    if request.vars.objects_to_remove:
+        objects_to_remove = maybe_list(request.vars.objects_to_remove)
+
+        query = db.object_collection.object_id.belongs(objects_to_remove)
+        db(query).delete()
+
+        for object_id in objects_to_remove:
+            num_cols = len(db(db.object_collection.object_id == object_id).select())
+            if num_cols == 0:
+                owner_id = get_owner_id(object_id)
+                unfiled_col_id = get_unfiled_collection(owner_id)
+                link_object_collections(object_id, unfiled_col_id)
+        session.flash = dict(status='success', message='Successfully removed items from collection.')
 
     return redirect(URL('collections', 'show', args=collection_id))
