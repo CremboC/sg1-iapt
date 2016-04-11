@@ -1,7 +1,7 @@
 {{if is_owner:}}
-    {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), 'My collections'], ['View collection']]}}
+{{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), 'My collections'], ['View collection']]}}
 {{else:}}
-    {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), user.username + '\'s collections'], ['View collection']]}}
+{{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), user.username + '\'s collections'], ['View collection']]}}
 {{pass}}
 
 {{extend 'layout.html'}}
@@ -11,37 +11,37 @@
     <div class="clearfix">
         <div class="pull-left">
             <h2>
-                {{ if is_owner: }}
-                    {{ if collection.private: }}
-                        <span
-                            data-toggle="tooltip"
-                            title="This collection is private.
+            {{ if is_owner: }}
+            {{ if collection.private: }}
+                <span
+                        data-toggle="tooltip"
+                        title="This collection is private.
 Only you will be able to see it.">
                             <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
                             <span class="sr-only">Private</span>
                         </span>
-                    {{ else: }}
-                        <span
-                                data-toggle="tooltip"
-                                title="This collection is public.
+            {{ else: }}
+                <span
+                        data-toggle="tooltip"
+                        title="This collection is public.
 This collection is visible to everyone.">
                             <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
                             <span class="sr-only">Public</span>
                         </span>
-                    {{ pass }}
-                {{ pass }}
-                {{=collection.name}}
+            {{ pass }}
+            {{ pass }}
+            {{=collection.name}}
                 <small>
                     by
                     <a href="{{=URL('collections', 'index', args=user.id)}}">
-                        {{=user.username}}
+                    {{=user.username}}
                     </a>
                 </small>
             </h2>
         </div>
 
         <div class="pull-right">
-            {{if is_owner:}}
+        {{if is_owner:}}
             <ul class="list-inline">
                 <li>
                     <div class="dropdown clearfix">
@@ -68,28 +68,40 @@ This collection is visible to everyone.">
                     </a>
                 </li>
             </ul>
-            {{pass}}
+        {{pass}}
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <form action="{{=URL('collections', 'remove_items')}}" method="post" id="collection_form">
+        <input type="hidden" name="id" value="{{=collection.id}}">
+
+        <div class="panel panel-default">
+            <div class="panel-body">
             {{print_sortby()}}
             {{if len(items)>0:}}
-                {{for chunk in chunks(items, 3):}}
+            {{for chunk in chunks(items, 3):}}
                 <div class="row">
-                    {{for item in chunk:}}
+                {{for item in chunk:}}
                     <div class="col-xs-4 object-wrapper">
-                        {{print_object(item, False)}}
+                    {{print_object(item, False, True)}}
                     </div>
-                    {{pass}}
-                </div>
                 {{pass}}
+                </div>
+            {{pass}}
             {{else:}}
                 <h2>This collection is empty :(</h2>
             {{pass}}
+            </div>
         </div>
-    </div>
+
+        <div class="clearfix">
+            <div class="pull-right">
+                <button type="submit" class="btn btn-success" id="submit_button">
+                    Save Collection
+                </button>
+            </div>
+        </div>
+    </form>
 
     <form action="{{=URL('collections', 'add_items')}}" method="POST">
         <input type="hidden" name="id" value="{{=collection.id}}">
@@ -109,9 +121,9 @@ This collection is visible to everyone.">
                             <label for="new_objects">Select items to add</label>
                             <br>
                             <select id="new_objects" multiple="multiple" name="new_objects">
-                                {{for obj in other_objects:}}
+                            {{for obj in other_objects:}}
                                 <option value="{{=obj.id}}">{{=obj.name}}</option>
-                                {{pass}}
+                            {{pass}}
                             </select>
                         </div>
                     </div>
@@ -123,6 +135,20 @@ This collection is visible to everyone.">
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
     </form>
+</div>
+
+<div class="undo" role="alert">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-10">
+                <strong id="undo-name-display"></strong> has been removed from
+                your collection.
+            </div>
+            <div class="col-xs-2">
+                <a class="btn btn-warning btn-block" role="button">Undo</a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="{{=URL('static','js/collection.js')}}"></script>

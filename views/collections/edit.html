@@ -61,23 +61,6 @@
         </label>
     </div>
 
-    <h3>Items in Collection</h3>
-
-    <div class="panel panel-default">
-        <div class="panel-body">
-        {{print_sortby()}}
-        {{for chunk in chunks(objects_in_collection, 3):}}
-            <div class="row">
-            {{for object in chunk:}}
-                <div class="col-xs-4" id="object-{{=object.id}}">
-                    {{print_object(object, False, True)}}
-                </div>
-            {{pass}}
-            </div>
-        {{pass}}
-        </div>
-    </div>
-
     <div class="form-group clearfix">
         <a href="{{=URL('collections', 'show', args=collection.id)}}" class="btn btn-default pull-left" role="button">Cancel</a>
         <button type="submit" name="submit" value="save" class="btn btn-success pull-right">Save Collection</button>
@@ -85,19 +68,3 @@
 
 {{=form.custom.end}}
 </div>
-
-<div class="undo" role="alert">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-10">
-                <strong id="undo-name-display"></strong> has been removed from
-                your collection.
-            </div>
-            <div class="col-xs-2">
-                <a class="btn btn-warning" role="button">Undo</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="{{=URL('static','js/collection.js')}}"></script>

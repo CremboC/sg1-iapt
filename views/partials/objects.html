@@ -1,7 +1,7 @@
 {{def print_object(obj, show_owner = True, make_removable = False):}}
 {{owner = obj.owner()}}
 {{type = obj.type()}}
-<div class="panel panel-default">
+<div class="panel panel-default" id="object-{{=obj.id}}">
     <header class="panel-heading">
         <a href="{{=URL('items', 'show', args=obj.id)}}" class="object-name">
             {{= obj.name }}
@@ -161,12 +161,12 @@
         </div>
         {{if make_removable:}}
             <a
-               class="remove pull-right"
+                class="remove pull-right"
                 role="button"
-               href="#remove"
-               data-toggle="tooltip"
-               title="Remove item from this collection"
-               data-id="{{=object.id}}">
+                href="#remove"
+                data-toggle="tooltip"
+                title="Remove item from this collection"
+                data-id="{{=obj.id}}">
                 <span class="glyphicon glyphicon-remove middle" aria-hidden="true"></span>
                 <span class="sr-only">Remove item from this collection</span>
             </a>
