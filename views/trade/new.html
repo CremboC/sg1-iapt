@@ -25,6 +25,7 @@
                                             Search
                                         </span>
                                     </span>
+                                    <label class="sr-only" for="searchOwnItems">Search for your available items</label>
                                     <input id="searchOwnItems" type="text" class="form-control"
                                            placeholder="Search your items"
                                            autocomplete="off">
@@ -47,8 +48,8 @@
                                     <label
                                         class="btn btn-default active"
                                         title="View nontradable items"
-                                        data-toggle="tooltip">
-
+                                        data-toggle="tooltip"
+                                        for="your-item-checkbox">
                                         <input
                                             id="your-item-checkbox"
                                             type="checkbox"
@@ -96,8 +97,9 @@
 
 
                         <div class="row" style="padding-bottom:5px">
-                            <div class="col-md-7">
+                            <div class="col-md-10">
                                 <div class="input-group trade-item-search">
+                                    <label class="sr-only" for="searchTheirItems">Search for their available items</label>
                                     <input id="searchTheirItems" type="text" class="form-control"
                                            placeholder="Search your items"
                                            autocomplete="off">
@@ -109,10 +111,25 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-5">
-                                <label>
-                                    View non-tradable items: <input id="their-item-checkbox" type="checkbox" checked onchange="filterTradeItems(false);">
-                                </label>
+                            <div class="col-md-2">
+                                <div class="btn-group pull-right" data-toggle="buttons">
+                                    <label
+                                        class="btn btn-default active"
+                                        title="View nontradable items"
+                                        data-toggle="tooltip"
+                                        for="their-item-checkbox">
+                                        <input
+                                            id="their-item-checkbox"
+                                            type="checkbox"
+                                            autocomplete="off"
+                                            onchange="filterTradeItems(false);"
+                                            checked>
+                                        <span
+                                            class="glyphicon glyphicon-eye-close"
+                                            aria-hidden="true"></span>
+                                        <span class="sr-only">View their non-tradable items</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
