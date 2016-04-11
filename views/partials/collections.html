@@ -26,7 +26,10 @@
             <span
                 class="glyphicon glyphicon-lock"
                 data-toggle="tooltip"
-                title="This Collection is Private."></span>
+                title="This Collection is Private."
+                aria-hidden="true">
+            </span>
+            <span class="sr-only">This Collection is Private.</span>
         {{pass}}
         </td>
     {{pass}}
@@ -48,16 +51,16 @@
         </td>
         <td>
             <div class="btn-group" role="group" aria-label="Collection Actions">
-            <a href="{{=URL('collections', 'show', args=collection.id)}}" class="btn btn-default btn-sm" role="button">
-                <span class="glyphicon glyphicon-eye-open middle"></span>
-                View
-            </a>
-            {{if show_edit:}}
-                <a href="{{=URL('collections', 'edit', args=collection.id)}}" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-edit middle"></span>
-                    Edit
+                <a href="{{=URL('collections', 'show', args=collection.id)}}" class="btn btn-default btn-sm" role="button">
+                    <span class="glyphicon glyphicon-eye-open middle" aria-hidden="true"></span>
+                    View
                 </a>
-            {{pass}}
+                {{if show_edit:}}
+                    <a href="{{=URL('collections', 'edit', args=collection.id)}}" class="btn btn-default btn-sm" role="button">
+                        <span class="glyphicon glyphicon-edit middle" aria-hidden="true"></span>
+                        Edit
+                    </a>
+                {{pass}}
             </div>
         </td>
     </tr>

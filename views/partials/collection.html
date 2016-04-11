@@ -1,27 +1,29 @@
 <!-- This is for an individual collection, not multiple collections -->
 {{def print_collection(col, size =-1):}}
 <div class="panel panel-default ">
-    <div class="panel-heading">
+    <header class="panel-heading">
         <a href="{{=URL('collections', 'show', args=col.id)}}" class="object-name">
             {{= col.name }}
         </a>
-    </div>
-    <div class="panel-body  alert-warning">
-            <div class="collection-preview">
-            {{owner = col.owner()}}
-                <div class="row">
-                    <span class="glyphicon glyphicon-user object-icon"></span>
-                    <a href="{{=URL('collections', 'index', args=owner.id)}}">
+    </header>
+    <main class="panel-body alert-warning">
+        <div class="collection-preview">
+        {{owner = col.owner()}}
+            <div class="row">
+                <span class="glyphicon glyphicon-user object-icon" aria-hidden="true"></span>
+                <span class="sr-only">Username</span>
+                <a href="{{=URL('collections', 'index', args=owner.id)}}">
                     {{=owner.username}}
-                    </a>
-                </div>
-                <div class="row">
-                    <span class="glyphicon glyphicon-folder-open object-icon"></span>
-                    {{=size}}
-                </div>
+                </a>
             </div>
-    </div>
-    <div class="panel-footer">
+            <div class="row">
+                <span class="glyphicon glyphicon-folder-open object-icon" aria-hidden="true"></span>
+                <span class="sr-only">Items in collection</span>
+                {{=size}}
+            </div>
+        </div>
+    </main>
+    <footer class="panel-footer">
         <div class="btn-group btn-group-xs" role="group" aria-label="Object Actions">
             <!-- TODO: Contextual Actions -->
             <a
@@ -30,11 +32,11 @@
                 data-toggle="tooltip"
                 title="View">
 
-                <span class="glyphicon glyphicon-eye-open"></span> View collection
+                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View collection
             </a>
 
         </div>
-    </div>
+    </footer>
 </div>
 
 {{return}}

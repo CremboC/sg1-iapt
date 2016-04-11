@@ -2,10 +2,13 @@
 <div class="modal fade" id="new_trade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <header class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close Alert</span>
+                </button>
                 <h4 class="modal-title">Create a new collection</h4>
-            </div>
+            </header>
             <div class="modal-body">
                 <div id="modal_collection_name" class="form-group">
                     <label for="collections_name" class="mandatory">Select a user:</label>
@@ -15,10 +18,10 @@
                                autocomplete="off" title="Trade modal">
                 </div>
             </div>
-            <div class="modal-footer">
+            <footer class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" onclick="redirectToTrade('{{=URL('trade', 'new')}}')" class="btn btn-primary">Start trading</button>
-            </div>
+            </footer>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

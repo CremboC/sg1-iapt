@@ -73,20 +73,20 @@
         <div class="col-xs-6">
             <div class="pull-right">
             {{if not is_owner:}}
-                <a href="{{=URL('items', 'wish', args=item.id)}}" class="btn btn-warning">
+                <a href="{{=URL('items', 'wish', args=item.id)}}" class="btn btn-warning" role="button">
                     <span class="glyphicon glyphicon-heart middle" aria-hidden="true"></span>
                     Add to My Wish List
                 </a>
             {{pass}}
             {{if is_owner:}}
-                <a href="{{=URL('items', 'edit', args=item.id)}}" class="btn btn-success">
+                <a href="{{=URL('items', 'edit', args=item.id)}}" class="btn btn-success" role="button">
                     <span class="glyphicon glyphicon-edit middle" aria-hidden="true"></span>
                     Edit
                 </a>
             {{pass}}
             {{if (not is_owner) & (item.status == 2) & (not item.in_trade):}}
                 <a href="{{=URL('trade', 'new', vars={"item_id": item.id})}}" class="btn btn-default for-trade">
-                    <span class="glyphicon glyphicon-tags"></span>
+                    <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
                     Trade for this item
                 </a>
             {{pass}}

@@ -4,8 +4,11 @@
 
 <div class="container">
 {{if form.errors:}}
-    <div class="alert alert-warning">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <div class="alert alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close Alert</span>
+        </button>
         <strong>Your submitted form contains the following errors</strong>
         <ul>
         {{for fieldname in form.errors:}}
@@ -17,10 +20,10 @@
 {{pass}}
 
     <div class="panel panel-default">
-        <div class="panel-heading">
+        <header class="panel-heading">
             <h3 class="panel-title">Add Item</h3>
-        </div>
-        <div class="panel-body">
+        </header>
+        <main class="panel-body">
         {{=form.custom.begin}}
 
             <p class="text-info">
@@ -180,13 +183,13 @@
 
             <div class="form-group pull-right">
                 <button type="submit" class="btn btn-success">
-                    <span class="glyphicon glyphicon-floppy-open middle"></span>
+                    <span class="glyphicon glyphicon-floppy-open middle" aria-hidden="true"></span>
                     Add
                 </button>
             </div>
 
         {{=form.custom.end}}
-        </div>
+    </main>
     </div>
 </div>
 

@@ -19,11 +19,11 @@
             <div class="col-md-6 tradeborder">
                 <div class="panel panel-default">
 
-                    <div class="panel-heading">
+                    <header class="panel-heading">
                         <h2 class="panel-title">Your items</h2>
-                    </div>
+                    </header>
 
-                    <div class="panel-body">
+                    <main class="panel-body">
                         <div class="row" style="padding-bottom:5px">
                             <div class="col-md-7">
                                 <div id="searchItems" class="input-group trade-item-search">
@@ -49,30 +49,30 @@
                                 {{print_trade_obj(obj)}}
                             {{pass}}
                         </div>
-                    </div>
+                    </main>
                 </div>
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <header class="panel-heading">
                         <h2 class="panel-title">Your offering</h2>
-                    </div>
+                    </header>
 
-                    <div class="panel-body" id="yourOffering">
+                    <main class="panel-body" id="yourOffering">
                         {{for obj in trade_objects[0]:}}
                             {{print_trade_obj(obj)}}
                         {{pass}}
-                    </div>
+                    </main>
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="panel panel-default">
 
-                    <div class="panel-heading">
+                    <header class="panel-heading">
                         <h2 class="panel-title">{{=trader_username}}'s items</h2>
-                    </div>
+                    </header>
 
-                    <div class="panel-body">
+                    <main class="panel-body">
 
                         <div class="row" style="padding-bottom:5px">
                              <div class="col-md-7">
@@ -104,19 +104,19 @@
                             {{pass}}
                         </div>
 
-                    </div>
+                    </main>
                 </div>
                 <div class="panel panel-default">
 
-                    <div class="panel-heading">
+                    <header class="panel-heading">
                         <h2 class="panel-title">{{=trader_username}}'s offerings</h2>
-                    </div>
+                    </header>
 
-                    <div class="panel-body" id="theirOffering">
+                    <main class="panel-body" id="theirOffering">
                         {{for obj in trade_objects[1]:}}
                             {{print_trade_obj(obj)}}
                         {{pass}}
-                    </div>
+                    </main>
                 </div>
             </div>
         </div>
@@ -135,7 +135,7 @@
 
         <div class="row">
             <div class="pull-left">
-                <a class="btn btn-danger" href="{{=URL('trade', 'index')}}">Cancel</a>
+                <a class="btn btn-danger" role="button" href="{{=URL('trade', 'index')}}">Cancel</a>
             </div>
             <div class="pull-right">
                 <button type="button" onclick="submitForm()" class="btn btn-success">Submit</button>

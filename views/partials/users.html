@@ -15,19 +15,19 @@
             </a>
         </td>
         <td>
-            <a class="btn btn-default nav-collections"
+            <a class="btn btn-default nav-collections" role="button"
                href="{{=URL('collections', 'index', args=user.id)}}">
                 View his collections
             </a>
-            <a class="btn btn-default nav-fortrade"
+            <a class="btn btn-default nav-fortrade" role="button"
                href="{{=URL('item_lists', 'for_trade', vars=dict(user_id=user.id))}}">
                 View his items for trade
             </a>
-            <a class="btn btn-default nav-wishlist"
+            <a class="btn btn-default nav-wishlist" role="button"
                href="{{=URL('item_lists', 'wish_list', vars=dict(user_id=user.id))}}">
                 View his wish list
             </a>
-            <a class="btn btn-default nav-trades"
+            <a class="btn btn-default nav-trades" role="button"
                href="{{=URL('trade', 'new', vars=dict(receiver_id=user.id))}}">
                 Trade with this user
             </a>

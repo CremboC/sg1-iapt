@@ -5,31 +5,31 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="pull-left col-md-2">
-                <a data-toggle="modal" href="#new_trade"><div class="btn btn-default for-trade">Propose new trade</div></a>
+                <a data-toggle="modal" class="btn btn-default for-trade" role="button" href="#new_trade">Propose New Trade</a>
             </div>
             <div class="pull-left col-md-3">
-                <a class="btn btn-default" href="{{=URL('trade', 'log')}}">View trade log</a>
+                <a class="btn btn-default" role="button" href="{{=URL('trade', 'log')}}">View trade log</a>
             </div>
         </div>
     </div>
 
     <div class="panel panel-default">
-        <div class="panel-heading">
+        <header class="panel-heading">
             <h2 class="panel-title">Trade inbox</h2>
-        </div>
+        </header>
     {{list_trades(incoming, user_id)}}
     </div>
 
     <div class="panel panel-default">
-        <div class="panel-heading">
+        <header class="panel-heading">
             <h2 class="panel-title">Sent trades</h2>
-        </div>
+        </header>
     {{list_trades(sent, user_id)}}
     </div>
     <div class="panel panel-default">
-        <div class="panel-heading">
+        <header class="panel-heading">
             <h2 class="panel-title">Concluded trades</h2>
-        </div>
+        </header>
     {{list_trades(completed, user_id)}}
     </div>
 </div>

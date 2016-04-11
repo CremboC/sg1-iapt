@@ -3,12 +3,12 @@
 {{extend 'layout.html'}}
 <div class="container">
     <div class="panel panel-default">
-        <div class="panel-heading">
+        <header class="panel-heading">
             <h2 class="panel-title">{{=user_name}}'s trade log</h2>
-        </div>
-        <div class="panel-body">
+        </header>
+        <main class="panel-body">
             {{print_table_sortby()}}
-        </div>
+        </main>
     {{list_trades(trades, user_id)}}
     </div>
     <nav>

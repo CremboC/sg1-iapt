@@ -317,3 +317,10 @@
 .trade-item-search .form-control{
     width: 50%;
 }
+
+/* web2py futzing */
+
+header {
+    box-shadow: initial;
+    margin-bottom: initial;
+}

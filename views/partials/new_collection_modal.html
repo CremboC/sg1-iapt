@@ -1,12 +1,15 @@
 {{def get_new_col_modal():}}
-<a class="btn btn-default" data-toggle="modal" href="#new_collection">Create new Collection</a>
+<a class="btn btn-default" role="button" data-toggle="modal" href="#new_collection" aria-haspopup="true">Create new Collection</a>
 <div class="modal fade" id="new_collection">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <header class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close Alert</span>
+                </button>
                 <h4 class="modal-title">Create a new collection</h4>
-            </div>
+            </header>
             <div class="modal-body">
                 <div id="modal_collection_name" class="form-group">
                     <label for="collections_name" class="mandatory">Name</label>
@@ -14,17 +17,17 @@
                     <span style="display: none" class="help-block">Please enter a name</span>
                 </div>
                 <div class="form-group">
-                    <label for="collections_private" data-toggle="tooltip" data-placement="right" title=""
-                           data-original-title="Check this box to make the collection visible only to you.">
+                    <label for="collections_private" data-toggle="tooltip" data-placement="right"
+                           title="Check this box to make the collection visible only to you.">
                         <input class="boolean" id="collections_private" name="col_private" type="checkbox" value="on">
                         Private
                     </label>
                 </div>
             </div>
-            <div class="modal-footer">
+            <footer class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" onclick="create_collection()" class="btn btn-primary">Create collection</button>
-            </div>
+            </footer>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

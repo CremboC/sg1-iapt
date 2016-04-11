@@ -43,8 +43,6 @@
     <script src="{{=URL('static','js/app.js')}}"></script>
 </head>
 <body>
-
-
 <!-- Navbar ======================================= -->
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
@@ -56,7 +54,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{=URL('default', 'index')}}">MEGACOLLECTOR</a>
+            <a class="navbar-brand" href="{{=URL('default', 'index')}}" role="banner">MEGACOLLECTOR</a>
         </div>
 
         <div id="navbar-ex1-collapse" class="collapse navbar-collapse">
@@ -115,11 +113,11 @@
                 </li>
             {{ pass}}
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" id="createDropdownButton">
                         <span class="glyphicon glyphicon-plus middle"></span>
                         Create
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" aria-labelledby="createDropdownButton">
                         <li>
                             <a href="{{=URL('items', 'create')}}">
                                 New Item
@@ -157,30 +155,28 @@
         </div>
     </div>
     <div class="container navbar-searchbar">
-        <form class="navbar-form" action="{{=URL('search', 'index')}}">
+        <form class="navbar-form" action="{{=URL('search', 'index')}}" role="search">
             <input type="hidden" name="page" value="{{=request.vars.page or 'items'}}">
 
             <div class="row">
-                <div class="">
-                    <div class="input-group col-sm-10 col-sm-offset-2">
-                        <label for="search_query" class="sr-only">Search Query</label>
-                        <input type="text" name="query" id="search_query" class="form-control"
-                               style="border-top-left-radius:4px; border-bottom-left-radius:4px"
-                               value="{{if request.vars.query:}}{{=request.vars.query}}{{pass}}"
-                               placeholder="Search for items, collections and users...">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="submit">Search</button>
-                        </span>
-                    </div><!-- /input-group -->
-                </div>
+                <div class="input-group col-sm-10 col-sm-offset-2">
+                    <label for="search_query" class="sr-only">Search Query</label>
+                    <input type="text" name="query" id="search_query" class="form-control"
+                           style="border-top-left-radius:4px; border-bottom-left-radius:4px"
+                           value="{{if request.vars.query:}}{{=request.vars.query}}{{pass}}"
+                           placeholder="Search for items, collections and users...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">Search</button>
+                    </span>
+                </div><!-- /input-group -->
             </div>
         </form>
     </div>
 </nav>
 {{get_user_select_modal()}}
-<div class="wrapper content">
+<main role="main" class="wrapper content">
 {{ if "breadcrumbs" in vars(): }}
-    <div class="container">
+    <nav class="container">
         <ol class="breadcrumb">
         {{ for index, tup in enumerate( breadcrumbs ): }}
         {{if len(tup)==1:}}
@@ -190,7 +186,7 @@
         {{ pass }}
         {{ pass }}
         </ol>
-    </div>
+    </nav>
 {{ pass }}
 {{if response.flash:}}
 {{
@@ -204,8 +200,11 @@ message = response.flash['message']
 }}
 {{pass}}
     <div class="container">
-        <div class="alert alert-{{=status}}">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <div class="alert alert-{{=status}}" role="alert">
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close Alert</span>
+            </button>
         {{=message}}
         </div>
     </div>
@@ -214,7 +213,7 @@ message = response.flash['message']
 {{block center}}
 {{include}}
 {{end}}
-</div>
+</main>
 
 {{block footer}} <!-- this is default footer -->
 <footer>
@@ -222,10 +221,6 @@ message = response.flash['message']
     </div>
 </footer>
 {{end}}
-
-<div class="container">
-{{#=response.toolbar()}}
-</div>
 
 
 <!-- The javascript =============================== -->
