@@ -1,7 +1,7 @@
 {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('trade', 'index'), 'My trades'], ['New trade with ' + trader_username]]}}
 {{extend 'layout.html'}}
 
-<div  id="errorcontainer" class="container">
+<div id="errorcontainer" class="container">
 
     <form id="tradeform" action="{{=URL('trade', 'createNew')}}">
         <input hidden name="receiver_username" value="{{=(trader_username if trader_username is not None else '')}}">
