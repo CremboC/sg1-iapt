@@ -13,7 +13,7 @@
                         <h2 class="panel-title">Your items</h2>
                     </header>
 
-                    <main class="panel-body">
+                    <div class="panel-body">
                         <div class="row" style="padding-bottom:5px">
                             <div class="col-md-10">
                                 <div id="searchItems" class="input-group trade-item-search">
@@ -66,7 +66,7 @@
                             {{pass}}
                         </div>
 
-                    </main>
+                    </div>
                 </div>
                 <div class="panel panel-default">
 
@@ -74,8 +74,8 @@
                         <h2 class="panel-title">Your offerings</h2>
                     </header>
 
-                    <main class="panel-body" id="yourOffering">
-                    </main>
+                    <div class="panel-body" id="yourOffering">
+                    </div>
                 </div>
             </div>
 
@@ -86,7 +86,7 @@
                         <h2 class="panel-title">{{=trader_username}}'s items</h2>
                     </header>
 
-                    <main class="panel-body">
+                    <div class="panel-body">
 
 
                         <div class="row" style="padding-bottom:5px">
@@ -142,14 +142,14 @@
                             {{pass}}
                         </div>
 
-                    </main>
+                    </div>
                 </div>
                 <div class="panel panel-default">
                     <header class="panel-heading">
                         <h2 class="panel-title">{{=trader_username}}'s offerings</h2>
                     </header>
 
-                    <main class="panel-body" id="theirOffering">
+                    <div class="panel-body" id="theirOffering">
                         {{if wanted_object is not None:}}
                             {{for obj in available_objects[1]:}}
                                 {{if obj.objects.id==wanted_object:}}
@@ -157,7 +157,7 @@
                                 {{pass}}
                             {{pass}}
                         {{pass}}
-                    </main>
+                    </div>
                 </div>
             </div>
         </div>

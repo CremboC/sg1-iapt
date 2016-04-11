@@ -9,13 +9,13 @@
                     <header class="panel-heading">
                         <h2 class="panel-title">Filter your search</h2>
                     </header>
-                    <main class="panel-body">
+                    <div class="panel-body">
                         {{if page == 'items':}}
                         {{include 'search/_items_filters.html'}}
                         {{elif page == 'collections':}}
                         {{include 'search/_collections_filters.html'}}
                         {{pass}}
-                    </main>
+                    </div>
                 </div>
             {{pass}}
         </div>
