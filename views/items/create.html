@@ -10,7 +10,6 @@
         input.attr('placeholder', 'Object\'s name');
         $("#objects_description").attr('placeholder', 'Description of the object');
         $("#objects_summary").attr('placeholder', 'Summary of the object');
-        $("#objects_image").attr('placeholder', 'Image of the object');
         $("#objects_value").attr('placeholder', 'Price of the object');
     });
 </script>
@@ -100,7 +99,7 @@
 
             <!--status-->
             <div class="form-group">
-                <label for="objects_status">{{=form.custom.label.status}}</label>
+                <label>{{=form.custom.label.status}}</label>
                 <br />
                 <div
                     class="btn-group btn-group-justified btn-group-lg"
@@ -108,8 +107,8 @@
                     aria-label="Item Status"
                     data-toggle="buttons">
 
-                    <label class="btn btn-primary active wrapping" role="button">
-                        <input type="radio" name="status" autocomplete="off" value="2" checked>
+                    <label class="btn btn-primary active wrapping">
+                        <input type="radio" name="status" value="2" checked>
                         <strong>
                             <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
 
@@ -119,8 +118,8 @@
                         <small>Tradable items can be traded for other items.</small>
                         </label>
                     </label>
-                    <label class="btn btn-success wrapping" role="button">
-                        <input type="radio" name="status" autocomplete="off" value="0">
+                    <label class="btn btn-success wrapping">
+                        <input type="radio" name="status" value="0">
                         <strong>
                             <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
 
@@ -130,8 +129,8 @@
                         <small>Non-Tradable items cannot be in trades and cannot be asked for in a trade.</small>
                         </label>
                     </label>
-                    <label class="btn btn-warning wrapping" role="button">
-                        <input type="radio" name="status" autocomplete="off" value="1">
+                    <label class="btn btn-warning wrapping">
+                        <input type="radio" name="status" value="1">
                         <strong>
                             <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
 

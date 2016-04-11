@@ -16,7 +16,6 @@
         input.attr('placeholder', 'Object\'s name');
         $("#objects_description").attr('placeholder', 'Description of the object');
         $("#objects_summary").attr('placeholder', 'Summary of the object');
-        $("#objects_image").attr('placeholder', 'Image of the object');
         $("#objects_value").attr('placeholder', 'Price of the object');
     });
 </script>
@@ -119,7 +118,7 @@
 
             <!--status-->
             <div class="form-group">
-                <label for="objects_status">{{=form.custom.label.status}}</label>
+                <label>{{=form.custom.label.status}}</label>
                 <br />
                 <div
                     class="btn-group btn-group-justified btn-group-lg"
@@ -129,11 +128,11 @@
 
 
                     {{ if object.status == 2: }}
-                    <label class="btn btn-primary active wrapping" role="button">
-                        <input type="radio" name="status" autocomplete="off" value="2" checked>
+                    <label class="btn btn-primary active wrapping">
+                        <input type="radio" name="status"  value="2" checked>
                     {{ else: }}
-                    <label class="btn btn-primary wrapping" role="button">
-                        <input type="radio" name="status" autocomplete="off" value="2">
+                    <label class="btn btn-primary wrapping">
+                        <input type="radio" name="status"  value="2">
                     {{ pass }}
                         <strong>
                             <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
@@ -145,15 +144,14 @@
                         </label>
                     </label>
                     {{ if object.status == 0: }}
-                    <label class="btn btn-success active wrapping" role="button">
-                        <input type="radio" name="status" autocomplete="off" value="0" checked>
+                    <label class="btn btn-success active wrapping">
+                        <input type="radio" name="status"  value="0" checked>
                     {{ else: }}
-                    <label class="btn btn-success wrapping" role="button">
-                        <input type="radio" name="status" autocomplete="off" value="0">
+                    <label class="btn btn-success wrapping">
+                        <input type="radio" name="status"  value="0">
                     {{ pass }}
                         <strong>
                             <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-
                             Non-Tradable
                         </strong>
                         <br />
@@ -161,11 +159,11 @@
                         </label>
                     </label>
                     {{ if object.status == 1: }}
-                    <label class="btn btn-warning active wrapping" role="button">
-                        <input type="radio" name="status" autocomplete="off" value="1" checked>
+                    <label class="btn btn-warning active wrapping">
+                        <input type="radio" name="status"  value="1" checked>
                     {{ else: }}
-                    <label class="btn btn-warning wrapping" role="button">
-                        <input type="radio" name="status" autocomplete="off" value="1">
+                    <label class="btn btn-warning wrapping">
+                        <input type="radio" name="status"  value="1">
                     {{ pass }}
                         <strong>
                             <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
@@ -180,7 +178,7 @@
             </div>
 
             <!--collections-->
-                <div class="form-group" id="collections" {{if object.status==1:}}style="display:none {{pass}}">
+                <div class="form-group" id="collections" {{if object.status==1:}} style="display:none" {{pass}}>
                 <label for="objects_collection">Collections</label>
                 <br>
                 <select id="objects_collection" multiple="multiple" name="collections">
@@ -224,7 +222,7 @@
 
             <div class="form-group clearfix">
                 <div class="pull-left">
-                    <a href="{{=URL('items', 'show', args=object.id)}}" class="btn btn-default" role="button">
+                    <a href="{{=URL('items', 'show', args=object.id)}}" class="btn btn-default">
                         Cancel
                     </a>
                 </div>
