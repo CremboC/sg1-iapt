@@ -102,6 +102,7 @@
                     <a href="{{=URL('trade', 'index')}}" data-toggle="tooltip" data-placement="bottom"
                        title="You have notifications!">
                         <span class="glyphicon glyphicon-bell notification-icon middle" aria-hidden="true"></span>
+                        <span class="sr-only">New Notifications</span>
                     </a>
                 </li>
             {{ else: }}
@@ -109,6 +110,7 @@
                     <a href="{{=URL('trade', 'index')}}" data-toggle="tooltip" data-placement="bottom"
                        title="No Notifications">
                         <span class="glyphicon glyphicon-bell middle" aria-hidden="true"></span>
+                        <span class="sr-only">No new Notifications</span>
                     </a>
                 </li>
             {{ pass}}
