@@ -34,7 +34,7 @@
             </a>
             <a href="{{=URL('item_lists', 'wish_list', vars=dict(user_id=user.id))}}" class="btn btn-warning" role="button">
                 <span class="glyphicon glyphicon-heart middle" aria-hidden="true"></span>
-            {{=user.username}}'s Wish List
+            {{=user.username}}'s Wishlist
             </a>
             {{ if auth.user_id: }}
             <a href="{{=URL('trade', 'new', vars=dict(receiver_id=user.id))}}" class="btn btn-default nav-trades" role="button">

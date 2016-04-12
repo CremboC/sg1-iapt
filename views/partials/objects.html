@@ -98,9 +98,7 @@
             <a
                 class="btn btn-default nav-collections"
                 role="button"
-                href="{{=URL('items', 'show', args=obj.id)}}"
-                data-toggle="tooltip"
-                title="View item">
+                href="{{=URL('items', 'show', args=obj.id)}}">
 
                 <span class="glyphicon glyphicon-eye-open middle" aria-hidden="true"></span> View
             </a>
@@ -108,9 +106,7 @@
             <a
                 class="btn btn-default edit"
                 role="button"
-                href="{{=URL('items', 'edit', args=obj.id)}}"
-                data-toggle="tooltip"
-                title="Edit item">
+                href="{{=URL('items', 'edit', args=obj.id)}}">
 
                 <span class="glyphicon glyphicon-edit middle" aria-hidden="true"></span> Edit
             </a>
@@ -118,8 +114,6 @@
                 class="btn btn-default nav-trades"
                 role="button"
                 href="{{=URL('items', 'delete', args=obj.id)}}"
-                data-toggle="tooltip"
-                title="Delete item"
                 onclick="return confirm('Are you sure you want to delete this item? \n This cannot be undone!')">
                 <span class="glyphicon glyphicon-trash middle" aria-hidden="true"></span> Delete
             </a>

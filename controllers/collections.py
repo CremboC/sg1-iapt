@@ -88,8 +88,8 @@ def edit():
     is_unfiled = collection.name == "Unfiled"
 
     if is_unfiled:
-        db.collections.name.writable = False
-        db.collections.private.writable = False
+        session.flash = {"status": "danger", "message": "Error: Cannot edit the Unfiled collection."}
+        return redirect(URL('collections', 'index'))
 
     form = SQLFORM(db.collections, record=collection, showid=False, deletable=True, submit_button='Update')
 
