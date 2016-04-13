@@ -1,6 +1,6 @@
 $(document).ready(function () {
+    // fill the typeahead for the users filter
     $.getJSON(__users_url__, function (data) {
-        var $hiddenUserId = $('#filter_user_id');
         var users = $.map(data.users, function (u) {
             return u.username;
         });

@@ -1,5 +1,13 @@
 # coding=utf-8
+
+
 def item_is_private(item_id):
+    """
+    Helper to check whether the item is private.
+    If the item is in at least one public collection, it is public.
+    :type item_id: int
+    :return boolean private or not
+    """
     query = db.object_collection.object_id == item_id
     query &= db.collections.id == db.object_collection.collection_id
     for collection in db(query).select():
@@ -9,14 +17,29 @@ def item_is_private(item_id):
 
 
 def link_object_collections(object_id, collection_id):
+    """
+    Adds an object to a collection
+    :param object_id: int
+    :param collection_id: int
+    """
     db.object_collection.insert(object_id=object_id, collection_id=collection_id)
 
 
 def get_owner_id(object_id):
+    """
+    Get the owner id of the given object
+    :param object_id:
+    :return:
+    """
     return db(db.objects.id == object_id).select(db.objects.owner_id).first().owner_id
 
 
 def get_unfiled_collection(user_id=auth.user_id):
+    """
+    Get the unfiled collection of the user. By default, if not is passed, the currently logged in user is used.
+    :param user_id:
+    :return:
+    """
     return db((db.collections.name == "Unfiled") & (db.collections.owner_id == user_id)).select().first()
 
 
@@ -27,6 +50,11 @@ def chunks(l, n):
 
 
 def delete_item(object_id):
+    """
+    Delete item by setting its status to -1 and removing all connections to collections
+    :param object_id:
+    :return:
+    """
     db(db.objects.id == object_id).update(status=-1)
     db(db.object_collection.object_id == object_id).delete()
     session.flash = {"status": "success", "message": "Item successfully deleted."}
@@ -34,6 +62,12 @@ def delete_item(object_id):
 
 
 def translate_sortby(query, subject):
+    """
+    Convert a sort by text into the actual query for db
+    :param query:
+    :param subject: can bd db.auth_user, db.collections or db.objects
+    :return:
+    """
     if query == 'date-new':
         return ~subject.created_on
     elif query == 'date-old':
@@ -59,6 +93,11 @@ def translate_sortby(query, subject):
 
 
 def maybe_list(var):
+    """
+    Useful when dealing with vars from a form that may have multiple values
+    :param var:
+    :return:
+    """
     if type(var) is list:
         return [int(v) for v in var]
     else:
@@ -66,9 +105,14 @@ def maybe_list(var):
 
 
 def add_in_trade_field(object):
+    """
+    Adds a field which indicates whether the passed item is currently in a trade.
+    :param object:
+    :return:
+    """
     in_trade_query = (((db.trades_receiving.recv_object_id == object.id) & (db.trades_receiving.trade_id == db.trades.id))
                           | ((db.trades_sending.sent_object_id == object.id) & (db.trades_sending.trade_id == db.trades.id))) \
-                         & ~(db.trades.status.belongs([1,2,3]))
+                         & ~(db.trades.status.belongs([1, 2, 3]))
     trades = db(in_trade_query).select(db.trades.id, db.trades.sender, db.trades.receiver)
     object.in_trade = len(trades) > 0
     if object.in_trade:
@@ -82,9 +126,9 @@ def add_in_trade_field(object):
 def add_object_tooltip(row, tradable=True):
     objects = row.objects
     if tradable:
-        txt = "{0} \n £ {1} \n Type: {2} \n Summary: {3} \n".format(objects.name, objects.currency_value, row.types.name, objects.summary)
+        txt = "{0} \n £{1} \n Type: {2} \n Summary: {3} \n".format(objects.name, objects.currency_value, row.types.name, objects.summary)
     else:
-        txt = "{0} \n £ {1} \n This item is not tradable due it's status or use in another trade. \n".format(objects.name, objects.currency_value)
+        txt = "{0} \n £{1} \n This item is not tradable due it's status or use in another trade. \n".format(objects.name, objects.currency_value)
     row.objects.tooltip = txt
 
 
@@ -197,10 +241,20 @@ def compact_collection_names(all_objects):
 
 
 def get_user_collections(user_id):
+    """
+    Get all collection names of the given user
+    :param user_id:
+    :return:
+    """
     return db(db.collections.owner_id == user_id).select(db.collections.name).column()
 
 
 def get_user_collections_no_unfiled(user_id):
+    """
+    Get all collection names of the given user, ignoring the unfiled one.
+    :param user_id:
+    :return:
+    """
     collections = get_user_collections(user_id)
     collections.remove('Unfiled')
     return collections

@@ -1,9 +1,15 @@
+/**
+ * Helper function to create an input which allows the removal of objects
+ * @param id
+ * @returns {*|jQuery|HTMLElement}
+ */
 function createInput(id) {
     return $('<input type="hidden" name="objects_to_remove" value="' + id + '" id="object-removal-' + id + '">');
 }
 
 $(document).ready(function () {
 
+    // cache all used DOM objects
     var $form = $('#collection_form'),
         $toggleRemoveButton = $('#toggle-remove'),
         $submit = $('#submit_button'),
@@ -11,12 +17,15 @@ $(document).ready(function () {
         $undoText = $("#undo-name-display"),
         $objectRemove = $('.object-remove');
 
+    // stores objects to be removed
     var objects = [];
 
+    // init by hiding elements that need to be hidden
     $undo.hide();
     $submit.hide();
     $objectRemove.hide();
 
+    // toggle whether removing items is enabled or not
     $toggleRemoveButton.on('click', function (e) {
         e.preventDefault();
         $objectRemove.toggle();
@@ -65,6 +74,4 @@ $(document).ready(function () {
         filterBehavior: 'text',
         buttonWidth: '350px'
     });
-
-
 });

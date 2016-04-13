@@ -100,7 +100,7 @@
         {{ pass }}
             <ul class="nav navbar-nav navbar-right">
             {{ if auth.user_id: }}
-            {{ if notifications(): }}
+            {{ if db.auth_user[auth.user_id].notifications: }}
                 <li>
                     <a href="{{=URL('trade', 'index')}}" data-toggle="tooltip" data-placement="bottom"
                        title="You have notifications!">

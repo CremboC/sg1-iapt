@@ -1,24 +1,24 @@
-function moveObject(object){
+function moveObject(object) {
     var parentName = $(object).parent().attr('id');
-    switch (parentName){
+    switch (parentName) {
         case "yourItems":
             $("#yourOffering").append(object);
-            $(object).addClass( "item-preview-in-trade" );
+            $(object).addClass("item-preview-in-trade");
             filterTradeItems(true);
             break;
         case "theirItems":
             $("#theirOffering").append(object);
-            $(object).addClass( "item-preview-in-trade" );
+            $(object).addClass("item-preview-in-trade");
             filterTradeItems(false);
             break;
         case "yourOffering":
             $("#yourItems").append(object);
-            $(object).removeClass( "item-preview-in-trade" );
+            $(object).removeClass("item-preview-in-trade");
             filterTradeItems(true);
             break;
         case "theirOffering":
             $("#theirItems").append(object);
-            $(object).removeClass( "item-preview-in-trade" );
+            $(object).removeClass("item-preview-in-trade");
             filterTradeItems(false);
             break;
     }
@@ -28,14 +28,14 @@ function moveObject(object){
 $(document).ready(updateTradeValue());
 
 
-function updateTradeValue(){
+function updateTradeValue() {
     var hisVal = 0;
     var yourVal = 0;
-    $(">div.item-preview", $("#yourOffering")).each(function(){
-        yourVal+=parseFloat($(this).attr('data-currency_value'));
+    $(">div.item-preview", $("#yourOffering")).each(function () {
+        yourVal += parseFloat($(this).attr('data-currency_value'));
     });
-    $(">div.item-preview", $("#theirOffering")).each(function(){
-        hisVal+=parseFloat($(this).attr('data-currency_value'));
+    $(">div.item-preview", $("#theirOffering")).each(function () {
+        hisVal += parseFloat($(this).attr('data-currency_value'));
     });
     var totalVal = hisVal - yourVal;
     totalVal = isNaN(totalVal) ? 0 : totalVal.toFixed(2);
@@ -72,16 +72,16 @@ function generateFormFields() {
 
 }
 
-function deleteHiddenFormFields(){
+function deleteHiddenFormFields() {
     $("input[name=youritems]").remove();
     $("input[name=theiritems]").remove();
 }
 
 
-function filterTradeItems(yours){
+function filterTradeItems(yours) {
     console.log("FIlter");
     var divId, checkboxId, searchBoxId, selectId;
-    if (yours){
+    if (yours) {
         divId = '#yourItems';
         checkboxId = '#your-item-checkbox';
         searchBoxId = '#searchOwnItems';
@@ -98,7 +98,7 @@ function filterTradeItems(yours){
     filterByTerm(divId, searchBoxId);
 }
 
-function hideNonTradables(divId, checkboxId){
+function hideNonTradables(divId, checkboxId) {
     var hide = $(checkboxId).is(':checked');
     if (hide) {
         $(divId).children('.item-preview:visible').show();
@@ -111,16 +111,16 @@ function filterByCollections(divId, selectId) {
     var collection = $(selectId).val();
     console.log(collection);
     if (collection != "all") {
-        $(divId).children('.item-preview:visible').each(function(){
+        $(divId).children('.item-preview:visible').each(function () {
             var collections = $(this).attr('data-collections');
-            if (collections.indexOf(collection)==-1){
+            if (collections.indexOf(collection) == -1) {
                 $(this).hide();
             }
         });
     }
 }
 
-function filterByTerm(divId, searchId){
+function filterByTerm(divId, searchId) {
     var opts = $(divId).find('.item-preview:visible').map(function () {
         return [[$(this).attr('data-itemid'), $(this).attr('data-original-title')]];
     });
@@ -139,11 +139,11 @@ function filterByTerm(divId, searchId){
     });
 }
 
-$('#searchOwnItems').keyup(function(){
+$('#searchOwnItems').keyup(function () {
     filterTradeItems(true);
 });
 
-$('#searchTheirItems').keyup(function(){
+$('#searchTheirItems').keyup(function () {
     filterTradeItems(false);
 });
 
@@ -163,18 +163,18 @@ $(function () {
 
 });
 
-function submitForm(){
+function submitForm() {
     generateFormFields();
     var form = $("#tradeform");
     $.ajax({
         url: form.attr('action'),
         type: "POST",
         data: form.serialize(),
-        success: function (data, textStatus, errorThrown){
+        success: function (data, textStatus, errorThrown) {
         },
         error: function (jXHR) {
             $(".alert").remove();
-            var error = $("<div class='alert alert-danger' role='alert'>"+jXHR.responseText+"</div>");
+            var error = $("<div class='alert alert-danger' role='alert'>" + jXHR.responseText + "</div>");
             var closeError = $("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>");
             error.append(closeError);
             $("#errorcontainer").prepend(error);

@@ -1,9 +1,18 @@
-function redirectToTrade(URL){
+/**
+ * Redirects to a new after the modal for "create trade" is filled.
+ * @param URL
+ */
+function redirectToTrade(URL) {
     var username = $('#trade_modal_username').val();
-    URL += "?receiver_username="+username;
+    URL += "?receiver_username=" + username;
     window.location.replace(URL);
 }
 
+/**
+ * Set a parameter like ?<param>=<val>
+ * @param paramName
+ * @param paramValue
+ */
 function setGetParameter(paramName, paramValue) {
     var url = window.location.href;
     var hash = location.hash;
@@ -32,6 +41,7 @@ function setGetParameter(paramName, paramValue) {
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
+    // image preview
     $(document).on('change', '#objects_image', function () {
         if (this.files && this.files[0]) {
             var reader = new FileReader();
@@ -46,6 +56,7 @@ $(function () {
         $("#preview").css({'background-image': 'url()'});
     });
 
+    // typeahead for users field in "create trade" modal
     $.getJSON(__users_url_ignore_auth__, function (data) {
         var $hiddenUserId = $('#trade_modal_username');
         var users = $.map(data.users, function (u) {

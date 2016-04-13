@@ -36,8 +36,7 @@ else:
     ## none otherwise. a pattern can be 'controller/function.extension'
 response.generic_patterns = ['*']
 ## choose a style for forms
-response.formstyle = myconf.take(
-    'forms.formstyle')  # or 'bootstrap3_stacked' or 'bootstrap2' or other
+response.formstyle = myconf.take('forms.formstyle')
 response.form_label_separator = myconf.take('forms.separator')
 
 ## (optional) optimize handling of static files
@@ -72,8 +71,6 @@ mail.settings.login = myconf.take('smtp.login')
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
-auth.settings.register_onaccept.append(
-    lambda form: db.collections.insert(owner_id=form.vars.id, name='Unfiled', private=True))
 
 #########################################################################
 ## Define your tables below (or better in another model file) for example
@@ -115,13 +112,13 @@ db.define_table("objects",
                       required=True,
                       label="Type",
                       comment="What best describes your object?"),
-                # -1: Deleted
-                # 0: Own (InCol)
+                # -1: Deleted. This status is required so that trade history would properly work
+                # 0: Non-Tradable
                 # 1: Wish List
-                # 2: Own, Willing to Trade (For Trade)
+                # 2: For Trade
                 Field("status", "integer",
                       default=0,
-                      requires=IS_IN_SET([-1, 0, 1, 2])),  # TODO: Nice label
+                      requires=IS_IN_SET([-1, 0, 1, 2])),
                 Field("name", "string",
                       required=True,
                       requires=[IS_NOT_EMPTY(
@@ -164,7 +161,6 @@ db.define_table("collections",
                 Field('updated_on', 'datetime', default=request.now, update=request.now, writable=False,
                       readable=False),
                 )
-
 
 db.auth_user._after_insert.append(
     lambda row, id: db.collections.insert(owner_id=id, name='Unfiled', private=True))
