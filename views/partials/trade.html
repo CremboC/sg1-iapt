@@ -1,14 +1,13 @@
 {{def print_trade(trade):}}
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="row">
-                <div class="object-header clearfix col-xs-12">
-                    <div class="pull-left">
-                        Traded with: <a href="{{=URL('collections', 'index', args=trade.other_user_id)}}">{{=trade.otheruser}}</a>
-                    </div>
-                    <div class="pull-right">
-                        <a href="{{=URL('trade', 'view', vars={'tradeid':trade.trades.id})}}">View</a>
-                    </div>
+
+            <div class="clearfix object-header">
+                <div class="pull-left">
+                    Traded with: <a href="{{=URL('collections', 'index', args=trade.other_user_id)}}">{{=trade.otheruser}}</a>
+                </div>
+                <div class="pull-right">
+                    <a href="{{=URL('trade', 'view', vars={'tradeid':trade.trades.id})}}">View</a>
                 </div>
             </div>
 
