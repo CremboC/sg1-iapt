@@ -1,4 +1,7 @@
 # coding=utf-8
+
+
+# Controller to view an existing trade
 @auth.requires_login()
 def view():
     trade_id = request.vars.tradeid
@@ -36,7 +39,6 @@ def view():
         add_in_trade_field(obj.objects)
         add_object_tooltip(obj)
 
-
     # Get other user's username
     if trade.sender == auth.user_id:
         trader_id = trade.receiver
@@ -53,13 +55,15 @@ def view():
         else:
             trader_username = trader_username[0].username
     if not trade.seen & (trade.receiver == auth.user_id):
-        db(db.trades.id==trade.id).update(seen=True)
+        db(db.trades.id == trade.id).update(seen=True)
     return {"user_is_receiver": auth.user_id == trade.receiver, "tradeid": trade_id, "trader_id": trader_id,
             "status": trade.status, "trader_username": trader_username,
             "editable": trade.status == 0,
             "trade_objects": trade_objects}
 
 
+# Method to display the page in which users can create a new trade
+# (called when offering to trade for a particular item)
 @auth.requires_login()
 def new():
     # Method can accept a user or an item id, the receiver_id will take precedence over the user if both are specified
@@ -115,12 +119,16 @@ def new():
             session.flash = {"status": "danger", "message": "Error: username does not exist"}
             return redirect(URL('trade', 'new'))
         receiver_id = receiver_id[0].id
+        # Retrieve available items for both users
         available_items = [get_user_items(auth.user_id), get_user_items(receiver_id)]
+        # Retrieve all available collections for both users (used to filter items)
         collections = [get_user_collections_no_unfiled(auth.user_id), get_user_collections_no_unfiled(receiver_id)]
         return {"user_id": auth.user_id, "trader_id": receiver_id, "trader_username": receiver_username,
                 "available_objects": available_items, "wanted_object": obj, "collections": collections}
 
 
+# Method to edit an existing trade (trade objects are non-mutable: a new trade will be created, and the old trade
+# will have it's status changed to signify it's termination)
 @auth.requires_login()
 def edit():
 
@@ -152,18 +160,12 @@ def edit():
     # Get objects currently in trade from sender
     trade_objects2 = db(trade_query_sender & coll_query).select(db.objects.ALL, db.collections.ALL, db.types.name)
 
-    for obj in trade_objects2:
-        obj.string = format_string(obj)
-
     trade_query_receiver = db.trades_receiving.trade_id == trade_id
     trade_query_receiver &= db.trades_receiving.recv_object_id == db.objects.id
     trade_query_receiver &= db.objects.type_id == db.types.id
 
     # Get objects currently in trade from receiver
     trade_objects1 = db(trade_query_receiver & coll_query).select(db.objects.ALL, db.collections.ALL, db.types.name)
-
-    for obj in trade_objects1:
-        obj.string = format_string(obj)
 
     # Get other user's username
     if trade.sender == auth.user_id:
@@ -206,6 +208,8 @@ def edit():
             "trade_objects": trade_objects, "available_objects": available_objects, "collections": collections}
 
 
+
+# Method to create a new trade
 @auth.requires_login()
 def createNew():
     if (request.vars['youritems'] is None) | (request.vars['theiritems'] is None) | (
@@ -283,6 +287,7 @@ def createNew():
     redirect(URL('trade', 'index'), client_side=True)
 
 
+# Method for a receiver of a trade proposal to accept a change and exchange the trade's items
 @auth.requires_login()
 def accept():
     tradeid = request.vars.tradeid
@@ -299,16 +304,17 @@ def accept():
         session.flash = {"status": "danger", "message": "Error: you cannot accept a trade that wasn't sent to you"}
         return redirect(URL('trade', 'index'))
 
+    # Ids of items to be given to the sender from the receiver
     new_sender_objects = map(int, db(db.trades_receiving.trade_id == tradeid).select(
         db.trades_receiving.recv_object_id).column())
     db(db.objects.id.belongs(new_sender_objects)).update(owner_id=trade.sender)
 
+    # Ids of items to be given to the receiver from the sender
     new_receiver_objects = map(int, db(db.trades_sending.trade_id == tradeid).select(
         db.trades_sending.sent_object_id).column())
     db(db.objects.id.belongs(new_receiver_objects)).update(owner_id=trade.receiver)
 
     # Remove all items from user's previous collections
-
     db(db.object_collection.object_id.belongs(new_sender_objects + new_receiver_objects)).delete()
 
     unfiled_sender = get_unfiled_collection(trade.sender).id
@@ -327,6 +333,7 @@ def accept():
     return redirect(URL('trade', 'index'), client_side=True)
 
 
+# Method to delete/cancel a trade
 @auth.requires_login()
 def delete():
     trade_id = request.vars.tradeid
@@ -355,27 +362,23 @@ def delete():
     redirect(URL('trade', 'index'), client_side=True)
 
 
+# Method to display a user's trade home
 @auth.requires_login()
 def index():
     db(db.auth_user.id == auth.user_id).update(notifications=False)
 
     trades_query = (db.trades.sender == auth.user_id) & (db.auth_user.id == db.trades.receiver)
     trades_query |= (db.trades.receiver == auth.user_id) & (db.auth_user.id == db.trades.sender)
-
+    # Select all of a user's trades, before organising them into incoming/sent/completed trades
     trades = db(trades_query).select(db.trades.ALL, db.auth_user.username)
     incoming = []
     sent = []
     completed = []
 
     for trade in trades:
+        # Add details of items related to each trade
         sent_items = db(db.trades_sending.trade_id == trade.trades.id).count()
-        sent_item_value = map(int, db((db.trades_sending.trade_id == trade.trades.id) & (
-            db.objects.id == db.trades_sending.sent_object_id)).select(db.objects.currency_value).column())
         received_items = db(db.trades_receiving.trade_id == trade.trades.id).count()
-        received_item_value = map(int, db((db.trades_receiving.trade_id == trade.trades.id) & (
-            db.objects.id == db.trades_receiving.recv_object_id)).select(db.objects.currency_value).column())
-
-        trade.value = sum(sent_item_value) + sum(received_item_value)
 
         if trade.trades.sender != auth.user_id:
             a = received_items
@@ -402,12 +405,7 @@ def index():
     return {"incoming": incoming, "sent": sent, "completed": completed[:5], "user_id": auth.user_id}
 
 
-def format_string(object):
-    name = object.objects.name + "  "
-    name += "(£{:0,.2f})".format(object.objects.currency_value)
-    return name
-
-
+# Method to retrieve the log of all trades (modifications, accepted and rejected/modified trades)
 @auth.requires_login()
 def log():
     num_per_page = 20
@@ -426,14 +424,9 @@ def log():
     trade_count = db(trades_query).count()
 
     for trade in trades:
+        # Add details of items associated to each trade
         sent_items = db(db.trades_sending.trade_id == trade.trades.id).count()
-        sent_item_value = map(int, db((db.trades_sending.trade_id == trade.trades.id) & (
-            db.objects.id == db.trades_sending.sent_object_id)).select(db.objects.currency_value).column())
         received_items = db(db.trades_receiving.trade_id == trade.trades.id).count()
-        received_item_value = map(int, db((db.trades_receiving.trade_id == trade.trades.id) & (
-            db.objects.id == db.trades_receiving.recv_object_id)).select(db.objects.currency_value).column())
-
-        trade.value = sum(sent_item_value) + sum(received_item_value)
 
         if trade.trades.sender != auth.user_id:
             a = received_items

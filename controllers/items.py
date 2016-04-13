@@ -1,3 +1,5 @@
+
+# Controller to create items
 @auth.requires_login()
 def create():
     form = SQLFORM(db.objects)
@@ -6,7 +8,7 @@ def create():
     selected_collection = request.vars.collection or get_unfiled_collection()
 
     if form.process().accepted:
-        if (request.vars.collections is not None) & (request.vars.status!='1'):
+        if (request.vars.collections is not None) & (request.vars.status != '1'):
             chosen_cols = maybe_list(request.vars.collections)
             for col in chosen_cols:
                 db.object_collection.insert(object_id=form.vars.id, collection_id=col)
@@ -21,6 +23,8 @@ def create():
 
     return dict(form=form, types=types, collections=collections, selected_collection=int(selected_collection))
 
+
+# Controller to delete items
 @auth.requires_login()
 def delete():
     if request.args is None:
@@ -41,6 +45,7 @@ def delete():
     return delete_item(object_id)
 
 
+# Controller method to edit an item
 @auth.requires_login()
 def edit():
     if request.args is None:
@@ -56,6 +61,7 @@ def edit():
 
     object_collections = [col.id for col in obj.collections()]
 
+    # Do not allow editing of other user's items
     if obj.owner_id != auth.user_id:
         session.flash = {"status": "danger", "message": "Error: you cannot edit an item that doesn't belong to you"}
         return redirect(URL('default', 'index'))
@@ -68,7 +74,8 @@ def edit():
         if request.vars.delete == 'yes':
             return delete_item(object_id)
 
-        if request.vars.status!='1':
+        # Check if item was not already deleted
+        if request.vars.status != '1':
             if request.vars.collections:
                 chosen_cols = maybe_list(request.vars.collections)
 
@@ -103,6 +110,7 @@ def edit():
     return dict(object=obj, form=form, types=types, collections=collections, object_collections=object_collections)
 
 
+# Controller to display an item on the item view page
 def show():
     obj_id = request.args[0] or redirect(URL('default', 'index'))
     obj = db.objects[obj_id]
@@ -126,6 +134,7 @@ def show():
     return dict(item=obj, is_owner=is_owner, user=user)
 
 
+# Method to add an item to your wishlist
 @auth.requires_login()
 def wish():
     obj_id = request.args[0] or redirect(URL('default', 'index'))

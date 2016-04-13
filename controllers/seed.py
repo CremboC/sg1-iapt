@@ -1,3 +1,6 @@
+
+
+# Controller used to re-set the database for the TBUE and later evaluation by examiners
 def index():
     db.auth_user.truncate()
     db.collections.truncate()
