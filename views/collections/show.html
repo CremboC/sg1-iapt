@@ -14,20 +14,18 @@
             {{ if is_owner: }}
             {{ if collection.private: }}
                 <span
-                        data-toggle="tooltip"
-                        title="This collection is private.
-Only you will be able to see it.">
-                            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
-                            <span class="sr-only">Private</span>
-                        </span>
+                    data-toggle="tooltip"
+                    title="This collection is private. Only you will be able to see it.">
+                        <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                        <span class="sr-only">Private</span>
+                    </span>
             {{ else: }}
                 <span
-                        data-toggle="tooltip"
-                        title="This collection is public.
-This collection is visible to everyone.">
-                            <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-                            <span class="sr-only">Public</span>
-                        </span>
+                    data-toggle="tooltip"
+                    title="This collection is public. This collection is visible to everyone.">
+                        <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+                        <span class="sr-only">Public</span>
+                    </span>
             {{ pass }}
             {{ pass }}
             {{=collection.name}}
@@ -50,7 +48,7 @@ This collection is visible to everyone.">
                                 class="btn btn-success dropdown-toggle"
                                 data-toggle="dropdown">
 
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-plus middle" aria-hidden="true"></span>
                             Add Item to Collection
                             <span class="caret"></span>
                         </button>
@@ -61,10 +59,16 @@ This collection is visible to everyone.">
                         </ul>
                     </div>
                 </li>
+                <li>
+                    <button class="btn btn-danger" id="toggle-remove">
+                        <span class="glyphicon glyphicon-remove middle" aria-hidden="true"></span>
+                        Remove Items from Collection
+                    </button>
+                </li>
                 {{if collection.name!="Unfiled":}}
                 <li>
                     <a href="{{=URL('collections', 'edit', args=collection.id)}}" class="btn btn-warning" role="button">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-pencil middle" aria-hidden="true"></span>
                         Edit Collection
                     </a>
                 </li>

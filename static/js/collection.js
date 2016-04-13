@@ -4,14 +4,23 @@ function createInput(id) {
 
 $(document).ready(function () {
 
-    var $form = $('#collection_form');
-    var $submit = $('#submit_button');
-    var $undo = $('.undo');
-    var $undoText = $("#undo-name-display");
+    var $form = $('#collection_form'),
+        $toggleRemoveButton = $('#toggle-remove'),
+        $submit = $('#submit_button'),
+        $undo = $('.undo'),
+        $undoText = $("#undo-name-display"),
+        $objectRemove = $('.object-remove');
+
     var objects = [];
 
     $undo.hide();
     $submit.hide();
+    $objectRemove.hide();
+
+    $toggleRemoveButton.on('click', function (e) {
+        e.preventDefault();
+        $objectRemove.toggle();
+    });
 
     $('.remove').on('click', function (e) {
         e.preventDefault();
