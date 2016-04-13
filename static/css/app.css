@@ -248,36 +248,6 @@
     border:1px black solid;
 }
 
-.hovertext {
-    position: relative;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out, background 0.3s ease-in-out;
-    background: rgba(255, 255, 255, 0);
-    padding: 0.5em;
-    overflow: hidden;
-    z-index: 1;
-}
-
-/*background-image: url({{=URL('download', args=row.comicbook.cover, host=True)}});*/
-.hovertext:hover {
-    opacity: 1;
-    transition: opacity 0.3s ease-in-out, background 0.3s ease-in-out;
-    background: rgba(255, 255, 255, 0.8);
-}
-
-.rmvItemPreview {
-    cursor: pointer;
-    float: right;
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 2;
-}
-
 .clearfix .pull-left h2,
 .clearfix .pull-left h3 {
     margin-top: 0;
@@ -285,16 +255,6 @@
 
 .pull-right .sortby {
     margin-top: 15px;
-}
-
-.vcenter {
-    height: 3em;
-    vertical-align: middle;
-    display: table-cell;
-}
-
-.imgPreview {
-    background-size:100% 100%;
 }
 
 .remove {

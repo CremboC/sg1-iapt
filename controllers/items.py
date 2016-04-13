@@ -144,7 +144,7 @@ def wish():
     fields['created_on'] = request.now
     fields['updated_on'] = request.now
 
-    new_item_id = db.objects.insert(**fields)
+    db.objects.insert(**fields)
 
     session.flash = {"status": "success", "message": "Item successfully added to your wish list."}
 

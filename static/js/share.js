@@ -14,7 +14,7 @@ jQuery(function(){
         var params = function(name,default_value) {
             var match = RegExp('[?&]' + name + '=([^&]*)').exec(script_source);
             return match && decodeURIComponent(match[1].replace(/\+/g, ' '))||default_value;
-        }
+        };
 	var path = params('static','social');
 	var url = encodeURIComponent(window.location.href);
 	var host =  window.location.hostname;

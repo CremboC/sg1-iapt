@@ -31,7 +31,7 @@ def index():
         returns = dict(results=results)
 
     elif page == 'users':
-        (search_query) = _users(query_string, filtered)
+        (search_query) = _users(query_string)
 
         results = db(search_query).select()
 
@@ -104,7 +104,7 @@ def _collections(query_string, filtered):
     return search_query
 
 
-def _users(query_string, filtered):
+def _users(query_string):
     search_query = db.auth_user.username.contains(query_string)
 
     return search_query

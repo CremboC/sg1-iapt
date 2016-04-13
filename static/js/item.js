@@ -46,12 +46,12 @@ function create_collection(){
         url: new_col_url,
         type: "POST",
         data: data,
-        success: function (data, textStatus, errorThrown){
+        success: function (data) {
             var error,closeError;
             if (data == "-1"){
                 // Flash error message in dialog
                 var formgroup = $("#modal_collection_name");
-                formgroup.addClass("has-error")
+                formgroup.addClass("has-error");
                 formgroup.find("span").show();
             } else {
                 // Append to list
@@ -68,7 +68,7 @@ function create_collection(){
 
             }
         },
-        error: function (jXHR, textStatus, errorThrown){
+        error: function () {
             console.log("Error occured");
         }
     });
