@@ -4,21 +4,6 @@ function redirectToTrade(URL){
     window.location.replace(URL);
 }
 
-$(document).ready(function () {
-    $.getJSON(__users_url__, function (data) {
-        var $hiddenUserId = $('#trade_modal_username');
-        var users = $.map(data.users, function (u) {
-            return u.username;
-        });
-
-        $hiddenUserId.typeahead({
-            source: users,
-            autoSelect: true
-        });
-    });
-});
-
-
 function setGetParameter(paramName, paramValue) {
     var url = window.location.href;
     var hash = location.hash;
@@ -59,5 +44,17 @@ $(function () {
 
     $(document).on('click', '#objects_image', function () {
         $("#preview").css({'background-image': 'url()'});
+    });
+
+    $.getJSON(__users_url_ignore_auth__, function (data) {
+        var $hiddenUserId = $('#trade_modal_username');
+        var users = $.map(data.users, function (u) {
+            return u.username;
+        });
+
+        $hiddenUserId.typeahead({
+            source: users,
+            autoSelect: true
+        });
     });
 });

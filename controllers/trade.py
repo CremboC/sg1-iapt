@@ -66,6 +66,10 @@ def new():
     receiver_id = request.vars.receiver_id
     item_id = request.vars.item_id
 
+    if request.vars.receiver_username == auth.user.username:
+        session.flash = {"status": "danger", "message": "Error: You cannot trade with yourself."}
+        return redirect(URL('trade', 'index'))
+
     if (request.vars.receiver_id is None) & (request.vars.item_id is None) & (request.vars.receiver_username is not None):
         receiver = db(db.auth_user.username == request.vars.receiver_username).select().first()
         if receiver is None:

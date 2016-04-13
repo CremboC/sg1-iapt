@@ -1,14 +1,3 @@
-{{include 'partials/objects.html'}}
-{{include 'partials/trade_list.html'}}
-{{include 'partials/trade.html'}}
-{{include 'partials/collections.html'}}
-{{include 'partials/collection.html'}}
-{{include 'partials/sortby.html'}}
-{{include 'partials/users.html'}}
-{{include 'partials/new_collection_modal.html'}}
-{{include 'partials/trade_object.html'}}
-{{include 'partials/user_select_modal.html'}}
-
 <!DOCTYPE html>
 <!--[if (gt IE 9)|!(IE)]><!-->
 <html lang="{{=T.accepted_language or 'en'}}" class="no-js" > <!--<![endif]-->
@@ -41,8 +30,22 @@
     <!-- Favicons -->
 {{include 'web2py_ajax.html'}} <!-- this includes jquery.js, calendar.js/.css and web2py.js -->
     <script src="{{=URL('static','js/app.js')}}"></script>
+    <script>
+        var __users_url__ = "{{=URL('users', 'index.json')}}";
+        var __users_url_ignore_auth__ = "{{=URL('users', 'index.json', vars=dict(ignore=auth.user_id))}}";
+    </script>
 </head>
 <body>
+{{include 'partials/objects.html'}}
+{{include 'partials/trade_list.html'}}
+{{include 'partials/trade.html'}}
+{{include 'partials/collections.html'}}
+{{include 'partials/collection.html'}}
+{{include 'partials/sortby.html'}}
+{{include 'partials/users.html'}}
+{{include 'partials/new_collection_modal.html'}}
+{{include 'partials/trade_object.html'}}
+{{include 'partials/user_select_modal.html'}}
 <!-- Navbar ======================================= -->
 <nav class="navbar navbar-default navbar-fixed-top" >
     <div class="container">
@@ -223,7 +226,6 @@ message = response.flash['message']
     </div>
 </footer>
 {{end}}
-
 
 <!-- The javascript =============================== -->
 <script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
