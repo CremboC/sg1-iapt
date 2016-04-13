@@ -172,7 +172,7 @@ function submitForm(){
         data: form.serialize(),
         success: function (data, textStatus, errorThrown){
         },
-        error: function (jXHR {
+        error: function (jXHR) {
             $(".alert").remove();
             var error = $("<div class='alert alert-danger' role='alert'>"+jXHR.responseText+"</div>");
             var closeError = $("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>");
