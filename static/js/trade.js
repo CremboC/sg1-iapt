@@ -1,4 +1,11 @@
+/**
+ * Method to move a trade object from the your items to offering sections
+ * @param object
+ */
 function moveObject(object) {
+    // Switch based on object's current location to select destination
+    // Your items <--> Your offerings
+    // Their items <--> Their offerings
     var parentName = $(object).parent().attr('id');
     switch (parentName) {
         case "yourItems":
@@ -24,10 +31,10 @@ function moveObject(object) {
     }
     updateTradeValue();
 }
-
+// Method to update numbers displayed at bottom of trade page on page load
 $(document).ready(updateTradeValue());
 
-
+// Method to update numbers displayed at bottom of trade page
 function updateTradeValue() {
     var hisVal = 0;
     var yourVal = 0;
@@ -38,6 +45,7 @@ function updateTradeValue() {
         hisVal += parseFloat($(this).attr('data-currency_value'));
     });
     var totalVal = hisVal - yourVal;
+    // Prevent NaN from being displayed in case of error
     totalVal = isNaN(totalVal) ? 0 : totalVal.toFixed(2);
     yourVal = isNaN(yourVal) ? 0 : yourVal.toFixed(2);
     hisVal = isNaN(hisVal) ? 0 : hisVal.toFixed(2);
@@ -47,6 +55,7 @@ function updateTradeValue() {
     $("#hisVal").text(hisVal);
 }
 
+// Method to retrieve parameters from URL
 $.urlParam = function (name) {
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
     if (results == null) {
@@ -56,6 +65,9 @@ $.urlParam = function (name) {
     }
 };
 
+/**
+ * Method to convert items in offerings into a list of item id's for submission to the server
+ */
 function generateFormFields() {
     var yourItemIds = [];
     $(">div.item-preview", $("#yourOffering")).each(function () {
@@ -72,14 +84,20 @@ function generateFormFields() {
 
 }
 
+/**
+ * Method to reset the trade's processed form fields
+ */
 function deleteHiddenFormFields() {
     $("input[name=youritems]").remove();
     $("input[name=theiritems]").remove();
 }
 
 
+/**
+ * Method to apply the filters to trade items
+ * @param yours: boolean True if yourItems, false if theirItems
+ */
 function filterTradeItems(yours) {
-    console.log("FIlter");
     var divId, checkboxId, searchBoxId, selectId;
     if (yours) {
         divId = '#yourItems';
@@ -98,6 +116,7 @@ function filterTradeItems(yours) {
     filterByTerm(divId, searchBoxId);
 }
 
+// First hide non-tradable items if enabled, otherwise show all
 function hideNonTradables(divId, checkboxId) {
     var hide = $(checkboxId).is(':checked');
     if (hide) {
@@ -107,9 +126,10 @@ function hideNonTradables(divId, checkboxId) {
     }
 }
 
+// Then hide all still visible items which do not belong to
+// chosen collection, or do nothing if "all" collections is selected
 function filterByCollections(divId, selectId) {
     var collection = $(selectId).val();
-    console.log(collection);
     if (collection != "all") {
         $(divId).children('.item-preview:visible').each(function () {
             var collections = $(this).attr('data-collections');
@@ -120,6 +140,7 @@ function filterByCollections(divId, selectId) {
     }
 }
 
+// Then filter by item name by searching item's name using keyword from input
 function filterByTerm(divId, searchId) {
     var opts = $(divId).find('.item-preview:visible').map(function () {
         return [[$(this).attr('data-itemid'), $(this).attr('data-original-title')]];
@@ -139,6 +160,7 @@ function filterByTerm(divId, searchId) {
     });
 }
 
+// Dynamically apply filters on keyword edit
 $('#searchOwnItems').keyup(function () {
     filterTradeItems(true);
 });
@@ -147,22 +169,20 @@ $('#searchTheirItems').keyup(function () {
     filterTradeItems(false);
 });
 
+
 $(function () {
+    // Get user data
     $.getJSON(__users_url__, function (data) {
         var users = $.map(data.users, function (u) {
             return u.username;
-        });
-
-        $("#receiver_username").typeahead({
-            source: users,
-            afterSelect: function (selectedUser) {
-            },
-            autoSelect: true
         });
     });
 
 });
 
+/**
+ * Method to submit the form to the server and display any errors returned from server
+ */
 function submitForm() {
     generateFormFields();
     var form = $("#tradeform");
@@ -173,6 +193,7 @@ function submitForm() {
         success: function (data, textStatus, errorThrown) {
         },
         error: function (jXHR) {
+            // Error message passed through jXHR
             $(".alert").remove();
             var error = $("<div class='alert alert-danger' role='alert'>" + jXHR.responseText + "</div>");
             var closeError = $("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>");
