@@ -3,6 +3,10 @@
 {{extend 'layout.html'}}
 
 <script src="{{=URL('static','js/trade.js')}}"></script>
+<script>
+    itemsOffered = {{=len(trade_objects[0])}};
+    itemsReceived = {{=len(trade_objects[1])}};
+</script>
 
 <div id="errorcontainer" class="container">
     <div class="col-md-4"></div>
@@ -12,8 +16,8 @@
     </div>
     <div class="col-md-4"></div>
     <form  id="tradeform" action="{{=URL('trade', 'createNew')}}">
-        <input hidden name="prevtrade" value="{{=prevtrade}}"/>
-        <input hidden name="receiver_username" value="{{=trader_username}}">
+        <input type="hidden" name="prevtrade" value="{{=prevtrade}}"/>
+        <input type="hidden" name="receiver_username" value="{{=trader_username}}">
         <div class="row">
             <div class="col-md-6 tradeborder">
                 <div class="panel panel-default">
@@ -26,6 +30,13 @@
                         <div class="row" style="padding-bottom:5px">
                             <div class="col-md-10">
                                 <div id="searchItems" class="input-group trade-item-search">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-search"
+                                            aria-hidden="true"></span>
+                                        <span class="sr-only">
+                                            Search
+                                        </span>
+                                    </span>
                                     <label class="sr-only" for="searchOwnItems">Search for your available items</label>
                                     <input id="searchOwnItems" type="text" class="form-control"
                                            placeholder="Search your items"
@@ -76,7 +87,7 @@
                         {{for obj in trade_objects[0]:}}
                             {{print_trade_obj(obj)}}
                         {{pass}}
-                         <p class="placeholder"><i>You are not offering any items at the moment.</i></p>
+                        <p class="placeholder" style="display: none;"><i>You are not offering any items at the moment.</i></p>
                     </div>
                 </div>
             </div>
@@ -85,7 +96,7 @@
                 <div class="panel panel-default">
 
                     <header class="panel-heading">
-                        <h2 class="panel-title">{{=trader_username}}'s items</h2>
+                        <h2 class="panel-title"><a href="{{=URL('collections', 'index', args=trader_id)}}">{{=trader_username}}</a>'s items</h2>
                     </header>
 
                     <div class="panel-body">
@@ -93,6 +104,13 @@
                         <div class="row" style="padding-bottom:5px">
                              <div class="col-md-10">
                                 <div class="input-group trade-item-search">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-search"
+                                                aria-hidden="true"></span>
+                                        <span class="sr-only">
+                                            Search
+                                        </span>
+                                    </span>
                                     <label class="sr-only" for="searchTheirItems">Search for their available items</label>
                                     <input id="searchTheirItems" type="text" class="form-control"
                                            placeholder="Search your items"
@@ -141,14 +159,14 @@
                 <div class="panel panel-default">
 
                     <header class="panel-heading">
-                        <h2 class="panel-title">{{=trader_username}}'s offerings</h2>
+                        <h2 class="panel-title"><a href="{{=URL('collections', 'index', args=trader_id)}}">{{=trader_username}}</a>'s offerings</h2>
                     </header>
 
                     <div class="panel-body" id="theirOffering">
                         {{for obj in trade_objects[1]:}}
                             {{print_trade_obj(obj)}}
                         {{pass}}
-                        <p class="placeholder">
+                        <p class="placeholder" style="display: none;">
                             <i>
                                 You will not receive any items from <a
                                 href="{{=URL('collections', 'index', args=trader_id)}}"
@@ -162,13 +180,13 @@
 
         <div class="row">
             <div class="col-md-4 text-center">
-                <h3>Your items = &pound; <span id="yourVal">0</span> </h3>
+                <h3>Your items = &pound;<span id="yourVal">0</span> </h3>
             </div>
             <div class="col-md-4 text-center">
-                <h3>Difference = &pound; <span id="tradevalue">0</span> </h3>
+                <h3>Difference = &pound;<span id="tradevalue">0</span> </h3>
             </div>
             <div class="col-md-4 text-center">
-                <h3>Their items = &pound; <span id="hisVal">0</span> </h3>
+                <h3>Their items = &pound;<span id="hisVal">0</span> </h3>
             </div>
         </div>
 

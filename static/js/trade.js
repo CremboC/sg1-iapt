@@ -50,8 +50,6 @@ function moveObject(object) {
     }
     updateTradeValue();
 }
-// Method to update numbers displayed at bottom of trade page on page load
-$(document).ready(updateTradeValue());
 
 // Method to update numbers displayed at bottom of trade page
 function updateTradeValue() {
@@ -218,3 +216,8 @@ function submitForm() {
         }
     });
 }
+
+$(document).ready(function () {
+    // Method to update numbers displayed at bottom of trade page on page load
+    updateTradeValue()
+});
