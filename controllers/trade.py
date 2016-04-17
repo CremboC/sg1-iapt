@@ -21,12 +21,14 @@ def view():
 
     # Get objects currently in trade from sender
     trade_objects_from_sender = db(
-        (db.trades_sending.trade_id == trade_id) & (db.types.id == db.objects.type_id) & (db.trades_sending.sent_object_id == db.objects.id)).select(
+        (db.trades_sending.trade_id == trade_id) & (db.types.id == db.objects.type_id) & (
+        db.trades_sending.sent_object_id == db.objects.id)).select(
         db.objects.ALL, db.types.name)
 
     # Get objects currently in trade from receiver
     trade_objects_from_receiver = db(
-        (db.trades_receiving.trade_id == trade_id) & (db.types.id == db.objects.type_id) & (db.trades_receiving.recv_object_id == db.objects.id)).select(
+        (db.trades_receiving.trade_id == trade_id) & (db.types.id == db.objects.type_id) & (
+        db.trades_receiving.recv_object_id == db.objects.id)).select(
         db.objects.ALL, db.types.name)
 
     for obj in trade_objects_from_receiver:
@@ -74,7 +76,8 @@ def new():
         session.flash = {"status": "danger", "message": "Error: You cannot trade with yourself."}
         return redirect(URL('trade', 'index'))
 
-    if (request.vars.receiver_id is None) & (request.vars.item_id is None) & (request.vars.receiver_username is not None):
+    if (request.vars.receiver_id is None) & (request.vars.item_id is None) & (
+        request.vars.receiver_username is not None):
         receiver = db(db.auth_user.username == request.vars.receiver_username).select().first()
         if receiver is None:
             session.flash = {"status": "danger", "message": "Error: username does not exist"}
@@ -131,7 +134,6 @@ def new():
 # will have it's status changed to signify it's termination)
 @auth.requires_login()
 def edit():
-
     coll_query = (db.objects.id == db.object_collection.object_id) & \
                  (db.object_collection.collection_id == db.collections.id)
 
@@ -208,14 +210,13 @@ def edit():
             "trade_objects": trade_objects, "available_objects": available_objects, "collections": collections}
 
 
-
 # Method to create a new trade
 @auth.requires_login()
 def createNew():
     if (request.vars['youritems'] is None) | (request.vars['theiritems'] is None) | (
-        request.vars['receiver_username'] is None):
+                request.vars['receiver_username'] is None):
         response.status = 400
-        return 'Error 400: incomplete trade, please enter trade items or select other user'
+        return 'Error 400: incomplete trade, please enter trade items'
 
     receiver_id = db(db.auth_user.username == request.vars['receiver_username']).select(db.auth_user.id)
 
@@ -236,7 +237,7 @@ def createNew():
 
     if (len(your_items) == 0) & (len(their_items) == 0):
         response.status = 400
-        return 'Error 400: incomplete trade, please enter trade items or select other user'
+        return 'Error 400: incomplete trade. You cannot initiate an empty trade. Please choose some items first.'
 
     sender_id = int(auth.user_id)
 
@@ -441,7 +442,9 @@ def log():
         else:
             trade.trades.otheruser = trade.trades.sender
         trade.trades.otheruser = db(db.auth_user.id == trade.trades.otheruser).select(db.auth_user.username).column()[0]
-    return {"trades": trades, "user_name": db(db.auth_user.id==auth.user_id).select(db.auth_user.username).first().username, "user_id": auth.user_id, "hasPrevPage": min_index > 0,
+    return {"trades": trades,
+            "user_name": db(db.auth_user.id == auth.user_id).select(db.auth_user.username).first().username,
+            "user_id": auth.user_id, "hasPrevPage": min_index > 0,
             "hasNextPage": trade_count > min_index + num_per_page, "minIndex": min_index, "numPerPage": num_per_page}
 
 
