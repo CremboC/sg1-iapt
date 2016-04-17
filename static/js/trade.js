@@ -1,3 +1,6 @@
+var itemsOffered = 0;
+var itemsReceived = 0;
+
 /**
  * Method to move a trade object from the your items to offering sections
  * @param object
@@ -12,21 +15,37 @@ function moveObject(object) {
             $("#yourOffering").append(object);
             $(object).addClass("item-preview-in-trade");
             filterTradeItems(true);
+
+            itemsOffered++;
+            $("#yourOffering").find('.placeholder').hide();
             break;
         case "theirItems":
             $("#theirOffering").append(object);
             $(object).addClass("item-preview-in-trade");
             filterTradeItems(false);
+
+            itemsReceived++;
+            $("#theirOffering").find('.placeholder').hide();
             break;
         case "yourOffering":
             $("#yourItems").append(object);
             $(object).removeClass("item-preview-in-trade");
             filterTradeItems(true);
+
+            itemsOffered--;
+            if (itemsOffered == 0) {
+                $("#yourOffering").find('.placeholder').show();
+            }
             break;
         case "theirOffering":
             $("#theirItems").append(object);
             $(object).removeClass("item-preview-in-trade");
             filterTradeItems(false);
+
+            itemsReceived--;
+            if (itemsReceived == 0) {
+                $("#theirOffering").find('.placeholder').show();
+            }
             break;
     }
     updateTradeValue();
@@ -92,7 +111,6 @@ function deleteHiddenFormFields() {
     $("input[name=theiritems]").remove();
 }
 
-
 /**
  * Method to apply the filters to trade items
  * @param yours: boolean True if yourItems, false if theirItems
@@ -110,7 +128,7 @@ function filterTradeItems(yours) {
         searchBoxId = '#searchTheirItems';
         selectId = '#selectTheirCol';
     }
-    $(divId).children('.item-preview').show();
+    $(divId).find('.item-preview').show();
     hideNonTradables(divId, checkboxId);
     filterByCollections(divId, selectId);
     filterByTerm(divId, searchBoxId);
@@ -120,9 +138,9 @@ function filterTradeItems(yours) {
 function hideNonTradables(divId, checkboxId) {
     var hide = $(checkboxId).is(':checked');
     if (hide) {
-        $(divId).children('.item-preview:visible').show();
+        $(divId).find('.item-preview:visible').show();
     } else {
-        $(divId).children('.disabled:visible').hide();
+        $(divId).find('.disabled:visible').hide();
     }
 }
 
@@ -131,7 +149,7 @@ function hideNonTradables(divId, checkboxId) {
 function filterByCollections(divId, selectId) {
     var collection = $(selectId).val();
     if (collection != "all") {
-        $(divId).children('.item-preview:visible').each(function () {
+        $(divId).find('.item-preview:visible').each(function () {
             var collections = $(this).attr('data-collections');
             if (collections.indexOf(collection) == -1) {
                 $(this).hide();
@@ -167,17 +185,6 @@ $('#searchOwnItems').keyup(function () {
 
 $('#searchTheirItems').keyup(function () {
     filterTradeItems(false);
-});
-
-
-$(function () {
-    // Get user data
-    $.getJSON(__users_url__, function (data) {
-        var users = $.map(data.users, function (u) {
-            return u.username;
-        });
-    });
-
 });
 
 /**

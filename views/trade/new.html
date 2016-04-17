@@ -69,12 +69,12 @@
                     </div>
                 </div>
                 <div class="panel panel-default">
-
                     <header class="panel-heading">
                         <h2 class="panel-title">Your offerings</h2>
                     </header>
 
                     <div class="panel-body" id="yourOffering">
+                        <p class="placeholder"><i>You are not offering any items at the moment.</i></p>
                     </div>
                 </div>
             </div>
@@ -83,8 +83,7 @@
                 <div class="panel panel-default">
 
                     <header class="panel-heading">
-                        <h2 class="panel-title"><a href="{{=URL('collections', 'index', args=trader_id)}}" class="text-info"
-                                                   onclick="return confirm('Are you sure you want to leave this page? All progress will be lost.')">
+                        <h2 class="panel-title"><a href="{{=URL('collections', 'index', args=trader_id)}}" class="text-info">
                             {{=trader_username}}</a>'s items</h2>
                     </header>
 
@@ -154,8 +153,9 @@
                 </div>
                 <div class="panel panel-default">
                     <header class="panel-heading">
-                        <h2 class="panel-title"><a href="{{=URL('collections', 'index', args=trader_id)}}"
-                                                   class="text-info" onclick="return confirm('Are you sure you want to leave this page? All progress will be lost.')">{{=trader_username}}</a>'s offerings</h2>
+                        <h2 class="panel-title">
+                            <a href="{{=URL('collections', 'index', args=trader_id)}}">{{=trader_username}}</a>'s offerings
+                        </h2>
                     </header>
 
                     <div class="panel-body" id="theirOffering">
@@ -165,6 +165,14 @@
                                    {{print_trade_obj(obj)}}
                                 {{pass}}
                             {{pass}}
+                        {{else:}}
+                        <p class="placeholder">
+                            <i>
+                                You will not receive any items from <a
+                                href="{{=URL('collections', 'index', args=trader_id)}}"
+                                class="text-info">{{=trader_username}}</a> at the moment.
+                            </i>
+                        </p>
                         {{pass}}
                     </div>
                 </div>
@@ -173,13 +181,13 @@
 
         <div class="row">
             <div class="col-md-4 text-center">
-                <h3>Your items = &pound; <span id="yourVal">0</span> </h3>
+                <h3>Your items = &pound;<span id="yourVal">0</span> </h3>
             </div>
             <div class="col-md-4 text-center">
-                <h3>Difference = &pound; <span id="tradevalue">0</span> </h3>
+                <h3>Difference = &pound;<span id="tradevalue">0</span> </h3>
             </div>
             <div class="col-md-4 text-center">
-                <h3>His items = &pound; <span id="hisVal">0</span> </h3>
+                <h3>His items = &pound;<span id="hisVal">0</span> </h3>
             </div>
         </div>
         <div class="row">
@@ -195,3 +203,10 @@
 
 
 <script src="{{=URL('static','js/trade.js')}}"></script>
+<script>
+    $(document).ready(function () {
+        $('a').on('click', function () {
+            return confirm('Are you sure you want to leave this page? All progress will be lost.');
+        });
+    });
+</script>
