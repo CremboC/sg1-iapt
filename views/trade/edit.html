@@ -85,7 +85,7 @@
 
                     <div class="panel-body" id="yourOffering">
                         {{for obj in trade_objects[0]:}}
-                            {{print_trade_obj(obj)}}
+                            {{print_trade_obj(obj, False, True)}}
                         {{pass}}
                         <p class="placeholder" style="display: none;"><i>You are not offering any items at the moment.</i></p>
                     </div>
@@ -164,7 +164,7 @@
 
                     <div class="panel-body" id="theirOffering">
                         {{for obj in trade_objects[1]:}}
-                            {{print_trade_obj(obj)}}
+                            {{print_trade_obj(obj, False, True)}}
                         {{pass}}
                         <p class="placeholder" style="display: none;">
                             <i>

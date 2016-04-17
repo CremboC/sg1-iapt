@@ -1,6 +1,14 @@
-{{def print_trade_obj(obj, view_only=False):}}
+{{def print_trade_obj(obj, view_only=False, in_trade=False):}}
     {{if obj.tradable:}}
-        <div class='item-preview' onclick="moveObject(this);" data-collections="{{=obj.collection_names}}" data-toggle="tooltip" title="{{=obj.objects.tooltip}}" data-currency_value="{{=obj.objects.currency_value}}" data-itemid="{{=obj.objects.id}}" style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.objects.image, host=True)}}");'>
+        <div class="item-preview {{if in_trade:}}item-preview-in-trade{{pass}}"
+             onclick="moveObject(this);"
+             data-collections="{{=obj.collection_names}}"
+             data-toggle="tooltip"
+             title="{{=obj.objects.tooltip}}"
+             data-currency_value="{{=obj.objects.currency_value}}"
+             data-itemid="{{=obj.objects.id}}"
+
+             style='background-image: url("{{=URL(r=request, c='default', f='download',  args=obj.objects.image, host=True)}}");'>
         </div>
     {{else:}}
         {{if view_only:}}
