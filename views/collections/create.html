@@ -44,3 +44,18 @@
         </div>
     </div>
 </div>
+
+<script>
+    var changesMade = false;
+    $( function() {
+        $("#collections_name").change( function() { changesMade = true } )
+        $("#collections_private").change( function() { changesMade = true } )
+    } );
+    $( function() {
+        $("button[type=submit]" ).click( function() { changesMade = false } )
+    } );
+    window.onbeforeunload = function() {
+        if ( changesMade )
+            return "Are you sure you want to leave this page? All progress will be lost.";
+    }
+</script>

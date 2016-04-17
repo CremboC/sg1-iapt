@@ -209,3 +209,22 @@
     var __collections_url__ = "{{=URL('collections', 'get.json')}}";
 </script>
 <script src="{{=URL('static','js/item.js')}}"></script>
+
+<script>
+    var changesMade = false;
+    $( function() {
+        $("#objects_name").change( function() { changesMade = true } )
+        $("#objects_description").change( function() { changesMade = true } )
+        $("#objects_summary").change( function() { changesMade = true } )
+        $("#objects_image").change( function() { changesMade = true } )
+        $("#objects_value").change( function() { changesMade = true } )
+        $("input[type=radio]").change( function() { changesMade = true } )
+    } );
+    $( function() {
+        $("button[type=submit]" ).click( function() { changesMade = false } )
+    } );
+    window.onbeforeunload = function() {
+        if ( changesMade )
+            return "Are you sure you want to leave this page? All progress will be lost.";
+    }
+</script>
