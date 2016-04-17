@@ -123,7 +123,7 @@ def new():
             return redirect(URL('trade', 'new'))
         receiver_id = receiver_id[0].id
         # Retrieve available items for both users
-        available_items = [get_user_items(auth.user_id), get_user_items(receiver_id)]
+        available_items = [get_user_items(auth.user_id, True), get_user_items(receiver_id, False)]
         # Retrieve all available collections for both users (used to filter items)
         collections = [get_user_collections_no_unfiled(auth.user_id), get_user_collections_no_unfiled(receiver_id)]
         return {"user_id": auth.user_id, "trader_id": receiver_id, "trader_username": receiver_username,
@@ -189,7 +189,7 @@ def edit():
             return redirect(URL('trade', 'index'))
         trader_username = trader_username[0].username
 
-    available_objects = [get_user_items(auth.user_id, trade_id), get_user_items(receiver_id, trade_id)]
+    available_objects = [get_user_items(auth.user_id, True, trade_id), get_user_items(receiver_id, False, trade_id)]
 
     trade_objects[0] = compact_collection_names(trade_objects[0])
     trade_objects[1] = compact_collection_names(trade_objects[1])

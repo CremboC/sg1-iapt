@@ -133,7 +133,7 @@ def add_object_tooltip(row, tradable=True):
 
 
 # Get items that are not currently in any trade
-def get_user_items(userid, tradeid=None):
+def get_user_items(userid, is_current_user, tradeid=None):
     # Get items in public collections
     gen_query = (db.objects.owner_id == userid) & \
                 (db.types.id == db.objects.type_id) & \
@@ -191,12 +191,22 @@ def get_user_items(userid, tradeid=None):
         add_object_tooltip(obj, False)
         in_trade_ids.append(obj.objects.id)
 
-    items_not_for_trade = db((db.objects.owner_id == userid) & (db.objects.status == 0) & ~db.objects.id.belongs(
-        in_trade_ids) & coll_query & (db.types.id == db.objects.type_id)).select(
-        db.types.name,
-        db.collections.ALL,
-        db.objects.ALL,
-        groupby=db.objects.id)
+    if is_current_user:
+        items_not_for_trade = db((db.objects.owner_id == userid) & (db.collections.private == True) & ~db.objects.id.belongs(
+            in_trade_ids) & coll_query & (db.types.id == db.objects.type_id)).select(
+            db.types.name,
+            db.collections.ALL,
+            db.objects.ALL,
+            groupby=db.objects.id)
+    else:
+        items_not_for_trade = db((db.objects.owner_id == userid) & (db.objects.status == 0) & ~db.objects.id.belongs(
+            in_trade_ids) & coll_query & (db.types.id == db.objects.type_id)).select(
+            db.types.name,
+            db.collections.ALL,
+            db.objects.ALL,
+            groupby=db.objects.id)
+
+    print items_not_for_trade
 
     for obj in items_not_for_trade:
         obj.tradable = False

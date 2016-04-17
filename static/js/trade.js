@@ -116,22 +116,30 @@ function deleteHiddenFormFields() {
  * @param yours: boolean True if yourItems, false if theirItems
  */
 function filterTradeItems(yours) {
-    var divId, checkboxId, searchBoxId, selectId;
+    var divId, checkboxId, searchBoxId, selectId, no_items;
     if (yours) {
         divId = '#yourItems';
         checkboxId = '#your-item-checkbox';
         searchBoxId = '#searchOwnItems';
         selectId = '#selectOwnCol';
+        no_items = '#no_your_items';
     } else {
         divId = '#theirItems';
         checkboxId = '#their-item-checkbox';
         searchBoxId = '#searchTheirItems';
         selectId = '#selectTheirCol';
+        no_items = '#no_their_items';
     }
     $(divId).find('.item-preview').show();
     hideNonTradables(divId, checkboxId);
     filterByCollections(divId, selectId);
     filterByTerm(divId, searchBoxId);
+    var num_visible = $(divId).find('.item-preview:visible').length;
+    if (num_visible===0){
+        $(no_items).show();
+    } else {
+        $(no_items).hide();
+    }
 }
 
 // First hide non-tradable items if enabled, otherwise show all
