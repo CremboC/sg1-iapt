@@ -53,14 +53,17 @@ function moveObject(object) {
 
 // Method to update numbers displayed at bottom of trade page
 function updateTradeValue() {
+    console.log("called");
     var hisVal = 0;
     var yourVal = 0;
-    $(">div.item-preview", $("#yourOffering")).each(function () {
+    $("#yourOffering").find(".item-preview").each(function () {
         yourVal += parseFloat($(this).attr('data-currency_value'));
     });
-    $(">div.item-preview", $("#theirOffering")).each(function () {
+    $("#theirOffering").find(".item-preview").each(function () {
         hisVal += parseFloat($(this).attr('data-currency_value'));
     });
+    console.log(hisVal);
+    console.log(yourVal);
     var totalVal = hisVal - yourVal;
     // Prevent NaN from being displayed in case of error
     totalVal = isNaN(totalVal) ? 0 : totalVal.toFixed(2);

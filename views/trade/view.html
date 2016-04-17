@@ -1,8 +1,6 @@
 {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('trade', 'index'), 'My trades'], ['View trade']]}}
 {{extend 'layout.html'}}
 
-<script src="{{=URL('static','js/trade.js')}}"></script>
-
 <div class="container">
     <div class="text-center row row-bottom-margin">
         <div class="col-md-4"></div>
@@ -15,7 +13,6 @@
         </div>
     </div>
 
-    <!-- TODO: create search features for multi-selects -->
     <div class="row row-bottom-margin">
         <div class="col-md-6 tradeborder">
             <div class="panel panel-default">
@@ -24,7 +21,7 @@
                     <h2 class="panel-title">You offered</h2>
                 </header>
 
-                <div class="panel-body" id="yourItemDisplay">
+                <div class="panel-body" id="yourOffering">
                 {{for obj in trade_objects[0]:}}
                     {{print_trade_obj(obj, True)}}
                 {{pass}}
@@ -35,10 +32,10 @@
         <div class="col-md-6">
             <div class="panel panel-default">
                 <header class="panel-heading">
-                    <h2 class="panel-title">{{="They offered"}}</h2>
+                    <h2 class="panel-title">They offered</h2>
                 </header>
 
-                <div class="panel-body" id="hisItemDisplay">
+                <div class="panel-body" id="theirOffering">
                 {{for obj in trade_objects[1]:}}
                     {{if obj.objects.status == -1:}}
                     <div class="item-preview deleted">
@@ -53,13 +50,13 @@
         </div>
         <div class="row">
             <div class="col-md-4 text-center">
-                <h2>Your items = &pound; <span id="yourVal">0</span> </h2>
+                <h2>Your items = &pound;<span id="yourVal">0</span> </h2>
             </div>
             <div class="col-md-4 text-center">
-                <h2>Difference = &pound; <span id="tradevalue">0</span> </h2>
+                <h2>Difference = &pound;<span id="tradevalue">0</span> </h2>
             </div>
             <div class="col-md-4 text-center">
-                <h2>Their items = &pound; <span id="hisVal">0</span> </h2>
+                <h2>Their items = &pound;<span id="hisVal">0</span> </h2>
             </div>
         </div>
     </div>
@@ -94,3 +91,5 @@
 {{pass}}
 
 </div>
+
+<script src="{{=URL('static','js/trade.js')}}"></script>
