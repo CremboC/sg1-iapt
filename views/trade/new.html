@@ -83,18 +83,18 @@
                 <div class="panel panel-default">
 
                     <header class="panel-heading">
-                        <h2 class="panel-title">{{=trader_username}}'s items</h2>
+                        <h2 class="panel-title"><a href="{{=URL('collections', 'index', args=trader_id)}}" class="text-info"
+                                                   onclick="return confirm('Are you sure you want to leave this page? All progress will be lost.')">
+                            {{=trader_username}}</a>'s items</h2>
                     </header>
 
                     <div class="panel-body">
-
-
                         <div class="row" style="padding-bottom:5px">
                             <div class="col-md-10">
                                 <div class="input-group trade-item-search">
                                     <label class="sr-only" for="searchTheirItems">Search for their available items</label>
                                     <input id="searchTheirItems" type="text" class="form-control"
-                                           placeholder="Search your items"
+                                           placeholder="Search their items"
                                            autocomplete="off">
                                     <select id="selectTheirCol" class="selectpicker form-control" title="Filter items by collection" onchange="filterTradeItems(false);">
                                         <option value="all">All collections</option>
@@ -146,7 +146,8 @@
                 </div>
                 <div class="panel panel-default">
                     <header class="panel-heading">
-                        <h2 class="panel-title">{{=trader_username}}'s offerings</h2>
+                        <h2 class="panel-title"><a href="{{=URL('collections', 'index', args=trader_id)}}"
+                                                   class="text-info" onclick="return confirm('Are you sure you want to leave this page? All progress will be lost.')">{{=trader_username}}</a>'s offerings</h2>
                     </header>
 
                     <div class="panel-body" id="theirOffering">
