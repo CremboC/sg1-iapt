@@ -7,6 +7,10 @@ def index():
     is_me = user_id == auth.user_id
     user = db(db.auth_user.id == user_id).select().first()
 
+    if user_id is None:
+        session.flash = {"status": "warning", "message": "You must be logged in to visit this page."}
+        return redirect(URL('default', 'user', args='login'))
+
     collection_query = db.collections.owner_id == user_id
     if not is_me:
         # Do not display other user's private collections
