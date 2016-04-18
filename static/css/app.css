@@ -284,3 +284,14 @@ header {
     box-shadow: initial;
     margin-bottom: initial;
 }
+
+a:link:not(.btn) {
+    color:#3344dd;
+}
+a:hover:not(.btn), a:active:not(.btn) {
+    color: #bb1122;
+}
+
+a:visited:not(.btn) {
+    color: #884488;
+}
