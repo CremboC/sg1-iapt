@@ -1,7 +1,7 @@
 {{if is_owner:}}
 {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), 'My collections'], ['View collection']]}}
 {{else:}}
-{{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), user.username + '\'s collections'], ['View collection']]}}
+{{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index', args=user.id), user.username + '\'s collections'], ['View collection']]}}
 {{pass}}
 
 {{extend 'layout.html'}}

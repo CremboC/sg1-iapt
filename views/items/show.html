@@ -8,23 +8,23 @@
 {{else:}}
     {{if not item.collections:}}
         {{if is_owner:}}
-            {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), 'My collections'],['View item']]}}
+            {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index', args=owner.id), 'My collections'],['View item']]}}
         {{else:}}
-            {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), owner.username + '\'s collections'], ['View item']]}}
+            {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index', args=owner.id), owner.username + '\'s collections'], ['View item']]}}
         {{pass}}
     {{else:}}
         {{if len(item.collections())==1:}}
             {{col = item.collections()[0]}}
             {{if is_owner:}}
-                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), 'My collections'], [URL('collections', 'show', args=col.id), col.name], ['View item']]}}
+                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index', args=owner.id), 'My collections'], [URL('collections', 'show', args=col.id), col.name], ['View item']]}}
             {{else:}}
-                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), owner.username + '\'s collections'],['View item']]}}
+                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index', args=owner.id), owner.username + '\'s collections'],['View item']]}}
             {{pass}}
         {{else:}}
             {{if is_owner:}}
-                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), 'My collections'], ['Multiple collections'], ['View item']]}}
+                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index', args=owner.id), 'My collections'], ['Multiple collections'], ['View item']]}}
             {{else:}}
-                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index'), owner.username + '\'s collections'], ['Multiple collections'], ['View item']]}}
+                {{breadcrumbs = [[URL('default', 'index'), 'Home'], [URL('collections', 'index', args=owner.id), owner.username + '\'s collections'], ['Multiple collections'], ['View item']]}}
             {{pass}}
         {{pass}}
     {{pass}}
