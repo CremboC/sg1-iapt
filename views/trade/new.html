@@ -207,7 +207,7 @@
 <script src="{{=URL('static','js/trade.js')}}"></script>
 <script>
     $(document).ready(function () {
-        $('a').on('click', function () {
+        $('a').not('.dropdown-toggle').on('click', function () {
             return confirm('Are you sure you want to leave this page? All progress will be lost.');
         });
     });
