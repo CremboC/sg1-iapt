@@ -128,7 +128,7 @@ def add_object_tooltip(row, tradable=True):
     if tradable:
         txt = "{0} \n £{1} \n Type: {2} \n Summary: {3} \n".format(objects.name, objects.currency_value, row.types.name, objects.summary)
     else:
-        txt = "{0} \n £{1} \n This item is not tradable due it's status or use in another trade. \n".format(objects.name, objects.currency_value)
+        txt = "{0} \n £{1} \n This item can not be traded due its status or use in another trade. \n".format(objects.name, objects.currency_value)
     row.objects.tooltip = txt
 
 

@@ -76,8 +76,7 @@ def new():
         session.flash = {"status": "danger", "message": "Error: You cannot trade with yourself."}
         return redirect(URL('trade', 'index'))
 
-    if (request.vars.receiver_id is None) & (request.vars.item_id is None) & (
-        request.vars.receiver_username is not None):
+    if (request.vars.receiver_id is None) & (request.vars.item_id is None) & (request.vars.receiver_username is not None):
         receiver = db(db.auth_user.username == request.vars.receiver_username).select().first()
         if receiver is None:
             session.flash = {"status": "danger", "message": "Error: username does not exist"}
@@ -131,7 +130,7 @@ def new():
 
 
 # Method to edit an existing trade (trade objects are non-mutable: a new trade will be created, and the old trade
-# will have it's status changed to signify it's termination)
+# will have its status changed to signify its termination)
 @auth.requires_login()
 def edit():
     coll_query = (db.objects.id == db.object_collection.object_id) & \
