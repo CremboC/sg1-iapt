@@ -289,13 +289,13 @@ header {
     margin-bottom: initial;
 }
 
-a:link:not(.btn) {
+a:link:not(.btn, .narbar-brand, .dropdown-item):not([role='tab']) {
     color:#3344dd;
 }
-a:hover:not(.btn), a:active:not(.btn) {
+a:hover:not(.btn, .narbar-brand, .dropdown-item):not([role='tab']), a:active:not(.btn, .narbar-brand, .dropdown-item):not([role='tab']) {
     color: #bb1122;
 }
 
-a:visited:not(.btn) {
+a:visited:not(.btn, .narbar-brand, .dropdown-item):not([role='tab']) {
     color: #884488;
 }
