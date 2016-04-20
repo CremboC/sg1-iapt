@@ -288,14 +288,15 @@ header {
     box-shadow: initial;
     margin-bottom: initial;
 }
-
-a:link:not(.btn, .narbar-brand, .dropdown-item):not([role='tab']) {
+/* , .narbar-brand, .dropdown-item */
+a:link:not(.btn):not(.no-colour):not(.dropdown-toggle):not([role='tab']):not([rel='nofollow']) {
     color:#3344dd;
 }
-a:hover:not(.btn, .narbar-brand, .dropdown-item):not([role='tab']), a:active:not(.btn, .narbar-brand, .dropdown-item):not([role='tab']) {
+a:hover:not(.btn):not(.no-colour):not(.dropdown-toggle):not([role='tab']):not([rel='nofollow']),
+a:active:not(.btn):not(.no-colour):not(.dropdown-toggle):not([role='tab']):not([rel='nofollow']) {
     color: #bb1122;
 }
 
-a:visited:not(.btn, .narbar-brand, .dropdown-item):not([role='tab']) {
+a:visited:not(.btn):not(.no-colour):not(.dropdown-toggle):not([role='tab']):not([rel='nofollow']) {
     color: #884488;
 }

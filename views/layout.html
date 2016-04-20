@@ -57,7 +57,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{=URL('default', 'index')}}">MEGACOLLECTOR</a>
+            <a class="navbar-brand no-colour" href="{{=URL('default', 'index')}}">MEGACOLLECTOR</a>
         </div>
 
         <div id="navbar-ex1-collapse" class="collapse navbar-collapse">
@@ -102,7 +102,7 @@
             {{ if auth.user_id: }}
             {{ if db.auth_user[auth.user_id].notifications: }}
                 <li>
-                    <a href="{{=URL('trade', 'index')}}" data-toggle="tooltip" data-placement="bottom"
+                    <a class="no-colour" href="{{=URL('trade', 'index')}}" data-toggle="tooltip" data-placement="bottom"
                        title="You have notifications!">
                         <span class="glyphicon glyphicon-bell notification-icon middle" aria-hidden="true"></span>
                         <span class="sr-only">New Notifications</span>
@@ -110,7 +110,7 @@
                 </li>
             {{ else: }}
                 <li>
-                    <a href="{{=URL('trade', 'index')}}" data-toggle="tooltip" data-placement="bottom"
+                    <a class="no-colour" href="{{=URL('trade', 'index')}}" data-toggle="tooltip" data-placement="bottom"
                        title="No Notifications">
                         <span class="glyphicon glyphicon-bell middle" aria-hidden="true"></span>
                         <span class="sr-only">No new Notifications</span>
@@ -118,23 +118,23 @@
                 </li>
             {{ pass}}
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" id="createDropdownButton">
+                    <a href="#" class="dropdown-toggle no-colour" data-toggle="dropdown" aria-haspopup="true" id="createDropdownButton">
                         <span class="glyphicon glyphicon-plus middle"></span>
                         Create
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="createDropdownButton">
                         <li>
-                            <a href="{{=URL('items', 'create')}}">
+                            <a class="no-colour" href="{{=URL('items', 'create')}}">
                                 New Item
                             </a>
                         </li>
                         <li>
-                            <a href="{{=URL('collections', 'create')}}">
+                            <a class="no-colour" href="{{=URL('collections', 'create')}}">
                                 New Collection
                             </a>
                         </li>
                         <li>
-                            <a data-toggle="modal" href="#new_trade" >
+                            <a class="no-colour" data-toggle="modal" href="#new_trade" >
                                 New Trade
                             </a>
                         </li>
@@ -143,12 +143,12 @@
             {{ pass }}
             {{if not auth.is_logged_in():}}
                 <li>
-                    <a href="{{=URL('default', 'user', args='register')}}">
+                    <a class="no-colour" href="{{=URL('default', 'user', args='register')}}">
                         Register
                     </a>
                 </li>
                 <li>
-                    <a href="{{=URL('default', 'user', args='login')}}">
+                    <a class="no-colour" href="{{=URL('default', 'user', args='login')}}">
                         Log In
                     </a>
                 </li>
